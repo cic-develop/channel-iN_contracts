@@ -6,6 +6,9 @@ coverage.json
 typechain
 typechain-types
 
+# legacy contracts
+contracts/Channel_iN/legacy/*
+
 # Hardhat files
 cache
 artifacts

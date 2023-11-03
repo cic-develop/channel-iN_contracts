@@ -24,8 +24,10 @@
     "@openzeppelin/hardhat-upgrades": "2.3.3",
     "@typechain/ethers-v6": "0.5.1",
     "@typechain/hardhat": "9.1.0",
+    "caver-js": "1.11.0",
     "chai": "4.3.10",
     "dotenv": "16.3.1",
-    "ethers": "6.8.1"
+    "ethers": "6.8.1",
+    "fs": "0.0.1-security"
   }
 }

@@ -1,6 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import "dotenv/config"; // import .env variables
+import "dotenv/config";
 import "./tasks";
 import "@openzeppelin/hardhat-upgrades";
 
