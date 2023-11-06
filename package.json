@@ -17,6 +17,7 @@
     "hardhat": "2.18.3"
   },
   "dependencies": {
+    "@bisonai/orakl-contracts": "v1.0.0",
     "@ethersproject/abi": "5.7.0",
     "@ethersproject/providers": "5.7.2",
     "@openzeppelin/contracts": "5.0.0",
