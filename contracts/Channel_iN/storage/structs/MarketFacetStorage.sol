@@ -34,6 +34,7 @@ struct MarketFacetStorage {
     uint32 exchangeCount;
     uint8 global_feeDecimal;
     uint16 tez_feeRatio;
+    uint16 global_feeRatioLimit;
     //
     bool isPause;
     bool isAdd;
