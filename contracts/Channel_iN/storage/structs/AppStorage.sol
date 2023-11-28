@@ -2,11 +2,11 @@
 pragma solidity ^0.8.0;
 
 struct AppStorage {
-    mapping(string => Constant) constants;
+    mapping(string => address) contracts;
 }
-struct Constant {
-    string _contractName;
-    address _contractAddr;
-    bytes _contractAbi;
-    uint _version;
-}
+
+
+// 레거시 컨트랙트 어댑터
+
+
+
