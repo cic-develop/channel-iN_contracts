@@ -1,20 +1,59 @@
-import { ethers } from "ethers";
-import { GetDbFacet__factory } from "../typechain-types";
-import "dotenv/config";
+/* global describe it before ethers */
 
-const RPC_HOST = process.env.KLAYTN_NODE_MAIN_ENDPOINT;
-const CHANNELIN_ADDRESS = "0xe98F1e28179DE7b678DD8146a5A33C588514415a";
+import {
+  getSelectors,
+  FacetCutAction,
+  removeSelectors,
+  findAddressPositionInFacets,
+} from "../scripts/libraries/diamond";
+import { deployDiamond } from "../scripts/deploy";
+import { assert } from "chai";
+import { ethers } from "hardhat";
+import { Contract } from "ethers";
 
-async function main() {
-  const provider = new ethers.JsonRpcProvider(RPC_HOST);
-  const channelin = new ethers.Contract(
-    CHANNELIN_ADDRESS,
-    GetDbFacet__factory.abi,
-    provider
-  );
-}
+describe("DiamondTest", async function () {
+  let diamondAddress: string;
+  let diamondCutFacet: Contract;
+  let diamondLoupeFacet: Contract;
+  let ownershipFacet: Contract;
+  let ConstantFacet: Contract;
+  let RubyonFacet: Contract;
+  let tx;
+  let receipt;
+  let result;
+  const addresses: string[] = [];
+  // const accounts =  ethers.getSigners();
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+  before(async function () {
+    diamondAddress = await deployDiamond();
+    console.log({ diamondAddress });
+    diamondCutFacet = await ethers.getContractAt(
+      "DiamondCutFacet",
+      diamondAddress
+    );
+    diamondLoupeFacet = await ethers.getContractAt(
+      "DiamondLoupeFacet",
+      diamondAddress
+    );
+    ownershipFacet = await ethers.getContractAt(
+      "OwnershipFacet",
+      diamondAddress
+    );
+
+    ConstantFacet = await ethers.getContractAt("ConstantFacet", diamondAddress);
+    RubyonFacet = await ethers.getContractAt("RubyonFacet", diamondAddress);
+  });
+
+  it("facet function call test", async () => {
+    await ConstantFacet.setContract(
+      "rainforest",
+      "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+    );
+    await ConstantFacet.setContract(
+      "rubyon",
+      "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+    );
+    console.log(await ConstantFacet.getContract("rainforest"));
+    console.log(await RubyonFacet.getNameItem(diamondAddress, 0));
+  });
 });

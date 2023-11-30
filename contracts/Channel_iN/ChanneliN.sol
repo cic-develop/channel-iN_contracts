@@ -8,8 +8,8 @@ pragma solidity ^0.8.18;
 * Implementation of a diamond.
 /******************************************************************************/
 
-import {LibDiamond} from "./libraries/LibDiamond.sol";
-import {IDiamondCut} from "./interfaces/IDiamondCut.sol";
+import {LibDiamond} from "../shared/libraries/LibDiamond.sol";
+import {IDiamondCut} from "../shared/interfaces/IDiamondCut.sol";
 
 contract CHANNELIN {
     constructor(address _contractOwner, address _diamondCutFacet) payable {
