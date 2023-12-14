@@ -35,7 +35,7 @@ export async function deployDiamond() {
     "DiamondLoupeFacet",
     "OwnershipFacet",
     "ConstantFacet",
-    // "RubyonFacet",
+    "P0Facet",
   ];
   const cut = [];
   for (const FacetName of FacetNames) {
@@ -72,6 +72,7 @@ export async function deployDiamond() {
   if (!receipt?.status) {
     throw Error(`Diamond upgrade failed: ${tx.hash}`);
   }
+
   console.log("Completed diamond cut");
   return await diamond.getAddress();
 }

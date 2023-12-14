@@ -3,6 +3,7 @@ pragma solidity ^0.8.18;
 
 import {LibDiamond} from "./LibDiamond.sol";
 import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import {LibMeta} from "./LibMeta.sol";
 
 library LibAppStorage {
     function diamondStorage() internal pure returns (AppStorage storage ds) {
@@ -26,8 +27,12 @@ struct AppStorage {
 contract Modifiers {
     AppStorage internal s;
 
-    modifier onlyOwner() {
+    modifier onlyDev() {
         LibDiamond.enforceIsContractOwner();
         _;
     }
+    // modifier onlyOwner() {
+    //     require(LibMeta.msgSender() == s.diamondStorage().contractOwner, "LibAppStorage: must be owner");
+    //     _;
+    // }
 }

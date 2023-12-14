@@ -9,10 +9,7 @@ contract ConstantFacet is Modifiers {
         return s.contracts[_name];
     }
 
-    function setContract(
-        string memory _name,
-        address _addr
-    ) external onlyOwner {
+    function setContract(string memory _name, address _addr) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.contracts[_name] = _addr;
     }

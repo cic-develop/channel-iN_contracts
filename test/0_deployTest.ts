@@ -41,19 +41,12 @@ describe("DiamondTest", async function () {
     );
 
     ConstantFacet = await ethers.getContractAt("ConstantFacet", diamondAddress);
-    RubyonFacet = await ethers.getContractAt("RubyonFacet", diamondAddress);
+    // RubyonFacet = await ethers.getContractAt("RubyonFacet", diamondAddress);
   });
 
-  it("facet function call test", async () => {
-    await ConstantFacet.setContract(
-      "rainforest",
-      "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
-    );
-    await ConstantFacet.setContract(
-      "rubyon",
-      "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
-    );
-    console.log(await ConstantFacet.getContract("rainforest"));
-    console.log(await RubyonFacet.getNameItem(diamondAddress, 0));
+  it("constant_contract function call test", async () => {
+    await ConstantFacet.setContract("main", diamondAddress);
+
+    console.log(await ConstantFacet.getContract("main"));
   });
 });

@@ -1,15 +1,15 @@
 import { ethers } from "hardhat";
 import { FacetCutAction, getSelectors } from "./libraries/diamond";
 
+const DiamondAddress = "0xefeC53f0F5F966947a7d74e7283E19Df4F57A720";
 const deployFacets = async () => {
   const accounts = await ethers.getSigners();
   const facets = [];
-
   // deploy facets
-  const Facet = await ethers.getContractFactory("RubyonFacet");
+  const Facet = await ethers.getContractFactory("P0Facet");
   const facet = await Facet.deploy();
   await facet.waitForDeployment();
-  console.log(`RubyonFacet deployed: ${await facet.getAddress()}`);
+  console.log(`P0Facet deployed: ${await facet.getAddress()}`);
   facets.push(facet);
 
   cutFacets(facets, FacetCutAction.Add);
@@ -18,7 +18,7 @@ const deployFacets = async () => {
 const removeFacets = async () => {
   const accounts = await ethers.getSigners();
   const facets = [];
-  const Facet = await ethers.getContractFactory("RubyonFacet");
+  const Facet = await ethers.getContractFactory("P0Facet");
   const facet = new ethers.Contract(
     ethers.ZeroAddress,
     Facet.interface,
@@ -45,7 +45,7 @@ const cutFacets = async (facets: any, FacetCutAction: any) => {
     "IDiamondCut",
 
     // diamond address
-    "0xfaf7D640b3E671095a5F6251a7f46eaB307F7C09"
+    DiamondAddress
   );
 
   let tx;
@@ -60,5 +60,15 @@ const cutFacets = async (facets: any, FacetCutAction: any) => {
   console.log("Completed diamond cut");
 };
 
+const searchFacets = async () => {
+  const DiamondLoupeFacet = await ethers.getContractAt(
+    "DiamondLoupeFacet",
+    DiamondAddress
+  );
+
+  const facets = await DiamondLoupeFacet.facets();
+  console.log(facets);
+};
 // removeFacets();
-deployFacets();
+// deployFacets();
+// searchFacets();
