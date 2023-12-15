@@ -1,9 +1,9 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-ethers";
 import "dotenv/config";
 import "./tasks";
 import "@openzeppelin/hardhat-upgrades";
-
 const config: HardhatUserConfig = {
   solidity: {
     compilers: [

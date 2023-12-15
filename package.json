@@ -11,24 +11,28 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "3.0.5",
     "@nomicfoundation/hardhat-toolbox": "3.0.0",
-    "@nomiclabs/hardhat-ethers": "3.0.0-beta.0",
-    "@types/mocha": "10.0.3",
-    "hardhat": "2.18.3"
+    "@nomicfoundation/hardhat-verify": "2.0.0",
+    "@typechain/ethers-v6": "^0.4.3",
+    "@types/mocha": "^10.0.1",
+    "hardhat": "^2.16.1"
   },
   "dependencies": {
-    "@bisonai/orakl-contracts": "v1.0.0",
-    "@ethersproject/abi": "5.7.0",
-    "@ethersproject/providers": "5.7.2",
+    "@bisonai/orakl-contracts": "1.2.0",
+    "@ethersproject/abi": "^5.7.0",
+    "@ethersproject/providers": "^5.7.2",
+    "@layerzerolabs/solidity-examples": "1.0.0",
     "@openzeppelin/contracts": "5.0.0",
     "@openzeppelin/contracts-upgradeable": "5.0.0",
     "@openzeppelin/hardhat-upgrades": "2.3.3",
-    "@typechain/ethers-v6": "0.5.1",
-    "@typechain/hardhat": "9.1.0",
-    "caver-js": "1.11.0",
-    "chai": "4.3.10",
+    "@typechain/hardhat": "^8.0.0",
+    "caver-js": "^1.11.0",
+    "chai": "^4.3.7",
     "dotenv": "16.3.1",
-    "ethers": "6.8.1",
-    "fs": "0.0.1-security"
+    "ethers": "^6.6.2",
+    "hardhat-deploy": "0.11.43",
+    "ts-node": "10.9.1",
+    "userop": "0.3.3"
   }
 }
