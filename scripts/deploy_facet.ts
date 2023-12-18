@@ -74,3 +74,6 @@ const searchFacets = async (_diamondAddress: string) => {
 };
 
 export { deployFacets, removeFacets, searchFacets };
+
+removeFacets("P0Facet", "0xa49e74e532E317A6Ec1759f7714Ed8546f6Aa801");
+// deployFacets("P0Facet", "0xa49e74e532E317A6Ec1759f7714Ed8546f6Aa801");

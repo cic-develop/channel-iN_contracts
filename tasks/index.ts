@@ -1,8 +1,8 @@
-import { task, types } from "hardhat/config";
-import "@nomicfoundation/hardhat-ethers";
+// import { task, types } from "hardhat/config";
+// import "@nomicfoundation/hardhat-ethers";
 
-import { deploy } from "./deploy";
+// import { deploy } from "./deploy";
 
-task("deploy", "Deploys the Diamond and facets")
-  .addParam("", "The name of the Diamond")
-  .setAction(deploy);
+// task("deploy", "Deploys the Diamond and facets")
+//   .addParam("", "The name of the Diamond")
+//   .setAction(deploy);

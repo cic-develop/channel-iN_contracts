@@ -7,61 +7,36 @@ import {IDB} from "../interfaces/IDB.sol";
 import {IERC20} from "../../shared/interfaces/IERC20.sol";
 import {IERC1155} from "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
-
+import {LibP0} from "../libraries/LibP0.sol";
 
 contract P0Facet is Modifiers {
-    function itemMerge(uint _itemId, uint _itemAmount) external {}
-
-    // function baseMixCall(uint _id, uint _useItemId) external returns (bool) {
-    //     IERC20
-    // }
-
-    function testCall(uint _aien, uint _itemId) external {
+    //
+    //
+    //
+    function itemMerge(uint _itemId, uint _itemAmount) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
-
-        
+        LibP0._itemMerge(msgsender, _itemId, _itemAmount);
     }
 
-
-    function getCall() external view returns (address, address) {
-        return (LibMeta.msgSender(), msg.sender);
+    function baseMixCall(uint _id, uint _useItemId) external returns (bool) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        address msgsender = LibMeta.msgSender();
+        LibP0._baseMixCall(msgsender, _id, _useItemId);
     }
 
-    function premiumMixCall(
-        uint _id,
-        uint _useItemId
-    ) external returns (bool) {}
-
-    function addProbCall(uint _aienId, uint[] memory _pf_Ids) external {}
-
-    // internal functions
-    function _random() internal returns (uint) {
-        // if (s.orakl  ? oraklVRF() : nativeRF())
+    function premiumMixCall(uint _id, uint _useItemId) external returns (bool) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        address msgsender = LibMeta.msgSender();
+        LibP0._premiumMixCall(msgsender, _id, _useItemId);
     }
 
-    function _randomAddProb(uint _max, uint _min) internal returns (uint) {
-        // if (s.orakl  ? oraklVRF() : nativeRF())
-    }
-
-    function checkDuplicates(uint[] memory array) internal pure returns (bool) {
-        for (uint i = 0; i < array.length - 1; i++) {
-            for (uint j = i + 1; j < array.length; j++) {
-                if (array[i] == array[j]) return true;
-            }
-        }
-        return false;
-    }
-
-    // 다중 ERC721 owner확인
-    function checkERC721sOwner(
-        address _owner,
-        address _contract,
-        uint[] memory _ids
-    ) internal view returns (bool) {
-        for (uint i = 0; i < _ids.length; i++) {
-            if (IERC721(_contract).ownerOf(_ids[i]) != _owner) return false;
-        }
-        return true;
+    function addProbCall(
+        uint _aienId,
+        uint[] memory _pf_Ids
+    ) external returns (bool) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        address msgsender = LibMeta.msgSender();
+        LibP0._addProbCall(msgsender, _id, _useItemId);
     }
 }
