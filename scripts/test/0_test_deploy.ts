@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
-import { FacetCutAction, getSelectors } from "./libraries/diamond";
-
+import { FacetCutAction, getSelectors } from "../libraries/diamond";
+import fs from "fs";
 export async function deployDiamond() {
   const accounts = await ethers.getSigners();
   const contractOwner = accounts[0];
@@ -69,6 +69,18 @@ export async function deployDiamond() {
   }
 
   console.log("Completed diamond cut");
+
+  const readFile = await JSON.parse(fs.readFileSync("constants.json", "utf8"));
+
+  //save contracts address to file
+  const contractAddress = {
+    diamond: await diamond.getAddress(),
+    diamondCutFacet: await diamondCutFacet.getAddress(),
+    diamondInit: await diamondInit.getAddress(),
+  };
+
+  readFile.test.contract = contractAddress;
+  fs.writeFileSync("constants.json", JSON.stringify(readFile));
   return await diamond.getAddress();
 }
 

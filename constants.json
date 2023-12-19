@@ -1,0 +1,22 @@
+{
+  "test": {
+    "contract": {
+      "diamond": "0x0A46eF87d2C1CF753f91ade449931527176e5A68",
+      "diamondCutFacet": "0xE59Da86042ba74cF1EDbd451C074cf81Be98421A",
+      "diamondInit": "0x7edF4DBa91C3a57e93b3D812F608A17411803f57"
+    },
+    "facets": {}
+  },
+  "live": {
+    "contract": {
+      "diamond": "0xFE66d05812A08E43a5648d8233ABe3ec668f4347",
+      "diamondCutFacet": "0xe61E4c11e2c8544C203A915e0487Ff893B438C9D",
+      "diamondInit": "0xC2824A5D4E61A9bd1FB26599588b3f6C00664034"
+    },
+    "facets": {
+      "AdminFacet": "0x6db8b287d2aBC1cafEdE7526eE9a9862F503820A",
+      "P0Facet": "0xBA5798e24E38635ac8061C560439B39d86BC0757"
+    }
+  },
+  "local": { "contract": {}, "facets": {} }
+}

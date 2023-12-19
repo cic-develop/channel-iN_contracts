@@ -24,23 +24,34 @@ library LibP0 {
 
     function _baseMixCall(address _sender, uint _id, uint _useItemId) internal {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        require(IERC721(s.contracts["aien"].ownerOf(_id)) == _sender, "not owner");
-        
+        require(
+            IERC721(s.contracts["aien"]).ownerOf(_id) == _sender,
+            "not owner"
+        );
     }
 
     function _premiumMixCall() internal {}
 
-    function _itemMerge(address _sender,uint _itemId, uint _itemAmount) internal {}
+    function _itemMerge(
+        address _sender,
+        uint _itemId,
+        uint _itemAmount
+    ) internal {}
 
-    function _addProbCall(uint _aienId, uint[] memory _pf_Ids) internal {}
+    function _addProbCall(
+        address _sender,
+        uint _aienId,
+        uint[] memory _pf_Ids
+    ) internal {}
 
     // internal functions
     function __random(address _sender) internal returns (uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
         // if (s.orakl  ? oraklVRF() : nativeRF())
         bytes32 hash = keccak256(
             abi.encodePacked(block.timestamp, _sender, block.coinbase)
         );
-        return (uint(hash) % (maxProb - 0 + 1)) + 0;
+        return (uint(hash) % (s.p0_states.maxProb - 0 + 1)) + 0;
     }
 
     function __randomAddProb(
@@ -69,23 +80,27 @@ library LibP0 {
     // 다중 ERC721 owner확인
     function __checkERC721sOwner(
         address _owner,
-        address _contract,
         uint[] memory _ids
     ) internal view returns (bool) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
         for (uint i = 0; i < _ids.length; i++) {
-            if (IERC721(_contract).ownerOf(_ids[i]) != _owner) return false;
+            if (IERC721(s.contracts["perfriends"]).ownerOf(_ids[i]) != _owner)
+                return false;
         }
         return true;
     }
 
     // 다중 ERC721의 등급별 mixPFInfos 합을 구한다.
-    function __checkERC721sGrade(
-        uint[] memory _ids
-    ) internal view returns (uint) {
-        uint _gradeProb = 0;
-        for (uint i = 0; i < _ids.length; i++) {
-            _gradeProb += mixPFInfos[IDB(DB).PFS(_ids[i]).class].gradeProb;
-        }
-        return _gradeProb;
-    }
+    // function __checkERC721sGrade(
+    //     uint[] memory _ids
+    // ) internal view returns (uint) {
+    //     AppStorage storage s = LibAppStorage.diamondStorage();
+    //     uint _gradeProb = 0;
+    //     for (uint i = 0; i < _ids.length; i++) {
+    //         _gradeProb += s
+    //             .p0_gradeInfos[IDB(s.contracts["db"]).PFS(_ids[i]).class]
+    //             .gradeProb;
+    //     }
+    //     return _gradeProb;
+    // }
 }

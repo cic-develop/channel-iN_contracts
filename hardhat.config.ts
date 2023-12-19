@@ -4,6 +4,7 @@ import "@nomicfoundation/hardhat-ethers";
 import "dotenv/config";
 import "./tasks";
 import "@openzeppelin/hardhat-upgrades";
+
 const config: HardhatUserConfig = {
   solidity: {
     compilers: [
@@ -26,18 +27,16 @@ const config: HardhatUserConfig = {
   },
 
   networks: {
-    cypress: {
+    live: {
       url: process.env.KLAYTN_NODE_MAIN_ENDPOINT,
-      accounts: {
-        mnemonic: process.env.MNEMONIC,
-      },
+      accounts: [process.env.LIVE_PRIV_KEY || ""],
+      chainId: 8217,
       gasPrice: 25000000000,
     },
-    cypress_test: {
+    test: {
       url: process.env.KLAYTN_NODE_TEST_ENDPOINT,
-      accounts: {
-        mnemonic: process.env.MNEMONIC,
-      },
+      accounts: [process.env.TEST_PRIV_KEY || ""],
+      chainId: 8217,
       gasPrice: 25000000000,
     },
   },

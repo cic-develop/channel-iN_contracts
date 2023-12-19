@@ -13,6 +13,8 @@ struct P0_State {
     uint addProbFee;
     // 퍼프렌즈를 이용한 PF POWER 변환시 획득 경험치
     uint16 addProbExp;
+    // bool
+    bool isVRF;
 }
 struct P0_PerFriendsProb {
     string pfGrade;
@@ -36,7 +38,15 @@ struct P0_GradeInfo {
 
 // P0 End
 struct AppStorage {
+    // address constants
     mapping(string => address) contracts;
+    // i-Tez/////////////////////////////
+    // P0 ///////////////////////////////
+    P0_State p0_states;
+    P0_GradeInfo[11] p0_gradeInfos;
+    mapping(uint => P0_PerFriendsProb) p0_perFriendsProbs;
+    /////////////////////////////////////
+
 }
 
 library LibAppStorage {
