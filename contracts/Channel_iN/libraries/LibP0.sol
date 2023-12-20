@@ -5,8 +5,24 @@ import {AppStorage, LibAppStorage} from "../../shared/libraries/LibAppStorage.so
 import {LibMeta} from "../../shared/libraries/LibMeta.sol";
 import {IDB} from "../interfaces/IDB.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
+import {IERC1155} from "../../shared/interfaces/IERC1155.sol";
+import {IERC20} from "../../shared/interfaces/IERC20.sol";
 
 library LibP0 {
+    struct P0_GradeInfo {
+        // 다음 level이 열렸는지 확인
+        bool isOpen;
+        // level별 mix fee
+        uint mixFee;
+        // 레벨업 성공시 level별 초기 base 확률
+        uint24 initBaseProb;
+        // level별 추가 확률 밸런스 조정값
+        uint16 mixExp;
+        // level별 합성 실패시 추가 확률 min,max
+        uint24 failedAddProbMin;
+        // 1000 = 0.1%, 10000 = 0.01%
+        uint24 failedAddProbMax;
+    }
     // events
     event MixCall(
         uint indexed _tokenId,
@@ -22,12 +38,76 @@ library LibP0 {
         bytes _pfURI
     );
 
-    function _baseMixCall(address _sender, uint _id, uint _useItemId) internal {
+    function _baseMixCall(
+        address _sender,
+        uint _id,
+        uint _useItemId
+    ) internal returns (bool) {
         AppStorage storage s = LibAppStorage.diamondStorage();
+
         require(
             IERC721(s.contracts["aien"]).ownerOf(_id) == _sender,
             "not owner"
         );
+        IDB.aien memory _AIEN = IDB(s.contracts["db"]).AIENS(_id);
+        // P0_GradeInfo memory _gradeInfo = s.p0_gradeInfos[_AIEN.p2Level];
+        // P0_GradeInfo memory _gradeInfoNext = s.p0_gradeInfos[_AIEN.p2Level + 1];
+
+        require(s.p0_gradeInfos[_AIEN.p2Level].isOpen == true, "not open");
+
+        (
+            address _influencer,
+            address _agency,
+            uint _influencerFee,
+            uint _agencyFee
+        ) = IDB(s.contracts["db"])._levelUpCalcul(
+                _useItemId,
+                s.p0_gradeInfos[_AIEN.p2Level].mixFee
+            );
+
+        IERC1155(s.contracts["item"]).burn(_sender, _useItemId, 1);
+        IERC20(s.contracts["per"]).transferFrom(
+            _sender,
+            s.contracts["distribute"],
+            s.p0_gradeInfos[_AIEN.p2Level].mixFee
+        );
+
+        if (_AIEN.p2Level == 0) {
+            IDB(s.contracts["db"])._levelUpSucess(_id, _AIEN.p2Level);
+            emit MixCall(_id, 0, true, s.p0_gradeInfos[_AIEN.p2Level].mixFee);
+
+            return true;
+        }
+
+        uint _random = __random(_sender);
+
+        // 성공시
+        if (_random <= _AIEN.baseProb) {
+            // 성공률 초기화
+            // 레벨 상승
+            IDB(s.contracts["db"])._levelUpSucess(_id, _AIEN.p2Level);
+        } else {
+            // base성공률에 랜덤 성공률 추가
+
+            uint _randomAdd = __randomAddProb(
+                _sender,
+                s.p0_gradeInfos[_AIEN.p2Level].failedAddProbMax,
+                s.p0_gradeInfos[_AIEN.p2Level].failedAddProbMin
+            );
+            // 경험치 상승
+            // _AIEN[_id].baseProb += _randomAdd;
+
+            IDB(s.contracts["db"])._levelUpFailed(_id, _randomAdd);
+        }
+
+        emit MixCall(
+            _id,
+            0,
+            _random <= _AIEN.baseProb,
+            s.p0_gradeInfos[_AIEN.p2Level].mixFee
+        );
+
+        return true;
     }
 
     function _premiumMixCall() internal {}

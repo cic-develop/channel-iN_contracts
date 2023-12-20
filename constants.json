@@ -1,11 +1,22 @@
 {
   "test": {
     "contract": {
-      "diamond": "0x0A46eF87d2C1CF753f91ade449931527176e5A68",
-      "diamondCutFacet": "0xE59Da86042ba74cF1EDbd451C074cf81Be98421A",
-      "diamondInit": "0x7edF4DBa91C3a57e93b3D812F608A17411803f57"
+      "diamond": "0x967479795f0bE206d9e2DbBBdBd4b496ab0b4f6B",
+      "diamondCutFacet": "0x7Ac066D48e899f305aD4eA5D84d8aad799bfEAE2",
+      "diamondInit": "0x1760feF92A0eC9fa9687b6654E031113d686b90a"
     },
-    "facets": {}
+    "facets": {
+      "AdminFacet": "0x276dB75EdEE09283B93Dd14EffbBbf038D1008c2",
+      "P0Facet": "0x93447BB8B7025B784Fd8ab1f0a0DC425b2373166",
+      "ConstantFacet": "0xc826d734679D22E591a48b3Ed51A8EdF31e61b34"
+    },
+    "legacy": {
+      "perfriends": "0x9A161D13af5EF286e6D6Aa77671Fb0870465DF20",
+      "aien": "0x9A4c82a0F2e1dF8236015166673F497470882E3d",
+      "db": "0x4f47CF617Cdd6eA9d1b235Af05650cd0e83B8C62",
+      "per": "0xe3A5F36D08C75d43B18bDCaD19A6d8Cf0Bb8128c",
+      "item": "0x13F0faE1e13F89bb6FCdEaF38275f4cAd20f397F"
+    }
   },
   "live": {
     "contract": {
@@ -16,6 +27,13 @@
     "facets": {
       "AdminFacet": "0x6db8b287d2aBC1cafEdE7526eE9a9862F503820A",
       "P0Facet": "0xBA5798e24E38635ac8061C560439B39d86BC0757"
+    },
+    "legacy": {
+      "perfriends": "0x0ed55aee0399064cfe51dd3cc10d99734bb796c7",
+      "aien": "0xf9415efcd4e41856fa1a7af4d0d6082d62e93211",
+      "db": "0x0967358cB6a94aCF45A99Fb4ED199C081bbe2121",
+      "per": "0x7eee60a000986e9efe7f5c90340738558c24317b",
+      "item": "0xd67b2bdd91ef23c4855b39f5ec9b3f6ad366eec7"
     }
   },
   "local": { "contract": {}, "facets": {} }
