@@ -4,6 +4,7 @@ import "@nomicfoundation/hardhat-ethers";
 import "dotenv/config";
 import "./tasks";
 import "@openzeppelin/hardhat-upgrades";
+import "hardhat-deploy";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -25,7 +26,9 @@ const config: HardhatUserConfig = {
       },
     ],
   },
-
+  namedAccounts: {
+    deployer: 0,
+  },
   networks: {
     live: {
       url: process.env.KLAYTN_NODE_MAIN_ENDPOINT,

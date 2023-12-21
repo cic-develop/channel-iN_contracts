@@ -124,4 +124,10 @@ contract AdminFacet is Modifiers {
             s.distribute_states.teamUsdtRatio
         );
     }
+
+
+    function testAdmins() external view returns (address) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return msg.sender;
+    }
 }

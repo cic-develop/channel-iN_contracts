@@ -12,3 +12,4 @@ contracts/Channel_iN/legacy/*
 # Hardhat files
 cache
 artifacts
+deployments
