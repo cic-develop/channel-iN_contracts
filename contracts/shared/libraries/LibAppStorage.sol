@@ -36,6 +36,19 @@ struct P0_GradeInfo {
     uint24 failedAddProbMax;
 }
 
+// //- Distribute struct
+struct Distribute_State {
+    uint beforeP2Usdt;
+    uint beforeP2Per;
+    uint beforeTeamUsdt;
+    // distribute ratios
+    uint24 p1Ratio;
+    uint24 p2PerRatio;
+    uint24 p2UsdtRatio;
+    uint24 burnRatio;
+    uint24 teamUsdtRatio;
+}
+
 // P0 End
 struct AppStorage {
     // address constants
@@ -46,7 +59,8 @@ struct AppStorage {
     P0_GradeInfo[11] p0_gradeInfos;
     mapping(uint => P0_PerFriendsProb) p0_perFriendsProbs;
     /////////////////////////////////////
-
+    // Distribute ///////////////////////
+    Distribute_State distribute_states;
 }
 
 library LibAppStorage {
@@ -71,8 +85,4 @@ contract Modifiers {
         LibDiamond.enforceIsContractOwner();
         _;
     }
-    // modifier onlyOwner() {
-    //     require(LibMeta.msgSender() == s.diamondStorage().contractOwner, "LibAppStorage: must be owner");
-    //     _;
-    // }
 }

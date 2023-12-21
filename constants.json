@@ -6,8 +6,8 @@
       "diamondInit": "0x1760feF92A0eC9fa9687b6654E031113d686b90a"
     },
     "facets": {
-      "AdminFacet": "0x276dB75EdEE09283B93Dd14EffbBbf038D1008c2",
-      "P0Facet": "0x93447BB8B7025B784Fd8ab1f0a0DC425b2373166",
+      "AdminFacet": "0x03550B4fCB52879B75b3C3b3bF539BE96C41921f",
+      "P0Facet": "0x15fa4Df693492caE4e1bB39e6d8Df5CaBa4ac39e",
       "ConstantFacet": "0xc826d734679D22E591a48b3Ed51A8EdF31e61b34"
     },
     "legacy": {
@@ -15,7 +15,9 @@
       "aien": "0x9A4c82a0F2e1dF8236015166673F497470882E3d",
       "db": "0x4f47CF617Cdd6eA9d1b235Af05650cd0e83B8C62",
       "per": "0xe3A5F36D08C75d43B18bDCaD19A6d8Cf0Bb8128c",
-      "item": "0x13F0faE1e13F89bb6FCdEaF38275f4cAd20f397F"
+      "item": "0x13F0faE1e13F89bb6FCdEaF38275f4cAd20f397F",
+      "p1": "0x0753ECbcb9B967fecD1e61b3a42F9C7Cd04E18EA",
+      "p2": "0x6576a1fD2B554a42cAE8F0CfbFF413f86449eE22"
     }
   },
   "live": {

@@ -86,7 +86,42 @@ contract AdminFacet is Modifiers {
             s.p0_perFriendsProbs[_grade].gradeProb
         );
     }
+
     /**
      *@dev P1 Admin functions
      */
+
+    /**
+     *@dev DistriBute Admin functions
+     */
+
+    function admin_distribute_setStates(
+        uint24 _p1Ratio,
+        uint24 _p2PerRatio,
+        uint24 _p2UsdtRatio,
+        uint24 _burnRatio,
+        uint24 _teamUsdtRatio
+    ) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.distribute_states.p1Ratio = _p1Ratio;
+        s.distribute_states.p2PerRatio = _p2PerRatio;
+        s.distribute_states.p2UsdtRatio = _p2UsdtRatio;
+        s.distribute_states.burnRatio = _burnRatio;
+        s.distribute_states.teamUsdtRatio = _teamUsdtRatio;
+    }
+
+    function admin_distribute_getStates()
+        external
+        view
+        returns (uint24, uint24, uint24, uint24, uint24)
+    {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return (
+            s.distribute_states.p1Ratio,
+            s.distribute_states.p2PerRatio,
+            s.distribute_states.p2UsdtRatio,
+            s.distribute_states.burnRatio,
+            s.distribute_states.teamUsdtRatio
+        );
+    }
 }
