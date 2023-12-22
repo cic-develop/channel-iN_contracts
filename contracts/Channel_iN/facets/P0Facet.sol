@@ -25,11 +25,11 @@ contract P0Facet is Modifiers {
         return LibP0._baseMixCall(msgsender, _id, _useItemId);
     }
 
-    // function premiumMixCall(uint _id, uint _useItemId) external returns (bool) {
-    //     AppStorage storage s = LibAppStorage.diamondStorage();
-    //     address msgsender = LibMeta.msgSender();
-    //     LibP0._premiumMixCall(msgsender, _id, _useItemId);
-    // }
+    function premiumMixCall(uint _id, uint _useItemId) external returns (bool) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        address msgsender = LibMeta.msgSender();
+        LibP0._premiumMixCall(msgsender, _id, _useItemId);
+    }
 
     function addProbCall(
         uint _aienId,

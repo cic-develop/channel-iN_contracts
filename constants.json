@@ -1,14 +1,13 @@
 {
   "test": {
     "contract": {
-      "diamond": "0x967479795f0bE206d9e2DbBBdBd4b496ab0b4f6B",
-      "diamondCutFacet": "0x7Ac066D48e899f305aD4eA5D84d8aad799bfEAE2",
-      "diamondInit": "0x1760feF92A0eC9fa9687b6654E031113d686b90a"
+      "diamond": "0xa2aa8ab81A37b12Dd30517a66Bb8960E7f018880",
+      "diamondCutFacet": "0x429dbdE7913c0Ed51E4B21163760B92eE66Ff5f5"
     },
     "facets": {
-      "AdminFacet": "0x03550B4fCB52879B75b3C3b3bF539BE96C41921f",
-      "P0Facet": "0x15fa4Df693492caE4e1bB39e6d8Df5CaBa4ac39e",
-      "ConstantFacet": "0xc826d734679D22E591a48b3Ed51A8EdF31e61b34"
+      "AdminFacet": "0xdA84955C5B28a7c60F34EfA40e2766a0947c0762",
+      "P0Facet": "0xC71B241c72838Ab506E7cDf6729C3e8734eC5860",
+      "ConstantFacet": "0xA5E30E8FEcAa3c78E83294176789c1F551C618dF"
     },
     "legacy": {
       "perfriends": "0x9A161D13af5EF286e6D6Aa77671Fb0870465DF20",

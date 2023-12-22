@@ -256,6 +256,47 @@ library LibP0 {
         uint[] memory _pf_Ids
     ) internal {
         AppStorage storage s = LibAppStorage.diamondStorage();
+        require(
+            IERC721(s.contracts["aien"]).ownerOf(_aienId) == _sender,
+            "not owner"
+        );
+
+        require(__checkDuplicates(_pf_Ids) == false, "duplicate pf id");
+        require(
+            __checkERC721sOwner(_sender, _pf_Ids) == true,
+            "not owner of perfriends"
+        );
+        uint _gradeProb = __checkERC721sGrade(_pf_Ids);
+        IERC20(s.contracts["per"]).transferFrom(
+            _sender,
+            s.contracts["distribute"],
+            s.p0_states.addProbFee * _pf_Ids.length
+        );
+
+        for (uint i = 0; i < _pf_Ids.length; i++) {
+            IERC721(s.contracts["perfriends"]).burn(_pf_Ids[i]);
+            IDB(s.contracts["db"]).subPfGrades(_pf_Ids[i]);
+        }
+
+        IDB.aien memory _AIEN = IDB(s.contracts["db"]).AIENS(_aienId);
+        IDB(s.contracts["db"]).setAienAll(
+            _aienId,
+            _AIEN.mixCount,
+            _AIEN.p2Level,
+            _AIEN.totalExp + (s.p0_states.addProbExp * _pf_Ids.length),
+            _AIEN.influExp,
+            _AIEN.baseProb,
+            0,
+            _AIEN.isPFid,
+            _AIEN.addProb + _gradeProb
+        );
+
+        emit MixCall(
+            _aienId,
+            2,
+            false,
+            _pf_Ids.length * s.p0_states.addProbFee
+        );
     }
 
     // internal functions

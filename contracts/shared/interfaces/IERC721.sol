@@ -156,4 +156,10 @@ interface IERC721 {
         address owner,
         address operator
     ) external view returns (bool);
+
+    function burn(uint256 _tokenId) external;
+
+    function safeMintByMinter(address _to) external;
+
+    function nextTokenId() external view returns (uint256);
 }

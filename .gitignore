@@ -13,3 +13,6 @@ contracts/Channel_iN/legacy/*
 cache
 artifacts
 deployments
+contracts/P1
+contracts/P2
+contracts/db

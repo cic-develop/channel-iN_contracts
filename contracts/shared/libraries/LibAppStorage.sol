@@ -61,6 +61,7 @@ struct AppStorage {
     /////////////////////////////////////
     // Distribute ///////////////////////
     Distribute_State distribute_states;
+    uint aienMintFee;
 }
 
 library LibAppStorage {

@@ -34,6 +34,7 @@
     "ethers": "^6.6.2",
     "fs": "0.0.1-security",
     "hardhat-deploy": "0.11.43",
+    "hardhat-diamond-abi": "3.0.1",
     "ts-node": "10.9.1",
     "userop": "0.3.3"
   }

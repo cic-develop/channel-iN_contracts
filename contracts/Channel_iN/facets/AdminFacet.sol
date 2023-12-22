@@ -125,9 +125,17 @@ contract AdminFacet is Modifiers {
         );
     }
 
+    /**
+    @dev aien mint variables
+     */
 
-    function testAdmins() external view returns (address) {
+    function admin_setAienMintFee(uint _mintFee) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        return msg.sender;
+        s.aienMintFee = _mintFee;
+    }
+
+    function admin_getAienMintFee() external view returns (uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return s.aienMintFee;
     }
 }
