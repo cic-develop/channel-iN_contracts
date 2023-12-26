@@ -1,0 +1,5 @@
+KLAYTN_NODE_MAIN_ENDPOINT="https://public-en-cypress.klaytn.net"
+KLAYTN_NODE_TEST_ENDPOINT="https://public-en-baobab.klaytn.net"
+MNEMONIC="test test test test test test test test test test test junk"
+LIVE_PRIV_KEY="0x0"
+TEST_PRIV_KEY="0x0"

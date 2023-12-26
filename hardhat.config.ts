@@ -42,6 +42,12 @@ const config: HardhatUserConfig = {
       chainId: 8217,
       gasPrice: 25000000000,
     },
+    test2: {
+      url: process.env.KLAYTN_NODE_TEST_ENDPOINT,
+      accounts: [process.env.TEST_PRIV_KEY || ""],
+      chainId: 8217,
+      gasPrice: 25000000000,
+    },
   },
 };
 export default config;

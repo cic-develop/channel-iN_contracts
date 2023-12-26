@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.22;
+
 // legacy db contract interface
 interface IDB {
     struct pf {
@@ -110,4 +113,6 @@ interface IDB {
         address _influencer,
         uint _influencerFee
     ) external;
+
+    function usePFPower(uint _id, uint _usePower) external;
 }
