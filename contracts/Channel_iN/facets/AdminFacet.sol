@@ -144,7 +144,8 @@ contract AdminFacet is Modifiers {
         uint24 _p2PerRatio,
         uint24 _p2UsdtRatio,
         uint24 _burnRatio,
-        uint24 _teamUsdtRatio
+        uint24 _teamUsdtRatio,
+
     ) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.distribute_states.p1Ratio = _p1Ratio;
@@ -152,6 +153,7 @@ contract AdminFacet is Modifiers {
         s.distribute_states.p2UsdtRatio = _p2UsdtRatio;
         s.distribute_states.burnRatio = _burnRatio;
         s.distribute_states.teamUsdtRatio = _teamUsdtRatio;
+
     }
 
     function admin_distribute_getStates()
@@ -165,9 +167,21 @@ contract AdminFacet is Modifiers {
             s.distribute_states.p2PerRatio,
             s.distribute_states.p2UsdtRatio,
             s.distribute_states.burnRatio,
-            s.distribute_states.teamUsdtRatio
+            s.distribute_states.teamUsdtRatio,
+
         );
     }
+
+    function admin_distribute_setAuto(bool _isAuto) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.isAutoDistribute = _isAuto;
+    }
+
+    function admin_distribute_ksSwapLimit(uint _limit) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.ksSwapLimit = _limit;
+    }
+
 
     /**
     @dev aien mint variables

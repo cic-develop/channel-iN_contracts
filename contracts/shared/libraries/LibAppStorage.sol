@@ -62,6 +62,10 @@ struct AppStorage {
     // Distribute ///////////////////////
     Distribute_State distribute_states;
     uint aienMintFee;
+    // Distribute
+    uint ksSwapLimit;
+    bool isAutoDistribute;
+    //
 }
 
 library LibAppStorage {

@@ -5,6 +5,7 @@ import {AppStorage, LibAppStorage} from "./LibAppStorage.sol";
 import {LibDiamond} from "./LibDiamond.sol";
 import {LibMeta} from "./LibMeta.sol";
 import {IERC20} from "../interfaces/IERC20.sol";
+import {IKlaySwap} from "../interfaces/IKlaySwap.sol";
 
 library LibDistribute {
     //
@@ -27,8 +28,6 @@ library LibDistribute {
         ) = distributeCalc(_totalAmount);
         address per = s.contracts["per"];
 
-        // IERC20(per).transfer(_agency, _agencyAmount);
-        // IERC20(per).transfer(_influencer, _influencerAmount);
         IERC20(per).transfer(_agency, _agencyAmount);
         IERC20(per).transfer(_influencer, _influencerAmount);
         IERC20(per).transfer(s.contracts["burn"], burnAmount);
@@ -66,13 +65,38 @@ library LibDistribute {
         );
     }
 
-    // function exchangeWithDistribute() public onlyOwner {
-    //     IEstimate(KLAYSWAP_Util).estimateSwap(PER, );
-    // 	//
-    // 	//
-    // 	//
-    // 	//
-    // }
+    function swapToDistribute() internal {
+        (bool run, uint thisBalance, uint estimateUsdt) = isSwap();
+        require(run == true, "swapToDistribute: swap is not needed");
+        AppStorage storage s = LibAppStorage.diamondStorage();
+
+        address[] memory path;
+
+        IERC20(s.contracts["per"]).approve(
+            s.contracts["klayswap"],
+            thisBalance
+        );
+
+        IKlaySwap(s.contracts["klayswap"]).exchangeKctPos(
+            s.contracts["per"],
+            thisBalance,
+            s.contracts["usdt"],
+            estimateUsdt,
+            path
+        );
+    }
+
+    function swaplToCalculate() internal returns (uint, uint, uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        uint usdtBalance = IERC20(s.contracts["usdt"]).balanceOf(address(this));
+        uint calculatePercent = s.distribute_states.p2UsdtRatio +
+            s.distribute_states.teamUsdtRatio;
+
+        uint _p2UsdtAmount = (usdtBalance * s.distribute_states.p2UsdtRatio) /
+            calculatePercent;
+        uint _teamUsdtAmount = (usdtBalance *
+            s.distribute_states.teamUsdtRatio) / calculatePercent;
+    }
 
     function getDistributePrice() internal view returns (uint, uint, uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
@@ -106,5 +130,24 @@ library LibDistribute {
         beforeTeamUsdt = 0;
 
         return (_beforeP2Usdt, _beforeP2Per, _beforeTeamUsdt);
+    }
+
+    function isSwap() internal view returns (bool, uint, uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        address[] memory path;
+        uint _balance = IERC20(s.contracts["per"]).balanceOf(address(this));
+
+        uint estimateUsdt = IKlaySwap(s.contracts["klayswaputil"]).estimateSwap(
+            s.contracts["per"],
+            s.contracts["usdt"],
+            _balance,
+            path
+        );
+
+        if (estimateUsdt > s.ksSwapLimit && s.isAutoDistribute == true) {
+            return (true, _balance, estimateUsdt);
+        } else {
+            return (false, 0, 0);
+        }
     }
 }
