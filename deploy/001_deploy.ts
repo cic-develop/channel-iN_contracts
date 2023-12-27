@@ -17,6 +17,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       "P0Facet",
       "AienMintFacet",
       "P1Facet",
+      "P2Facet",
     ],
   });
 };

@@ -3,6 +3,8 @@ pragma solidity ^0.8.22;
 
 import {AppStorage, Modifiers, LibAppStorage} from "../../shared/libraries/LibAppStorage.sol";
 import {LibMeta} from "../../shared/libraries/LibMeta.sol";
+import {IP2} from "../interfaces/IP2.sol";
+import {IP2_Admin} from "../interfaces/IP2_Admin.sol";
 
 contract AdminFacet is Modifiers {
     /**
@@ -88,8 +90,50 @@ contract AdminFacet is Modifiers {
     }
 
     /**
-     *@dev P1 Admin functions
+     *@dev P2 Admin functions
      */
+    function admin_P2_layer_setting(
+        uint _layerNumber,
+        uint _fromP2PerPercent,
+        uint _fromP2UsdtPercent,
+        uint _dailyReward_percent,
+        uint _add_dailyReward_Percent,
+        bool _isOpen
+    ) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        IP2_Admin(s.contracts["p2"])._layer_setting(
+            _layerNumber,
+            _fromP2PerPercent,
+            _fromP2UsdtPercent,
+            _dailyReward_percent,
+            _add_dailyReward_Percent,
+            _isOpen
+        );
+    }
+
+    function admin_P2_blockUser(
+        address _user,
+        bool _isBlock,
+        string memory _why
+    ) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        IP2_Admin(s.contracts["p2"]).diamond_P2_BlockUser(
+            _user,
+            _isBlock,
+            _why
+        );
+    }
+
+    function admin_P2_setMaxLimit(
+        uint _layerNumber,
+        uint _maxLimit
+    ) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        IP2_Admin(s.contracts["p2"]).diamond_P2_setMaxLimit(
+            _layerNumber,
+            _maxLimit
+        );
+    }
 
     /**
      *@dev DistriBute Admin functions

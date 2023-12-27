@@ -120,9 +120,4 @@ contract P1Facet {
         address msgsender = LibMeta.msgSender();
         return IP1(s.contracts["p1"]).diamond_P1_getUnstakeData(msgsender);
     }
-
-    function testCalling() external view returns (address) {
-        AppStorage storage s = LibAppStorage.diamondStorage();
-        return IP1(s.contracts["p1"]).testDiamondCall();
-    }
 }
