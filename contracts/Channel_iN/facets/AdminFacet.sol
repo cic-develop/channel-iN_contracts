@@ -124,15 +124,9 @@ contract AdminFacet is Modifiers {
         );
     }
 
-    function admin_P2_setMaxLimit(
-        uint _layerNumber,
-        uint _maxLimit
-    ) external onlyDev {
+    function admin_P2_setMaxLimit(uint _maxLimit) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        IP2_Admin(s.contracts["p2"]).diamond_P2_setMaxLimit(
-            _layerNumber,
-            _maxLimit
-        );
+        IP2_Admin(s.contracts["p2"]).diamond_P2_setMaxLimit(_maxLimit);
     }
 
     /**
@@ -144,8 +138,7 @@ contract AdminFacet is Modifiers {
         uint24 _p2PerRatio,
         uint24 _p2UsdtRatio,
         uint24 _burnRatio,
-        uint24 _teamUsdtRatio,
-
+        uint24 _teamUsdtRatio
     ) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.distribute_states.p1Ratio = _p1Ratio;
@@ -153,7 +146,6 @@ contract AdminFacet is Modifiers {
         s.distribute_states.p2UsdtRatio = _p2UsdtRatio;
         s.distribute_states.burnRatio = _burnRatio;
         s.distribute_states.teamUsdtRatio = _teamUsdtRatio;
-
     }
 
     function admin_distribute_getStates()
@@ -167,8 +159,7 @@ contract AdminFacet is Modifiers {
             s.distribute_states.p2PerRatio,
             s.distribute_states.p2UsdtRatio,
             s.distribute_states.burnRatio,
-            s.distribute_states.teamUsdtRatio,
-
+            s.distribute_states.teamUsdtRatio
         );
     }
 
@@ -181,7 +172,6 @@ contract AdminFacet is Modifiers {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.ksSwapLimit = _limit;
     }
-
 
     /**
     @dev aien mint variables

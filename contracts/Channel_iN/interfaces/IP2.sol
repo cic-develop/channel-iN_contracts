@@ -113,4 +113,6 @@ interface IP2 {
     function diamond_P2_getLayerData(
         uint _number
     ) external view returns (uint, uint, uint);
+
+    function addPerUsdtDistribution(uint _usdt, uint _per) external;
 }

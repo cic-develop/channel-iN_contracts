@@ -69,5 +69,5 @@ interface IP1 {
     ) external view returns (PendingInfo[] memory);
 
 
-    function testDiamondCall() external view returns(address);
+    function diamond_P1_addDistributionAmountAll(uint _amount) external;
 }

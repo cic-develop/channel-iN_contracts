@@ -18,5 +18,5 @@ interface IP2_Admin {
         string memory _why
     ) external;
 
-    function diamond_P2_setMaxLimit(uint _layerNumber, uint _maxLimit) external;
+    function diamond_P2_setMaxLimit(uint _maxLimit) external;
 }

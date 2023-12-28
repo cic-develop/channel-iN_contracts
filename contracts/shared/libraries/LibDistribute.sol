@@ -6,6 +6,8 @@ import {LibDiamond} from "./LibDiamond.sol";
 import {LibMeta} from "./LibMeta.sol";
 import {IERC20} from "../interfaces/IERC20.sol";
 import {IKlaySwap} from "../interfaces/IKlaySwap.sol";
+import {IP2} from "../../Channel_iN/interfaces/IP2.sol";
+import {IP1} from "../../Channel_iN/interfaces/IP1.sol";
 
 library LibDistribute {
     //
@@ -33,7 +35,7 @@ library LibDistribute {
         IERC20(per).transfer(s.contracts["burn"], burnAmount);
         IERC20(per).transfer(s.contracts["p2"], p2Amount);
         IERC20(per).transfer(s.contracts["p1"], p1Amount);
-
+        IP1(s.contracts["p1"]).diamond_P1_addDistributionAmountAll(p1Amount);
         // IERC20(PER).transfer(P1, )
         // 추가 되어야할 것들
         // 1.P1 10% PER
@@ -84,9 +86,11 @@ library LibDistribute {
             estimateUsdt,
             path
         );
+
+        _swaplToCalculate();
     }
 
-    function swaplToCalculate() internal returns (uint, uint, uint) {
+    function _swaplToCalculate() internal returns (uint, uint, uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         uint usdtBalance = IERC20(s.contracts["usdt"]).balanceOf(address(this));
         uint calculatePercent = s.distribute_states.p2UsdtRatio +
@@ -96,6 +100,22 @@ library LibDistribute {
             calculatePercent;
         uint _teamUsdtAmount = (usdtBalance *
             s.distribute_states.teamUsdtRatio) / calculatePercent;
+
+        IERC20(s.contracts["usdt"]).transfer(s.contracts["p2"], _p2UsdtAmount);
+
+        IERC20(s.contracts["usdt"]).transfer(
+            s.contracts["team"],
+            _teamUsdtAmount
+        );
+
+        IP2(s.contracts["p2"]).addPerUsdtDistribution(
+            _p2UsdtAmount,
+            s.distribute_states.beforeP2Per
+        );
+
+        s.distribute_states.beforeP2Per = 0;
+        s.distribute_states.beforeP2Usdt = 0;
+        s.distribute_states.beforeTeamUsdt = 0;
     }
 
     function getDistributePrice() internal view returns (uint, uint, uint) {
@@ -107,30 +127,30 @@ library LibDistribute {
         );
     }
 
-    function p0_transferForDistribute() internal returns (uint, uint, uint) {
-        AppStorage storage s = LibAppStorage.diamondStorage();
-        uint beforeP2Usdt = s.distribute_states.beforeP2Usdt;
-        uint beforeP2Per = s.distribute_states.beforeP2Per;
-        uint beforeTeamUsdt = s.distribute_states.beforeTeamUsdt;
-        address per = s.contracts["per"];
-        // require(
-        //     LibMeta.msgSender() == LibDiamond.enforceIsContractOwner(),
-        //     "you are not dev"
-        // );
-        IERC20(per).transfer(
-            LibMeta.msgSender(),
-            beforeP2Usdt + beforeTeamUsdt
-        );
-        uint _beforeP2Usdt = beforeP2Usdt;
-        uint _beforeP2Per = beforeP2Per;
-        uint _beforeTeamUsdt = beforeTeamUsdt;
+    // function p0_transferForDistribute() internal returns (uint, uint, uint) {
+    //     AppStorage storage s = LibAppStorage.diamondStorage();
+    //     uint beforeP2Usdt = s.distribute_states.beforeP2Usdt;
+    //     uint beforeP2Per = s.distribute_states.beforeP2Per;
+    //     uint beforeTeamUsdt = s.distribute_states.beforeTeamUsdt;
+    //     address per = s.contracts["per"];
+    //     // require(
+    //     //     LibMeta.msgSender() == LibDiamond.enforceIsContractOwner(),
+    //     //     "you are not dev"
+    //     // );
+    //     IERC20(per).transfer(
+    //         LibMeta.msgSender(),
+    //         beforeP2Usdt + beforeTeamUsdt
+    //     );
+    //     uint _beforeP2Usdt = beforeP2Usdt;
+    //     uint _beforeP2Per = beforeP2Per;
+    //     uint _beforeTeamUsdt = beforeTeamUsdt;
 
-        beforeP2Usdt = 0;
-        beforeP2Per = 0;
-        beforeTeamUsdt = 0;
+    //     beforeP2Usdt = 0;
+    //     beforeP2Per = 0;
+    //     beforeTeamUsdt = 0;
 
-        return (_beforeP2Usdt, _beforeP2Per, _beforeTeamUsdt);
-    }
+    //     return (_beforeP2Usdt, _beforeP2Per, _beforeTeamUsdt);
+    // }
 
     function isSwap() internal view returns (bool, uint, uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
