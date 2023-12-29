@@ -68,6 +68,9 @@ interface IP1 {
         address _sender
     ) external view returns (PendingInfo[] memory);
 
-
     function diamond_P1_addDistributionAmountAll(uint _amount) external;
+
+    function unStakeTimeLock() external view returns (uint16);
+
+    function unStakeCancelTimeLock() external view returns (uint16);
 }

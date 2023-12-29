@@ -115,4 +115,6 @@ interface IDB {
     ) external;
 
     function usePFPower(uint _id, uint _usePower) external;
+
+    function addProbFee() external view returns (uint);
 }

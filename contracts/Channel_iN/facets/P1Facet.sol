@@ -9,7 +9,7 @@ import {AppStorage, Modifiers, LibAppStorage} from "../../shared/libraries/LibAp
 import {IERC20} from "../../shared/interfaces/IERC20.sol";
 
 contract P1Facet {
-    function P1_deposit(uint _amount) external {
+    function P1_staking(uint _amount) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
@@ -21,7 +21,7 @@ contract P1Facet {
         IP1(s.contracts["p1"]).diamond_P1_deposit(msgsender, _amount);
     }
 
-    function P1_reDeposit() external {
+    function P1_rewardStaking() external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
@@ -58,7 +58,7 @@ contract P1Facet {
         );
     }
 
-    function P1_widthdraw(uint _amount) external {
+    function P1_unstaking(uint _amount) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
@@ -68,7 +68,7 @@ contract P1Facet {
         );
     }
 
-    function P1_widthdrawConfirm(uint _pendingId) external {
+    function P1_unstakingConfirm(uint _pendingId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
@@ -78,7 +78,7 @@ contract P1Facet {
         );
     }
 
-    function P1_widthdrawCancel(uint _pendingId) external {
+    function P1_unstakingCancel(uint _pendingId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
@@ -88,7 +88,7 @@ contract P1Facet {
         );
     }
 
-    function P1_widthdrawCancelConfirm(uint _pendingId) external {
+    function P1_unstakingCancelConfirm(uint _pendingId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
@@ -96,6 +96,9 @@ contract P1Facet {
             .diamond_P1_widthdrawCancelConfirm(msgsender, _pendingId);
     }
 
+    /**
+    P1 _ get functions
+     */
     function P1_getPoolData() external view returns (uint, uint, uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return IP1(s.contracts["p1"]).diamond_P1_getPoolData();
@@ -119,5 +122,13 @@ contract P1Facet {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
         return IP1(s.contracts["p1"]).diamond_P1_getUnstakeData(msgsender);
+    }
+
+    function P1_getTimeLockInfo() external view returns (uint16, uint16) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return (
+            IP1(s.contracts["p1"]).unStakeTimeLock(),
+            IP1(s.contracts["p1"]).unStakeCancelTimeLock()
+        );
     }
 }

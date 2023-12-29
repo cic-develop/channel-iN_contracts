@@ -13,25 +13,28 @@ import {LibP0} from "../libraries/LibP0.sol";
 @dev i-TEZ : P0 (Mix) Facet Contract
  */
 contract P0Facet is Modifiers {
-    function itemMerge(uint _itemId, uint _itemAmount) external {
+    function P0_itemMerge(uint _itemId, uint _itemAmount) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
         LibP0._itemMerge(msgsender, _itemId, _itemAmount);
     }
 
-    function baseMixCall(uint _id, uint _useItemId) external returns (bool) {
+    function P0_baseMixCall(uint _id, uint _useItemId) external returns (bool) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
         return LibP0._baseMixCall(msgsender, _id, _useItemId);
     }
 
-    function premiumMixCall(uint _id, uint _useItemId) external returns (bool) {
+    function P0_premiumMixCall(
+        uint _id,
+        uint _useItemId
+    ) external returns (bool) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
         LibP0._premiumMixCall(msgsender, _id, _useItemId);
     }
 
-    function addProbCall(
+    function P0_addProbCall(
         uint _aienId,
         uint[] memory _pf_Ids
     ) external returns (bool) {
@@ -40,8 +43,22 @@ contract P0Facet is Modifiers {
         LibP0._addProbCall(msgsender, _aienId, _pf_Ids);
     }
 
-    function getMaxProb() external view returns(uint) {
+    /**
+    P0 _ get functions
+     */
+
+    function P0_getMaxProb() external view returns (uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return s.p0_states.maxProb;
+    }
+
+    // input ItemId별로 병합시 소요되는 Per, item수량
+    function P0_getMergeState(uint _itemId) external view returns (uint, uint) {
+        return LibP0._getMergeState(_itemId);
+    }
+
+    // PF POWER ZONE 사용되는 Per 수량
+    function P0_getAddProbFee() external view returns (uint) {
+        return LibP0._getAddProbFee();
     }
 }

@@ -35,7 +35,9 @@ library LibDistribute {
         IERC20(per).transfer(s.contracts["burn"], burnAmount);
         IERC20(per).transfer(s.contracts["p2"], p2Amount);
         IERC20(per).transfer(s.contracts["p1"], p1Amount);
+
         IP1(s.contracts["p1"]).diamond_P1_addDistributionAmountAll(p1Amount);
+
         // IERC20(PER).transfer(P1, )
         // 추가 되어야할 것들
         // 1.P1 10% PER

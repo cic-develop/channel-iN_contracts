@@ -358,4 +358,16 @@ library LibP0 {
         }
         return _gradeProb;
     }
+
+    function _getAddProbFee() internal view returns (uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return IDB(s.contracts["db"]).addProbFee();
+    }
+
+    function _getMergeState(uint _itemId) internal view returns (uint, uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        (uint PerPrice, , , , , uint ItemAmount) = IDB(s.contracts["db"])
+            ._mergeCalcul(_itemId);
+        return (PerPrice, ItemAmount);
+    }
 }
