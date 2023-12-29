@@ -361,7 +361,7 @@ library LibP0 {
 
     function _getAddProbFee() internal view returns (uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        return IDB(s.contracts["db"]).addProbFee();
+        return IDB(s.contracts["p0"]).addProbFee();
     }
 
     function _getMergeState(uint _itemId) internal view returns (uint, uint) {
