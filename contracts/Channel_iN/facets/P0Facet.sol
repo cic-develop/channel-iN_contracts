@@ -39,4 +39,9 @@ contract P0Facet is Modifiers {
         address msgsender = LibMeta.msgSender();
         LibP0._addProbCall(msgsender, _aienId, _pf_Ids);
     }
+
+    function getMaxProb() external view returns(uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return s.p0_states.maxProb;
+    }
 }
