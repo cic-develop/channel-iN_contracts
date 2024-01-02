@@ -99,12 +99,12 @@ contract P2Facet {
     function P2_deposit(uint _aienId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
-        IERC721(s.contracts["p2"]).safeTransferFrom(
+        IP2(s.contracts["p2"]).diamond_P2_deposit(msgsender, _aienId);
+        IERC721(s.contracts["aien"]).safeTransferFrom(
             msgsender,
             s.contracts["p2"],
             _aienId
         );
-        IP2(s.contracts["p2"]).diamond_P2_deposit(msgsender, _aienId);
     }
 
     function P2_withdraw(uint _aienId) external {

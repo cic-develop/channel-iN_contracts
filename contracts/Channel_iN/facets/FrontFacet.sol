@@ -6,12 +6,13 @@ import {IERC20} from "../../shared/interfaces/IERC20.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
 import {IERC1155} from "../../shared/interfaces/IERC1155.sol";
 import {LibMeta} from "../../shared/libraries/LibMeta.sol";
+import {IDB} from "../interfaces/IDB.sol";
 
 /**
 @dev get load BlockChain datas before front component mount
  */
 contract FrontFacet {
-    function isApprovedAsset(
+    function Front_isApprovedAsset(
         address _user
     ) external view returns (bool, bool, bool, bool) {
         AppStorage storage s = LibAppStorage.diamondStorage();
@@ -40,5 +41,13 @@ contract FrontFacet {
         );
     }
 
-    
+    function Front_PfGrades() external view returns (IDB.pfGrade memory) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return IDB(s.contracts["db"]).PfGrades();
+    }
+
+    function Front_getAienGradeInfo() external view returns (uint[] memory) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return IDB(s.contracts["db"]).getAienGradeInfo();
+    }
 }

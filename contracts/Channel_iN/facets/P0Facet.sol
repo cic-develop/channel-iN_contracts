@@ -9,6 +9,12 @@ import {IERC1155} from "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
 import {LibP0} from "../libraries/LibP0.sol";
 
+interface IP0 {
+    function mixPFInfos(
+        uint _level
+    ) external view returns (string memory, uint);
+}
+
 /**
 @dev i-TEZ : P0 (Mix) Facet Contract
  */
@@ -60,5 +66,24 @@ contract P0Facet is Modifiers {
     // PF POWER ZONE 사용되는 Per 수량
     function P0_getAddProbFee() external view returns (uint) {
         return LibP0._getAddProbFee();
+    }
+
+    // 인플루언서 루비온 병합시 amount
+    function P0_influencerMergeAmount() external view returns (uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return IDB(s.contracts["db"]).influencerMergeAmount();
+    }
+
+    // 재단 루비온 병합시 amount
+    function P0_basicMergeAmount() external view returns (uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return IDB(s.contracts["db"]).basicMergeAmount();
+    }
+
+    // MixPFInfos
+    function P0_mixPFInfos(
+        uint _level
+    ) external view returns (string memory, uint) {
+        return IP0(s.contracts["p0"]).mixPFInfos(_level);
     }
 }

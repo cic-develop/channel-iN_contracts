@@ -9,6 +9,17 @@ interface IDB {
         bool isAien;
         uint usedAienId;
     }
+
+    struct pfGrade {
+        uint normal;
+        uint uncommon;
+        uint rare;
+        uint unique;
+        uint legendary;
+        uint myth;
+        uint ancient;
+    }
+
     struct aien {
         uint id;
         // 강화 횟수
@@ -117,4 +128,12 @@ interface IDB {
     function usePFPower(uint _id, uint _usePower) external;
 
     function addProbFee() external view returns (uint);
+
+    function PfGrades() external view returns (pfGrade memory);
+
+    function getAienGradeInfo() external view returns (uint[] memory);
+
+    function basicMergeAmount() external view returns (uint);
+
+    function influencerMergeAmount() external view returns (uint);
 }
