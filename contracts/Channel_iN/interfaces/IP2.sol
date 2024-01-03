@@ -115,4 +115,10 @@ interface IP2 {
     ) external view returns (uint, uint, uint);
 
     function addPerUsdtDistribution(uint _usdt, uint _per) external;
+
+    function P2_usdtBalance() external view returns (uint);
+
+    function P2_perBalance() external view returns (uint);
+
+    function MAX_STAKING_LIMIT() external view returns (uint);
 }

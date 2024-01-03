@@ -136,4 +136,8 @@ interface IDB {
     function basicMergeAmount() external view returns (uint);
 
     function influencerMergeAmount() external view returns (uint);
+
+    function _getMedataMargin() external view returns (uint, uint, uint);
+
+    function getAienLevel(uint _aienId) external view returns (uint);
 }

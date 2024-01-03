@@ -86,4 +86,12 @@ contract P0Facet is Modifiers {
     ) external view returns (string memory, uint) {
         return IP0(s.contracts["p0"]).mixPFInfos(_level);
     }
+
+    // Aien Metadata set Margin value
+    function P0_getMetadataMargin() external view returns (uint, uint, uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return IDB(s.contracts["db"])._getMedataMargin();
+    }
+
+    
 }
