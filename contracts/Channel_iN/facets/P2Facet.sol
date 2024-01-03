@@ -20,7 +20,7 @@ contract P2Facet {
         );
     }
 
-    function P2_unstaking(uint _aienId) external {
+    function P2_unStaking(uint _aienId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
