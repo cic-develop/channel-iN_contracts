@@ -121,4 +121,6 @@ interface IP2 {
     function P2_perBalance() external view returns (uint);
 
     function MAX_STAKING_LIMIT() external view returns (uint);
+
+    function layers(uint _number) external view returns (Layer memory);
 }

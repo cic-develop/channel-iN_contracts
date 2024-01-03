@@ -80,4 +80,9 @@ contract P2Facet {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return IP2(s.contracts["p2"]).MAX_STAKING_LIMIT();
     }
+
+    function P2_layers(uint _number) external view returns (IP2.Layer memory) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return IP2(s.contracts["p2"]).layers(_number);
+    }
 }
