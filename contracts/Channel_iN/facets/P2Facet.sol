@@ -9,7 +9,7 @@ import {IDB} from "../interfaces/IDB.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 
 contract P2Facet {
-    function P2_deposit(uint _aienId) external {
+    function P2_staking(uint _aienId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
         IP2(s.contracts["p2"]).diamond_P2_deposit(msgsender, _aienId);
@@ -20,7 +20,7 @@ contract P2Facet {
         );
     }
 
-    function P2_withdraw(uint _aienId) external {
+    function P2_unstaking(uint _aienId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
