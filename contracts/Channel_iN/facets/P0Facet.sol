@@ -84,6 +84,7 @@ contract P0Facet is Modifiers {
     function P0_mixPFInfos(
         uint _level
     ) external view returns (string memory, uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
         return IP0(s.contracts["p0"]).mixPFInfos(_level);
     }
 
@@ -92,6 +93,4 @@ contract P0Facet is Modifiers {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return IDB(s.contracts["db"])._getMedataMargin();
     }
-
-    
 }

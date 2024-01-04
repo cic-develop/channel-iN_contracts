@@ -17,12 +17,42 @@ library LibP0 {
         bool indexed isLevelUp,
         uint price
     );
-    event MergeToMint(
-        address indexed _to,
-        uint indexed _PerFriends_id,
-        uint indexed _Use_item_id,
-        uint _usePerAmount,
-        bytes _pfURI
+
+    event P0_BaseMix_Event(
+        address indexed to,
+        uint indexed aienId,
+        uint indexed itemId,
+        uint itemAmount,
+        bool isLevelUp,
+        uint payment
+    );
+
+    event P0_PremiumMix_Event(
+        address indexed to,
+        uint indexed aienId,
+        uint indexed itemId,
+        uint itemAmount,
+        bool isLevelUp,
+        uint payment,
+        uint usePower
+    );
+
+    event P0_ItemMerge_Event(
+        address indexed to,
+        uint indexed perfId,
+        uint indexed itemId,
+        uint itemAmount,
+        uint payment,
+        uint perfGrade,
+        bytes perfURI
+    );
+
+    event P0_AddProb_Event(
+        address indexed to,
+        uint indexed aienId,
+        uint[] indexed perfs,
+        uint addProb,
+        uint payment
     );
 
     function _baseMixCall(
@@ -37,8 +67,6 @@ library LibP0 {
             "not owner"
         );
         IDB.aien memory _AIEN = IDB(s.contracts["db"]).AIENS(_id);
-        // P0_GradeInfo memory _gradeInfo = s.p0_gradeInfos[_AIEN.p2Level];
-        // P0_GradeInfo memory _gradeInfoNext = s.p0_gradeInfos[_AIEN.p2Level + 1];
 
         require(s.p0_gradeInfos[_AIEN.p2Level].isOpen == true, "not open");
 
@@ -69,7 +97,15 @@ library LibP0 {
 
         if (_AIEN.p2Level == 0) {
             IDB(s.contracts["db"])._levelUpSucess(_id, _AIEN.p2Level);
-            emit MixCall(_id, 0, true, s.p0_gradeInfos[_AIEN.p2Level].mixFee);
+            emit P0_BaseMix_Event(
+                _sender,
+                _id,
+                _useItemId,
+                1,
+                true,
+                s.p0_gradeInfos[_AIEN.p2Level].mixFee
+            );
+            // emit MixCall(_id, 0, true, s.p0_gradeInfos[_AIEN.p2Level].mixFee);
 
             return true;
         }
@@ -95,13 +131,20 @@ library LibP0 {
             IDB(s.contracts["db"])._levelUpFailed(_id, _randomAdd);
         }
 
-        emit MixCall(
+        // emit MixCall(
+        //     _id,
+        //     0,
+        //     _random <= _AIEN.baseProb,
+        //     s.p0_gradeInfos[_AIEN.p2Level].mixFee
+        // );
+        emit P0_BaseMix_Event(
+            _sender,
             _id,
-            0,
+            _useItemId,
+            1,
             _random <= _AIEN.baseProb,
             s.p0_gradeInfos[_AIEN.p2Level].mixFee
         );
-
         return true;
     }
 
@@ -144,11 +187,21 @@ library LibP0 {
 
         uint _random = __random(_sender);
         uint totalProb = 0;
-        if (_AIEN.baseProb + _AIEN.addProb > _random) {
+        if (_AIEN.baseProb + _AIEN.addProb >= s.p0_states.maxProb) {
+            // if (_AIEN.baseProb + _AIEN.addProb > _random) {
             totalProb = _AIEN.baseProb + _AIEN.addProb - s.p0_states.maxProb;
         }
 
         if (_AIEN.baseProb + _AIEN.addProb >= _random) {
+            emit P0_PremiumMix_Event(
+                _sender,
+                _aienId,
+                _useItemId,
+                1,
+                true,
+                s.p0_gradeInfos[_AIEN.p2Level].mixFee,
+                totalProb == 0 ? _AIEN.addProb : _AIEN.addProb - totalProb
+            );
             // 성공률 초기화
             // 레벨 상승
             IDB(s.contracts["db"])._successAienSet(
@@ -160,6 +213,16 @@ library LibP0 {
                 totalProb
             );
         } else {
+            emit P0_PremiumMix_Event(
+                _sender,
+                _aienId,
+                _useItemId,
+                1,
+                false,
+                s.p0_gradeInfos[_AIEN.p2Level].mixFee,
+                totalProb == 0 ? _AIEN.addProb : _AIEN.addProb - totalProb
+            );
+
             uint _randomAdd = __randomAddProb(
                 _sender,
                 s.p0_gradeInfos[_AIEN.p2Level].failedAddProbMax,
@@ -174,13 +237,6 @@ library LibP0 {
                 totalProb
             );
         }
-
-        emit MixCall(
-            _aienId,
-            1,
-            _AIEN.baseProb + _AIEN.addProb >= _random,
-            s.p0_gradeInfos[_AIEN.p2Level].mixFee
-        );
 
         return true;
     }
@@ -247,7 +303,16 @@ library LibP0 {
 
         (uint mintPfId, string memory _pfURI) = IDB(s.contracts["db"])
             ._influencerMerge(_sender, _itemId, 0);
-        emit MergeToMint(_sender, mintPfId, _itemId, mergeFee, bytes(_pfURI));
+
+        emit P0_ItemMerge_Event(
+            _sender,
+            mintPfId,
+            _itemId,
+            _itemAmount,
+            mergeFee,
+            1,
+            bytes(_pfURI)
+        );
     }
 
     function _addProbCall(
@@ -291,10 +356,18 @@ library LibP0 {
             _AIEN.addProb + _gradeProb
         );
 
-        emit MixCall(
+        // emit MixCall(
+        //     _aienId,
+        //     2,
+        //     false,
+        //     _pf_Ids.length * s.p0_states.addProbFee
+        // );
+
+        emit P0_AddProb_Event(
+            _sender,
             _aienId,
-            2,
-            false,
+            _pf_Ids,
+            _gradeProb,
             _pf_Ids.length * s.p0_states.addProbFee
         );
     }

@@ -7,8 +7,8 @@ import {IP2} from "../interfaces/IP2.sol";
 import {IP2_Admin} from "../interfaces/IP2_Admin.sol";
 
 contract AdminFacet is Modifiers {
-    /**
-     *@dev P0 Admin functions
+    // @collapse
+    /**@dev P0 Admin functions
      */
     function admin_p0_setStates(
         uint24 _maxProb,
@@ -89,8 +89,7 @@ contract AdminFacet is Modifiers {
         );
     }
 
-    /**
-     *@dev P2 Admin functions
+    /**@dev P2 Admin functions
      */
     function admin_P2_layer_setting(
         uint _layerNumber,
@@ -128,11 +127,10 @@ contract AdminFacet is Modifiers {
         AppStorage storage s = LibAppStorage.diamondStorage();
         IP2_Admin(s.contracts["p2"]).diamond_P2_setMaxLimit(_maxLimit);
     }
+    
 
-    /**
-     *@dev DistriBute Admin functions
+    /**@dev DistriBute Admin functions
      */
-
     function admin_distribute_setStates(
         uint24 _p1Ratio,
         uint24 _p2PerRatio,
@@ -173,8 +171,7 @@ contract AdminFacet is Modifiers {
         s.ksSwapLimit = _limit;
     }
 
-    /**
-    @dev aien mint variables
+    /**@dev aien mint variables
      */
 
     function admin_setAienMintFee(uint _mintFee) external onlyDev {

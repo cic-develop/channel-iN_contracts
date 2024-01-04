@@ -4,7 +4,7 @@ pragma solidity ^0.8.18;
 import {LibDiamond} from "./LibDiamond.sol";
 import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import {LibMeta} from "./LibMeta.sol";
-
+// using EnumerableSet for EnumerableSet.AddressSet;
 // i-Tez Structs
 //- P0 struct
 struct P0_State {
@@ -65,7 +65,6 @@ struct AppStorage {
     // Distribute
     uint ksSwapLimit;
     bool isAutoDistribute;
-    //
 }
 
 library LibAppStorage {
@@ -84,10 +83,17 @@ library LibAppStorage {
 @dev global modifier
  */
 contract Modifiers {
-    AppStorage internal s;
-
     modifier onlyDev() {
         LibDiamond.enforceIsContractOwner();
         _;
     }
+
+    // modifier checkRole(uint16 _role) {
+    //     AppStorage storage s = LibAppStorage.diamondStorage();
+    //     require(
+    //         s.roles[_role].accounts.contains(LibMeta.msgSender()),
+    //         "AccessControl: sender does not have required role"
+    //     );
+    //     _;
+    // }
 }

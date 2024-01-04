@@ -9,22 +9,52 @@ import {IERC20} from "../../shared/interfaces/IERC20.sol";
 import {LibDistribute} from "../../shared/libraries/LibDistribute.sol";
 
 library LibAienMint {
-    event DefaultMint(address indexed _to, uint indexed _tokenId);
-    event AiMint(address indexed _to, uint indexed _tokenId);
-    event PfMint(
-        address indexed _to,
-        uint indexed _tokenId,
-        uint indexed _pfId
+    // event DefaultMint(address indexed _to, uint indexed _tokenId);
+    // event AiMint(address indexed _to, uint indexed _tokenId);
+    // event PfMint(
+    //     address indexed _to,
+    //     uint indexed _tokenId,
+    //     uint indexed _pfId
+    // );
+
+    // event DefaultSetImage(address indexed _to, uint indexed _tokenId);
+    // event AiSetImage(address indexed _to, uint indexed _tokenId);
+    // event PfSetImage(
+    //     address indexed _to,
+    //     uint indexed _tokenId,
+    //     uint indexed _pfId
+    // );
+    // event PfDeleteImage(uint indexed _tokenId, uint indexed _pfId);
+
+    // mint events
+    event Aien_DefaultMint_Event(address indexed to, uint indexed aienId);
+
+    event Aien_AiMint_Event(
+        address indexed to,
+        uint indexed aienId,
+        uint indexed payment
     );
 
-    event DefaultSetImage(address indexed _to, uint indexed _tokenId);
-    event AiSetImage(address indexed _to, uint indexed _tokenId);
-    event PfSetImage(
-        address indexed _to,
-        uint indexed _tokenId,
-        uint indexed _pfId
+    event Aien_PfMint_Event(
+        address indexed to,
+        uint indexed aienId,
+        uint indexed perfId
     );
-    event PfDeleteImage(uint indexed _tokenId, uint indexed _pfId);
+
+    // setImage events
+    event Aien_DefaultSetImage_Event(address indexed to, uint indexed aienId);
+
+    event Aien_AiSetImage_Event(
+        address indexed to,
+        uint indexed aienId,
+        uint indexed payment
+    );
+
+    event Aien_PfSetImage_Event(
+        address indexed to,
+        uint indexed aienId,
+        uint indexed perfId
+    );
 
     modifier onlyFirstMint() {
         AppStorage storage s = LibAppStorage.diamondStorage();
@@ -46,7 +76,9 @@ library LibAienMint {
         IERC721(s.contracts["aien"]).safeMintByMinter(_sender);
         IDB(s.contracts["db"]).setAien(id);
 
-        emit AiMint(_sender, id);
+        // emit AiMint(_sender, id);
+        emit Aien_AiMint_Event(_sender, id, s.aienMintFee);
+
         return id;
     }
 
@@ -59,7 +91,8 @@ library LibAienMint {
         IERC721(s.contracts["aien"]).safeMintByMinter(_sender);
         IDB(s.contracts["db"]).setAien(id);
 
-        emit DefaultMint(_sender, id);
+        // emit DefaultMint(_sender, id);
+        emit Aien_DefaultMint_Event(_sender, id);
         return id;
     }
 
@@ -84,7 +117,8 @@ library LibAienMint {
         IDB(s.contracts["db"]).usePFimg(id, _pfId);
         IERC721(s.contracts["aien"]).safeMintByMinter(_sender);
 
-        emit PfMint(_sender, id, _pfId);
+        // emit PfMint(_sender, id, _pfId);
+        emit Aien_PfMint_Event(_sender, id, _pfId);
 
         return id;
     }
@@ -96,7 +130,8 @@ library LibAienMint {
             "not owner"
         );
 
-        emit DefaultSetImage(_sender, _aienId);
+        // emit DefaultSetImage(_sender, _aienId);
+        emit Aien_DefaultSetImage_Event(_sender, _aienId);
     }
 
     function _aiSetImage(address _sender, uint _aienId) internal {
@@ -112,14 +147,11 @@ library LibAienMint {
             s.aienMintFee
         );
 
-        emit AiSetImage(_sender, _aienId);
+        // emit AiSetImage(_sender, _aienId);
+        emit Aien_AiSetImage_Event(_sender, _aienId, s.aienMintFee);
     }
 
-    function _pfSetImage(
-        address _sender,
-        uint _aienId,
-        uint _pfId
-    ) internal {
+    function _pfSetImage(address _sender, uint _aienId, uint _pfId) internal {
         AppStorage storage s = LibAppStorage.diamondStorage();
         require(
             IERC721(s.contracts["aien"]).ownerOf(_aienId) == _sender,
@@ -137,6 +169,7 @@ library LibAienMint {
 
         IDB(s.contracts["db"]).usePFimg(_aienId, _pfId);
 
-        emit PfSetImage(_sender, _aienId, _pfId);
+        // emit PfSetImage(_sender, _aienId, _pfId);
+        emit Aien_PfSetImage_Event(_sender, _aienId, _pfId);
     }
 }

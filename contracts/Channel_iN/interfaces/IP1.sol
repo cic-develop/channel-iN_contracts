@@ -41,22 +41,22 @@ interface IP1 {
     function diamond_P1_widthdraw(
         address _sender,
         uint _amount
-    ) external returns (uint);
+    ) external returns (uint,uint);
 
     function diamond_P1_widthdrawConfirm(
         address _sender,
         uint _pendingId
-    ) external returns (uint);
+    ) external returns (uint,uint);
 
     function diamond_P1_widthdrawCancel(
         address _sender,
         uint _pendingId
-    ) external returns (uint);
+    ) external returns (uint, uint);
 
     function diamond_P1_widthdrawCancelConfirm(
         address _sender,
         uint _pendingId
-    ) external returns (uint);
+    ) external returns (uint, uint);
 
     function diamond_P1_getPoolData() external view returns (uint, uint, uint);
 
