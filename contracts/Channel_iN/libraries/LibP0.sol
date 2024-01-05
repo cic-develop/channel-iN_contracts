@@ -50,11 +50,12 @@ library LibP0 {
     event P0_AddProb_Event(
         address indexed to,
         uint indexed aienId,
-        uint[] indexed perfs,
+        uint indexed payment,
         uint addProb,
-        uint payment
+        uint[] perfs
     );
 
+    // uint payment
     function _baseMixCall(
         address _sender,
         uint _id,
@@ -366,9 +367,9 @@ library LibP0 {
         emit P0_AddProb_Event(
             _sender,
             _aienId,
-            _pf_Ids,
+            s.p0_states.addProbFee,
             _gradeProb,
-            _pf_Ids.length * s.p0_states.addProbFee
+            _pf_Ids
         );
     }
 
