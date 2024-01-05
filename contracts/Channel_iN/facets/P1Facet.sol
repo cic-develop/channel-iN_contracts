@@ -15,12 +15,12 @@ contract P1Facet {
     event P1_Harvest_Event(address indexed to, uint indexed rewardAmount);
 
     event P1_AddPower_Event(address indexed to, uint indexed usePower);
-    event P1_BurnPower_Event(address indexed to, uint indexed burnPower);
 
     event P1_UnStaking_Event(
         address indexed to,
         uint indexed unStakeAmount,
-        uint indexed pendingId
+        uint indexed pendingId,
+        uint burnPower
     );
     event P1_UnstakingConfirm_Event(
         address indexed to,
@@ -109,11 +109,7 @@ contract P1Facet {
         (uint burnPower, uint pendingId) = IP1(s.contracts["p1"])
             .diamond_P1_widthdraw(msgsender, _amount);
 
-        if (burnPower > 0) {
-            emit P1_BurnPower_Event(msgsender, burnPower);
-        } else {
-            emit P1_UnStaking_Event(msgsender, _amount, pendingId);
-        }
+        emit P1_UnStaking_Event(msgsender, _amount, pendingId, burnPower);
     }
 
     function P1_unstakingConfirm(uint _pendingId) external {
