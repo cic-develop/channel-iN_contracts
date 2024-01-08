@@ -9,23 +9,6 @@ import {IERC20} from "../../shared/interfaces/IERC20.sol";
 import {LibDistribute} from "../../shared/libraries/LibDistribute.sol";
 
 library LibAienMint {
-    // event DefaultMint(address indexed _to, uint indexed _tokenId);
-    // event AiMint(address indexed _to, uint indexed _tokenId);
-    // event PfMint(
-    //     address indexed _to,
-    //     uint indexed _tokenId,
-    //     uint indexed _pfId
-    // );
-
-    // event DefaultSetImage(address indexed _to, uint indexed _tokenId);
-    // event AiSetImage(address indexed _to, uint indexed _tokenId);
-    // event PfSetImage(
-    //     address indexed _to,
-    //     uint indexed _tokenId,
-    //     uint indexed _pfId
-    // );
-    // event PfDeleteImage(uint indexed _tokenId, uint indexed _pfId);
-
     // mint events
     event Aien_DefaultMint_Event(address indexed to, uint indexed aienId);
 
@@ -70,7 +53,7 @@ library LibAienMint {
         uint id = IERC721(s.contracts["aien"]).nextTokenId();
         IERC20(s.contracts["per"]).transferFrom(
             _sender,
-            s.contracts["aien"],
+            s.contracts["team"],
             s.aienMintFee
         );
         IERC721(s.contracts["aien"]).safeMintByMinter(_sender);

@@ -16,3 +16,5 @@ deployments
 contracts/P1
 contracts/P2
 contracts/db
+
+contracts/Channel_iN/libraries/LibP0.sol

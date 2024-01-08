@@ -140,4 +140,17 @@ interface IDB {
     function _getMedataMargin() external view returns (uint, uint, uint);
 
     function getAienLevel(uint _aienId) external view returns (uint);
+
+    function setPerprojectWallet(address _addr) external;
+
+    function setAgencyAddr(address _influencer, address _agency) external;
+
+    function setAgencyIncomePercent(uint _agencyIncomePercent) external;
+
+    function adminSetMergeAmount(
+        uint _influencerMergeAmount,
+        uint _basicMergeAmount,
+        uint _agencyIncomePercent,
+        uint _ownerIncomePercent
+    ) external;
 }

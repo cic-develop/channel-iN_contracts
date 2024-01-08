@@ -7,7 +7,6 @@ import {IP2} from "../interfaces/IP2.sol";
 import {IP2_Admin} from "../interfaces/IP2_Admin.sol";
 
 contract AdminFacet is Modifiers {
-    // @collapse
     /**@dev P0 Admin functions
      */
     function admin_p0_setStates(
@@ -127,7 +126,6 @@ contract AdminFacet is Modifiers {
         AppStorage storage s = LibAppStorage.diamondStorage();
         IP2_Admin(s.contracts["p2"]).diamond_P2_setMaxLimit(_maxLimit);
     }
-    
 
     /**@dev DistriBute Admin functions
      */

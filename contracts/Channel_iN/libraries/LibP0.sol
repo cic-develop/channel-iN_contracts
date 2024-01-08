@@ -10,14 +10,6 @@ import {IERC20} from "../../shared/interfaces/IERC20.sol";
 import {LibDistribute} from "../../shared/libraries/LibDistribute.sol";
 
 library LibP0 {
-    // events
-    // event MixCall(
-    //     uint indexed _tokenId,
-    //     uint indexed _mixType,
-    //     bool indexed isLevelUp,
-    //     uint price
-    // );
-
     event P0_BaseMix_Event(
         address indexed to,
         uint indexed aienId,
@@ -356,13 +348,6 @@ library LibP0 {
             _AIEN.isPFid,
             _AIEN.addProb + _gradeProb
         );
-
-        // emit MixCall(
-        //     _aienId,
-        //     2,
-        //     false,
-        //     _pf_Ids.length * s.p0_states.addProbFee
-        // );
 
         emit P0_AddProb_Event(
             _sender,

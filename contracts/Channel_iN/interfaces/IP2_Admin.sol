@@ -19,4 +19,8 @@ interface IP2_Admin {
     ) external;
 
     function diamond_P2_setMaxLimit(uint _maxLimit) external;
+
+    
+
+
 }
