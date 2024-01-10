@@ -40,7 +40,6 @@ library LibDistribute {
             s.distribute_states.beforeP2Per
         );
         IP1(s.contracts["p1"]).diamond_P1_addDistributionAmountAll(p1Amount);
-        // IP2 PER Update 넣어야함
 
         // IERC20(PER).transfer(P1, )
         // 추가 되어야할 것들
