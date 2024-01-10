@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.22;
 
-import {AppStorage, Modifiers, LibAppStorage} from "../../shared/libraries/LibAppStorage.sol";
+import {P0_MergePfGrade, AppStorage, Modifiers, LibAppStorage} from "../../shared/libraries/LibAppStorage.sol";
 import {LibMeta} from "../../shared/libraries/LibMeta.sol";
 import {IDB} from "../interfaces/IDB.sol";
 import {IERC20} from "../../shared/interfaces/IERC20.sol";
@@ -24,6 +24,15 @@ contract P0Facet is Modifiers {
         address msgsender = LibMeta.msgSender();
         LibP0._itemMerge(msgsender, _itemId, _itemAmount);
     }
+
+    // function P0_itemGradeMerge(
+    //     uint _itemId,
+    //     uint _itemAmount,
+    //     uint8 _grade
+    // ) external {
+    //     address msgsender = LibMeta.msgSender();
+    //     LibP0._itemGradeMerge(msgsender, _itemId, _itemAmount, _grade);
+    // }
 
     function P0_baseMixCall(uint _id, uint _useItemId) external returns (bool) {
         AppStorage storage s = LibAppStorage.diamondStorage();
@@ -92,5 +101,12 @@ contract P0Facet is Modifiers {
     function P0_getMetadataMargin() external view returns (uint, uint, uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return IDB(s.contracts["db"])._getMedataMargin();
+    }
+
+    function P0_getMergeStates(
+        uint8 _grade
+    ) external view returns (P0_MergePfGrade memory) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return s.p0_mergePfGrades[_grade];
     }
 }

@@ -35,8 +35,12 @@ library LibDistribute {
         IERC20(per).transfer(s.contracts["burn"], burnAmount);
         IERC20(per).transfer(s.contracts["p2"], p2Amount);
         IERC20(per).transfer(s.contracts["p1"], p1Amount);
-
+        IP2(s.contracts["p2"]).addPerUsdtDistribution(
+            p2AmountForUsdt,
+            s.distribute_states.beforeP2Per
+        );
         IP1(s.contracts["p1"]).diamond_P1_addDistributionAmountAll(p1Amount);
+        // IP2 PER Update 넣어야함
 
         // IERC20(PER).transfer(P1, )
         // 추가 되어야할 것들
@@ -89,10 +93,10 @@ library LibDistribute {
             path
         );
 
-        _swaplToCalculate();
+        _swapToCalculate();
     }
 
-    function _swaplToCalculate() internal returns (uint, uint, uint) {
+    function _swapToCalculate() internal returns (uint, uint, uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         uint usdtBalance = IERC20(s.contracts["usdt"]).balanceOf(address(this));
         uint calculatePercent = s.distribute_states.p2UsdtRatio +

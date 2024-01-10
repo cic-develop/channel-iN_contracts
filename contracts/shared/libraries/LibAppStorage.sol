@@ -36,6 +36,21 @@ struct P0_GradeInfo {
     uint24 failedAddProbMax;
 }
 
+struct P0_MergePfGrade {
+    uint8 grade;
+    string gradeName;
+    uint mergeFee;
+    uint mergeUseItemAmount;
+    uint latestId;
+    uint setMatadataId;
+    bool isOpen;
+}
+struct P0_MergeState {
+    uint agencyIncomePercent;
+    uint influencerIncomePercent;
+    // 1e5 = 100%
+    // uint maxIncomePercent;
+}
 // //- Distribute struct
 struct Distribute_State {
     uint beforeP2Usdt;
@@ -47,6 +62,23 @@ struct Distribute_State {
     uint24 p2UsdtRatio;
     uint24 burnRatio;
     uint24 teamUsdtRatio;
+}
+// DB > Filtered User Struct
+struct User {
+    // DB > idx
+    uint userId;
+    // token itme ID
+    uint itemId;
+    address incomeAddr;
+    uint feeBalance;
+    bool isAble;
+    uint mintCount;
+    uint useLevelupCount;
+    uint useMergeCount;
+    //레퍼럴로 얻은 수익
+    uint referralIncome;
+    address agency;
+    uint agencyIncome;
 }
 
 // P0 End
@@ -65,6 +97,10 @@ struct AppStorage {
     // Distribute
     uint ksSwapLimit;
     bool isAutoDistribute;
+    // P0 - Item Merge Grade Infos
+    mapping(uint8 => P0_MergePfGrade) p0_mergePfGrades;
+    mapping(uint => string) pfMetaURI;
+    P0_MergeState p0_mergeState;
 }
 
 library LibAppStorage {
