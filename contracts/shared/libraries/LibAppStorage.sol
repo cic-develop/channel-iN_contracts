@@ -48,8 +48,7 @@ struct P0_MergePfGrade {
 struct P0_MergeState {
     uint agencyIncomePercent;
     uint influencerIncomePercent;
-    // 1e5 = 100%
-    // uint maxIncomePercent;
+    
 }
 // //- Distribute struct
 struct Distribute_State {

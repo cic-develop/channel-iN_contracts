@@ -180,4 +180,11 @@ interface IDB {
         uint8 _grade,
         string memory _seedHash
     ) external;
+
+    function _itemMergeFromDiamond(
+        address _to,
+        uint _pfId,
+        string memory _seedHash,
+        uint8 _grade
+    ) external;
 }

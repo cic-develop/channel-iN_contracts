@@ -25,14 +25,14 @@ contract P0Facet is Modifiers {
         LibP0._itemMerge(msgsender, _itemId, _itemAmount);
     }
 
-    // function P0_itemGradeMerge(
-    //     uint _itemId,
-    //     uint _itemAmount,
-    //     uint8 _grade
-    // ) external {
-    //     address msgsender = LibMeta.msgSender();
-    //     LibP0._itemGradeMerge(msgsender, _itemId, _itemAmount, _grade);
-    // }
+    function P0_itemGradeMerge(
+        uint _itemId,
+        uint _itemAmount,
+        uint8 _grade
+    ) external {
+        address msgsender = LibMeta.msgSender();
+        LibP0._itemGradeMerge(msgsender, _itemId, _itemAmount, _grade);
+    }
 
     function P0_baseMixCall(uint _id, uint _useItemId) external returns (bool) {
         AppStorage storage s = LibAppStorage.diamondStorage();

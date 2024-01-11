@@ -308,69 +308,72 @@ library LibP0 {
         );
     }
 
-    // function _itemGradeMerge(
-    //     address _sender,
-    //     uint _itemId,
-    //     uint _itemAmount,
-    //     uint8 _grade
-    // ) internal {
-    //     AppStorage storage s = LibAppStorage.diamondStorage();
-    //     P0_MergePfGrade memory _mergePfGrade = s.p0_mergePfGrades[_grade];
-    //     require(_mergePfGrade.isOpen, "PF Grade Merge function not open");
-    //     require(
-    //         _itemAmount == _mergePfGrade.mergeUseItemAmount,
-    //         "not equal item amount"
-    //     );
+    function _itemGradeMerge(
+        address _sender,
+        uint _itemId,
+        uint _itemAmount,
+        uint8 _grade
+    ) internal {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        P0_MergePfGrade storage _mergePfGrade = s.p0_mergePfGrades[_grade];
+        string memory _seedHash = s.pfMetaURI[_mergePfGrade.latestId];
+        require(_mergePfGrade.isOpen, "PF Grade Merge function not open");
 
-    //     (
-    //         uint mergeFee,
-    //         address _influencer,
-    //         uint _influencerFee,
-    //         address _agency,
-    //         uint _agencyFee,
-    //         uint _influencerItemAmount)= _mergeCalculate(_itemId, _grade);
+        (
+            uint _mergeFee,
+            address _influencer,
+            uint _influencerFee,
+            address _agency,
+            uint _agencyFee,
+            uint _influencerItemAmount
+        ) = _mergeCalculate(_itemId, _grade);
 
-    //     IERC1155(s.contracts["item"]).burn(
-    //         _sender,
-    //         _itemId,
-    //         _influencerItemAmount
-    //     );
+        IDB(s.contracts["db"])._mergeCount(
+            _agency,
+            _agencyFee,
+            _influencer,
+            _influencerFee
+        );
+        //
+        IERC1155(s.contracts["item"]).burn(
+            _sender,
+            _itemId,
+            _influencerItemAmount
+        );
 
-    //     IDB(s.contracts["db"])._mergeCount(
-    //         _agency,
-    //         _agencyFee,
-    //         _influencer,
-    //         _influencerFee
-    //     );
+        IERC20(s.contracts["per"]).transferFrom(
+            _sender,
+            s.contracts["distribute"],
+            _mergeFee
+        );
 
-    //     IERC20(s.contracts["per"]).transferFrom(
-    //         _sender,
-    //         s.contracts["distribute"],
-    //         mergeFee
-    //     );
+        LibDistribute.p0LvUpDistribute(
+            _agency,
+            _agencyFee,
+            _influencer,
+            _influencerFee,
+            _mergeFee
+        );
 
-    //     LibDistribute.p0LvUpDistribute(
-    //         _agency,
-    //         _agencyFee,
-    //         _influencer,
-    //         _influencerFee,
-    //         mergeFee
-    //     );
+        IDB(s.contracts["db"])._itemMergeFromDiamond(
+            _sender,
+            _mergePfGrade.latestId,
+            _seedHash,
+            _grade
+        );
 
-    //     (uint mintPfId, string memory _pfURI) = IDB(s.contracts["db"])
-    //         ._influencerMerge(_sender, _itemId, 0);
+        emit P0_ItemMerge_Event(
+            _sender,
+            _mergePfGrade.latestId,
+            _itemId,
+            _influencerItemAmount,
+            _mergeFee,
+            _grade,
+            bytes(_seedHash)
+        );
 
-    //     emit P0_ItemMerge_Event(
-    //         _sender,
-    //         mintPfId,
-    //         _itemId,
-    //         _itemAmount,
-    //         mergeFee,
-    //         _grade,
-    //         bytes(_pfURI)
-    //     );
-
-    // }
+        _mergePfGrade.latestId += 1;
+    }
 
     function _addProbCall(
         address _sender,
@@ -502,29 +505,39 @@ library LibP0 {
         return (PerPrice, ItemAmount);
     }
 
-    // function _mergeCalculate(
-    //     uint _itemId,
-    //     uint8 _grade
-    // ) internal returns (uint, address, uint, address, uint, uint) {
-    //     AppStorage storage s = LibAppStorage.diamondStorage();
-    //     P0_MergeState memory _mergeState = s.p0_mergeState;
-    //     User memory _user = IDB(s.contracts["db"]).getUserFromItem(_itemId);
-    //     P0_MergePfGrade memory _mergePfGrade = s.p0_mergePfGrades[_grade];
+    function _mergeCalculate(
+        uint _itemId,
+        uint8 _grade
+    ) internal returns (uint, address, uint, address, uint, uint) {
+        // AppStorage storage s = LibAppStorage.diamondStorage();
+        // P0_MergeState memory _mergeState = s.p0_mergeState;
+        // User memory _user = IDB(s.contracts["db"]).getUserFromItem(_itemId);
+        // P0_MergePfGrade memory _mergePfGrade = s.p0_mergePfGrades[_grade];
 
-    //     address agency;
-    //     address influencer;
-    //     uint _influeIncome = _mergePfGrade.mergeFee * _mergePfGrade.influencerIncomePercent / 1e5;
-    //     uint _agencyIncome = _mergePfGrade.mergeFee * _mergePfGrade.agencyIncomePercent / 1e5;
+        address agency;
+        address influencer;
+        uint _influeIncome = (_mergePfGrade.mergeFee *
+            _mergeState.influencerIncomePercent) / 1e5;
+        uint _agencyIncome = (_mergePfGrade.mergeFee *
+            _mergeState.agencyIncomePercent) / 1e5;
 
-    //     if(_itemId < 50){
-    //         agency = s.contracts["team"];
-    //         influencer = s.contracts["team"];
-    //     } else {
-    //         _user.agency == address(0) ? agency = s.contracts["team"]
-    //         influencer = _user.incomeAddr;
-    //     }
+        if (_itemId < 50) {
+            agency = s.contracts["team"];
+            influencer = s.contracts["team"];
+        } else {
+            _user.agency == address(0)
+                ? agency = s.contracts["team"]
+                : agency = _user.agency;
+            influencer = _user.incomeAddr;
+        }
 
-    //     return(_mergePfGrade.mergeFee, influencer, _influeIncome, agency, _agencyIncome, _mergePfGrade.mergeUseItemAmount);
-
-    // }
+        return (
+            _mergePfGrade.mergeFee,
+            influencer,
+            _influeIncome,
+            agency,
+            _agencyIncome,
+            _mergePfGrade.mergeUseItemAmount
+        );
+    }
 }

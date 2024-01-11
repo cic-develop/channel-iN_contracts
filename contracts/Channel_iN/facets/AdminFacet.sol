@@ -101,6 +101,35 @@ contract AdminFacet is Modifiers {
         IDB(s.contracts["db"]).adminSetMetaData(_pfId, _grade, _seedHash);
     }
 
+    function admin_p0_setMergeGradesInfo(
+        uint8 _grade,
+        string memory _gradeName,
+        uint _mergeFee,
+        uint _mergeUseItemAmount,
+        uint _latestId,
+        bool _isOpen
+    ) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.p0_mergePfGrades[_grade].grade = _grade;
+        s.p0_mergePfGrades[_grade].gradeName = _gradeName;
+        s.p0_mergePfGrades[_grade].mergeFee = _mergeFee;
+        s.p0_mergePfGrades[_grade].mergeUseItemAmount = _mergeUseItemAmount;
+        s.p0_mergePfGrades[_grade].latestId = _latestId;
+        s.p0_mergePfGrades[_grade].isOpen = _isOpen;
+    }
+
+    function admin_p0_getMetadataMargin(
+        uint8 _grade
+    ) external view returns (uint, uint, uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return (
+            s.p0_mergePfGrades[_grade].latestId,
+            s.p0_mergePfGrades[_grade].setMatadataId,
+            s.p0_mergePfGrades[_grade].setMatadataId -
+                s.p0_mergePfGrades[_grade].latestId
+        );
+    }
+
     /**@dev P2 Admin functions
      */
     function admin_P2_layer_setting(
@@ -157,10 +186,19 @@ contract AdminFacet is Modifiers {
         s.distribute_states.teamUsdtRatio = _teamUsdtRatio;
     }
 
+    function admin_distribute_userStates(
+        uint _agencyIncomePercent,
+        uint _influencerIncomePercent
+    ) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.p0_mergeState.agencyIncomePercent = _agencyIncomePercent;
+        s.p0_mergeState.influencerIncomePercent = _influencerIncomePercent;
+    }
+
     function admin_distribute_getStates()
         external
         view
-        returns (uint24, uint24, uint24, uint24, uint24)
+        returns (uint24, uint24, uint24, uint24, uint24, uint, uint)
     {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return (
@@ -168,7 +206,9 @@ contract AdminFacet is Modifiers {
             s.distribute_states.p2PerRatio,
             s.distribute_states.p2UsdtRatio,
             s.distribute_states.burnRatio,
-            s.distribute_states.teamUsdtRatio
+            s.distribute_states.teamUsdtRatio,
+            s.p0_mergeState.agencyIncomePercent,
+            s.p0_mergeState.influencerIncomePercent
         );
     }
 
@@ -201,10 +241,5 @@ contract AdminFacet is Modifiers {
     function admin_setAienMintFee(uint _mintFee) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.aienMintFee = _mintFee;
-    }
-
-    function admin_getAienMintFee() external view returns (uint) {
-        AppStorage storage s = LibAppStorage.diamondStorage();
-        return s.aienMintFee;
     }
 }
