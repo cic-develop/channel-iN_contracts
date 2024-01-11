@@ -182,6 +182,19 @@ contract AdminFacet is Modifiers {
         s.ksSwapLimit = _limit;
     }
 
+    function admin_distribute_getBeforAmounts()
+        external
+        view
+        returns (uint, uint, uint)
+    {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return (
+            s.distribute_states.beforeP2Usdt,
+            s.distribute_states.beforeP2Per,
+            s.distribute_states.beforeTeamUsdt
+        );
+    }
+
     /**@dev aien mint variables
      */
 

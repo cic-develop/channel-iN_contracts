@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.22;
 
-import {User,P0_MergeState, P0_MergePfGrade, AppStorage, LibAppStorage} from "../../shared/libraries/LibAppStorage.sol";
+import {User, P0_MergeState, P0_MergePfGrade, AppStorage, LibAppStorage} from "../../shared/libraries/LibAppStorage.sol";
 import {LibMeta} from "../../shared/libraries/LibMeta.sol";
 import {IDB} from "../interfaces/IDB.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
@@ -322,7 +322,6 @@ library LibP0 {
     //         "not equal item amount"
     //     );
 
-
     //     (
     //         uint mergeFee,
     //         address _influencer,
@@ -331,7 +330,6 @@ library LibP0 {
     //         uint _agencyFee,
     //         uint _influencerItemAmount)= _mergeCalculate(_itemId, _grade);
 
-        
     //     IERC1155(s.contracts["item"]).burn(
     //         _sender,
     //         _itemId,
@@ -371,7 +369,7 @@ library LibP0 {
     //         _grade,
     //         bytes(_pfURI)
     //     );
-        
+
     // }
 
     function _addProbCall(
@@ -413,6 +411,14 @@ library LibP0 {
             0,
             _AIEN.isPFid,
             _AIEN.addProb + _gradeProb
+        );
+
+        LibDistribute.p0LvUpDistribute(
+            s.contracts["team"],
+            (s.p0_states.addProbFee * _pf_Ids.length) / 10,
+            s.contracts["team"],
+            0,
+            s.p0_states.addProbFee * _pf_Ids.length
         );
 
         emit P0_AddProb_Event(
@@ -503,26 +509,22 @@ library LibP0 {
     //     AppStorage storage s = LibAppStorage.diamondStorage();
     //     P0_MergeState memory _mergeState = s.p0_mergeState;
     //     User memory _user = IDB(s.contracts["db"]).getUserFromItem(_itemId);
-    //     P0_MergePfGrade memory _mergePfGrade = s.p0_mergePfGrades[_grade];        
-
-        
+    //     P0_MergePfGrade memory _mergePfGrade = s.p0_mergePfGrades[_grade];
 
     //     address agency;
     //     address influencer;
     //     uint _influeIncome = _mergePfGrade.mergeFee * _mergePfGrade.influencerIncomePercent / 1e5;
     //     uint _agencyIncome = _mergePfGrade.mergeFee * _mergePfGrade.agencyIncomePercent / 1e5;
 
-
     //     if(_itemId < 50){
     //         agency = s.contracts["team"];
     //         influencer = s.contracts["team"];
     //     } else {
     //         _user.agency == address(0) ? agency = s.contracts["team"]
-    //         influencer = _user.incomeAddr; 
+    //         influencer = _user.incomeAddr;
     //     }
 
-
     //     return(_mergePfGrade.mergeFee, influencer, _influeIncome, agency, _agencyIncome, _mergePfGrade.mergeUseItemAmount);
-        
+
     // }
 }
