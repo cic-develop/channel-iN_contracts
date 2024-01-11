@@ -41,23 +41,23 @@ interface IDB {
     }
 
     struct User {
-		// DB > idx
-		uint userId;
-		// token itme ID
-		uint itemId;
-		address incomeAddr;
-		uint feeBalance;
-		bool isAble;
-		uint mintCount;
-		uint useLevelupCount;
-		uint useMergeCount;
-		// uint ownerIncomePercent;
-		// uint userIncomPercent;
-		//레퍼럴로 얻은 수익
-		uint referralIncome;
-		address agency;
-		uint agencyIncome;
-	}
+        // DB > idx
+        uint userId;
+        // token itme ID
+        uint itemId;
+        address incomeAddr;
+        uint feeBalance;
+        bool isAble;
+        uint mintCount;
+        uint useLevelupCount;
+        uint useMergeCount;
+        // uint ownerIncomePercent;
+        // uint userIncomPercent;
+        //레퍼럴로 얻은 수익
+        uint referralIncome;
+        address agency;
+        uint agencyIncome;
+    }
 
     function AIENS(uint _key) external view returns (aien memory);
 
@@ -174,4 +174,10 @@ interface IDB {
     ) external;
 
     function getUserFromItem(uint _itemId) external view returns (User memory);
+
+    function adminSetMetaData(
+        uint _pfId,
+        uint8 _grade,
+        string memory _seedHash
+    ) external;
 }

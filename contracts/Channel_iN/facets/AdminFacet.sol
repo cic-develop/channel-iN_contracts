@@ -5,6 +5,7 @@ import {AppStorage, Modifiers, LibAppStorage} from "../../shared/libraries/LibAp
 import {LibMeta} from "../../shared/libraries/LibMeta.sol";
 import {IP2} from "../interfaces/IP2.sol";
 import {IP2_Admin} from "../interfaces/IP2_Admin.sol";
+import {IDB} from "../interfaces/IDB.sol";
 
 contract AdminFacet is Modifiers {
     /**@dev P0 Admin functions
@@ -86,6 +87,18 @@ contract AdminFacet is Modifiers {
             s.p0_perFriendsProbs[_grade].pfGrade,
             s.p0_perFriendsProbs[_grade].gradeProb
         );
+    }
+
+    function admin_p0_setMetaData(
+        uint _pfId,
+        uint8 _grade,
+        string memory _seedHash
+    ) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.pfMetaURI[_pfId] = _seedHash;
+        s.p0_mergePfGrades[_grade].setMatadataId = _pfId;
+
+        IDB(s.contracts["db"]).adminSetMetaData(_pfId, _grade, _seedHash);
     }
 
     /**@dev P2 Admin functions
