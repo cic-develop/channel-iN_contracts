@@ -334,7 +334,7 @@ library LibP0 {
             _influencer,
             _influencerFee
         );
-        //
+        require(_itemAmount == _influencerItemAmount, "Not equal item amount");
         IERC1155(s.contracts["item"]).burn(
             _sender,
             _itemId,
@@ -509,10 +509,10 @@ library LibP0 {
         uint _itemId,
         uint8 _grade
     ) internal returns (uint, address, uint, address, uint, uint) {
-        // AppStorage storage s = LibAppStorage.diamondStorage();
-        // P0_MergeState memory _mergeState = s.p0_mergeState;
-        // User memory _user = IDB(s.contracts["db"]).getUserFromItem(_itemId);
-        // P0_MergePfGrade memory _mergePfGrade = s.p0_mergePfGrades[_grade];
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        P0_MergeState memory _mergeState = s.p0_mergeState;
+        IDB.User memory _user = IDB(s.contracts["db"]).getUserFromItem(_itemId);
+        P0_MergePfGrade memory _mergePfGrade = s.p0_mergePfGrades[_grade];
 
         address agency;
         address influencer;
@@ -521,15 +521,12 @@ library LibP0 {
         uint _agencyIncome = (_mergePfGrade.mergeFee *
             _mergeState.agencyIncomePercent) / 1e5;
 
-        if (_itemId < 50) {
-            agency = s.contracts["team"];
-            influencer = s.contracts["team"];
-        } else {
-            _user.agency == address(0)
-                ? agency = s.contracts["team"]
-                : agency = _user.agency;
-            influencer = _user.incomeAddr;
-        }
+        _user.agency == address(0)
+            ? agency = s.contracts["team"]
+            : agency = _user.agency;
+        influencer = _user.incomeAddr == address(0)
+            ? s.contracts["team"]
+            : _user.incomeAddr;
 
         return (
             _mergePfGrade.mergeFee,
