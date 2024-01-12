@@ -110,5 +110,24 @@ contract P0Facet is Modifiers {
         return s.p0_mergePfGrades[_grade];
     }
 
-    
+    function P0_getCurrentMergeStates()
+        external
+        view
+        returns (P0_MergePfGrade[] memory)
+    {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        uint8 endOpenGrade;
+        for (uint8 i = 1; i < 11; i++) {
+            s.p0_mergePfGrades[i].isOpen ? endOpenGrade = i : endOpenGrade;
+        }
+
+        P0_MergePfGrade[] memory _mergePfGrades = new P0_MergePfGrade[](
+            endOpenGrade
+        );
+        for (uint8 i = 1; i <= endOpenGrade; i++) {
+            _mergePfGrades[i - 1] = s.p0_mergePfGrades[i];
+        }
+
+        return _mergePfGrades;
+    }
 }
