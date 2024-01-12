@@ -334,7 +334,11 @@ library LibP0 {
             _influencer,
             _influencerFee
         );
-        require(_itemAmount == _influencerItemAmount, "Not equal item amount");
+        // require(
+        //     _mergeFee < IERC20(s.contracts["per"]).balanceOf(_sender),
+        //     "not enough per"
+        // );
+        // require(_itemAmount == _influencerItemAmount, "not equal item amount");
         IERC1155(s.contracts["item"]).burn(
             _sender,
             _itemId,
@@ -512,7 +516,7 @@ library LibP0 {
         AppStorage storage s = LibAppStorage.diamondStorage();
         P0_MergeState memory _mergeState = s.p0_mergeState;
         IDB.User memory _user = IDB(s.contracts["db"]).getUserFromItem(_itemId);
-        P0_MergePfGrade memory _mergePfGrade = s.p0_mergePfGrades[_grade];
+        P0_MergePfGrade storage _mergePfGrade = s.p0_mergePfGrades[_grade];
 
         address agency;
         address influencer;

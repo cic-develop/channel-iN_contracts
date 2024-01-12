@@ -110,10 +110,7 @@ library LibDistribute {
             _teamUsdtAmount
         );
 
-        IP2(s.contracts["p2"]).addPerUsdtDistribution(
-            _p2UsdtAmount,
-            s.distribute_states.beforeP2Per
-        );
+        IP2(s.contracts["p2"]).addPerUsdtDistribution(_p2UsdtAmount, 0);
 
         s.distribute_states.beforeP2Per = 0;
         s.distribute_states.beforeP2Usdt = 0;
@@ -124,35 +121,10 @@ library LibDistribute {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return (
             s.distribute_states.beforeP2Usdt,
-            s.distribute_states.beforeP2Per,
-            s.distribute_states.beforeTeamUsdt
+            s.distribute_states.beforeTeamUsdt,
+            s.distribute_states.beforeP2Per
         );
     }
-
-    // function p0_transferForDistribute() internal returns (uint, uint, uint) {
-    //     AppStorage storage s = LibAppStorage.diamondStorage();
-    //     uint beforeP2Usdt = s.distribute_states.beforeP2Usdt;
-    //     uint beforeP2Per = s.distribute_states.beforeP2Per;
-    //     uint beforeTeamUsdt = s.distribute_states.beforeTeamUsdt;
-    //     address per = s.contracts["per"];
-    //     // require(
-    //     //     LibMeta.msgSender() == LibDiamond.enforceIsContractOwner(),
-    //     //     "you are not dev"
-    //     // );
-    //     IERC20(per).transfer(
-    //         LibMeta.msgSender(),
-    //         beforeP2Usdt + beforeTeamUsdt
-    //     );
-    //     uint _beforeP2Usdt = beforeP2Usdt;
-    //     uint _beforeP2Per = beforeP2Per;
-    //     uint _beforeTeamUsdt = beforeTeamUsdt;
-
-    //     beforeP2Usdt = 0;
-    //     beforeP2Per = 0;
-    //     beforeTeamUsdt = 0;
-
-    //     return (_beforeP2Usdt, _beforeP2Per, _beforeTeamUsdt);
-    // }
 
     function isSwap() internal view returns (bool, uint, uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();

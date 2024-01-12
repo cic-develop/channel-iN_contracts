@@ -113,7 +113,9 @@ library LibAppStorage {
         return uint256(x >= 0 ? x : -x);
     }
 }
+// 1,normal,  350000000000000000000,60,1000002, 1000023,true
 
+// 2,uncommon,700000000000000000000,1, 2000001, 2000023,true
 /**
 @dev global modifier
  */

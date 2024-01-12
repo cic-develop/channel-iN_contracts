@@ -6,6 +6,7 @@ import {LibMeta} from "../../shared/libraries/LibMeta.sol";
 import {IP2} from "../interfaces/IP2.sol";
 import {IP2_Admin} from "../interfaces/IP2_Admin.sol";
 import {IDB} from "../interfaces/IDB.sol";
+import {LibDistribute} from "../../shared/libraries/LibDistribute.sol";
 
 contract AdminFacet is Modifiers {
     /**@dev P0 Admin functions
@@ -230,9 +231,21 @@ contract AdminFacet is Modifiers {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return (
             s.distribute_states.beforeP2Usdt,
-            s.distribute_states.beforeP2Per,
-            s.distribute_states.beforeTeamUsdt
+            s.distribute_states.beforeTeamUsdt,
+            s.distribute_states.beforeP2Per
         );
+    }
+
+    function admin_distribute_estimate()
+        external
+        view
+        returns (bool, uint, uint)
+    {
+        return LibDistribute.isSwap();
+    }
+
+    function admin_distribute_swap() external onlyDev {
+        LibDistribute.swapToDistribute();
     }
 
     /**@dev aien mint variables
