@@ -130,13 +130,4 @@ contract P0Facet is Modifiers {
 
         return _mergePfGrades;
     }
-
-    // function ___testCall(
-    //     uint _itemId,
-    //     uint8 _grade
-    // ) external view returns (uint) {
-    //     // AppStorage storage s = LibAppStorage.diamondStorage();
-    //     (, , , , , uint amount) = LibP0._mergeCalculate(_itemId, _grade);
-    //     return amount;
-    // }
 }

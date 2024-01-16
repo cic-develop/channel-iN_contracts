@@ -438,7 +438,7 @@ library LibP0 {
     }
 
     // internal functions
-    function __random(address _sender) internal returns (uint) {
+    function __random(address _sender) internal view returns (uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         // if (s.orakl  ? oraklVRF() : nativeRF())
         bytes32 hash = keccak256(
@@ -451,7 +451,7 @@ library LibP0 {
         address _sender,
         uint _max,
         uint _min
-    ) internal returns (uint) {
+    ) internal view returns (uint) {
         // if (s.orakl  ? oraklVRF() : nativeRF())
         bytes32 hash = keccak256(
             abi.encodePacked(block.timestamp, _sender, block.coinbase)
@@ -512,7 +512,7 @@ library LibP0 {
     function _mergeCalculate(
         uint _itemId,
         uint8 _grade
-    ) internal returns (uint, address, uint, address, uint, uint) {
+    ) internal view returns (uint, address, uint, address, uint, uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         P0_MergeState memory _mergeState = s.p0_mergeState;
         IDB.User memory _user = IDB(s.contracts["db"]).getUserFromItem(_itemId);

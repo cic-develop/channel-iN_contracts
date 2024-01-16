@@ -1,6 +1,114 @@
-# [cic community inc] 컨트랙트 구조
+# [cic community inc] 서비스 컨트랙트
+<!-- ![myImage](https://media.giphy.com/media/XRB1uf2F9bGOA/giphy.gif) -->
+## [Contract List](#contract-list)
 
-> 이 문서는 파편화되어 있는 contract에 대한 내용을 전부 기술해 놓습니다. - 조장주
+### Diamond (latest)
+
+기존 설계 되어 운영되던 컨트랙트들을
+
+모두 Diamond pattern의 컨트랙트로 병합되어 관리 됩니다.
+
+- [Diamond Contract](#diamond-contract)
+
+#
+
+### Legacy (old)
+
+#### [Asset Contracts](#asset-contracts)
+
+- [Per Project](#per-project) (ERC 20)
+- [Per Friends](#per-friends) (ERC 721)
+- [Aien](#aien) (ERC 721)
+- [Items](#item) (ERC 1155)
+
+#### [Logic Contracts](#logic-contracts)
+
+- channel-iN
+  - mint Logic
+- i - Tez
+  - DB
+  - mix Logic
+  - P2
+  - P1
+  - PerFriends Factory
+  - Distribute
+
+<!-- ## 1. 서비스 리스트
+
+## [**channel-iN**](#channel-in)
+
+## [**i-tez**](#i-tez)
+ -->
+
+---
+
+### [**Diamond Contract**](#diamond-contract)
+
+#### Live
+
+- deployer(owner) : 0xa5E5f12acC05B3D7E019747b511df4DaC8027Ce2
+- network : Cypress (8217)
+- contract address : 0x1151953d99ae3145ab18de6a5f031f174d518081
+
+#### Test
+
+- deployer(owner) : 0xe34f22cF55db5209bA6546701d408e5F58d8703f
+- network : Cypress (8217)
+- contract Address : 0xa2aa8ab81A37b12Dd30517a66Bb8960E7f018880
+# 
+- Facets
+
+  - channel-iN
+    - AdminFacet
+    - AienMintFacet
+    - P0Facet
+    - P1Facet
+    - P2Facet
+  - Share Facet
+    - OraklFacet
+    - ConstantFacet
+
+-  Struct(Storage)
+
+
+
+### [**Per Project**](#per-project)
+
+|          |  Main  |  Test  |
+| :------: | :----: | :----: |
+|   Type   | ERC-20 | ERC-20 |
+| Address  |   .    |   .    |
+| CodeLink |   .    |   .    |
+
+---
+
+### [**Per Friends**](#per-friends)
+
+|          |  Main   |  Test   |
+| :------: | :-----: | :-----: |
+|   Type   | ERC-721 | ERC-721 |
+| Address  |    .    |    .    |
+| CodeLink |    .    |    .    |
+
+---
+
+### [**Aien**](#aien)
+
+|          |  Main   |  Test   |
+| :------: | :-----: | :-----: |
+|   Type   | ERC-721 | ERC-721 |
+| Address  |    .    |    .    |
+| CodeLink |    .    |    .    |
+
+---
+
+### [**Items**](#items)
+
+|          |   Main   |   Test   |
+| :------: | :------: | :------: |
+|   Type   | ERC-1155 | ERC-1155 |
+| Address  |    .     |    .     |
+| CodeLink |    .     |    .     |
 
 <!-- # 1. 컨트랙트 리스트
 
