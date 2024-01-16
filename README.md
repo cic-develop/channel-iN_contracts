@@ -1,5 +1,7 @@
 # [cic community inc] 서비스 컨트랙트
+
 <!-- ![myImage](https://media.giphy.com/media/XRB1uf2F9bGOA/giphy.gif) -->
+
 ## [Contract List](#contract-list)
 
 ### Diamond (latest)
@@ -32,6 +34,8 @@
   - P1
   - PerFriends Factory
   - Distribute
+- KlayMint(Market Place)
+  - Market
 
 <!-- ## 1. 서비스 리스트
 
@@ -55,7 +59,9 @@
 - deployer(owner) : 0xe34f22cF55db5209bA6546701d408e5F58d8703f
 - network : Cypress (8217)
 - contract Address : 0xa2aa8ab81A37b12Dd30517a66Bb8960E7f018880
-# 
+
+#
+
 - Facets
 
   - channel-iN
@@ -68,47 +74,49 @@
     - OraklFacet
     - ConstantFacet
 
--  Struct(Storage)
-
-
+- Struct(Storage)
 
 ### [**Per Project**](#per-project)
 
-|          |  Main  |  Test  |
-| :------: | :----: | :----: |
-|   Type   | ERC-20 | ERC-20 |
-| Address  |   .    |   .    |
-| CodeLink |   .    |   .    |
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |                   ERC-20                   |                   ERC-20                   |
+| Address  | 0x7eee60a000986e9efe7f5c90340738558c24317b | 0xe3A5F36D08C75d43B18bDCaD19A6d8Cf0Bb8128c |
+| CodeLink |                     .                      |                     .                      |
 
 ---
 
 ### [**Per Friends**](#per-friends)
 
-|          |  Main   |  Test   |
-| :------: | :-----: | :-----: |
-|   Type   | ERC-721 | ERC-721 |
-| Address  |    .    |    .    |
-| CodeLink |    .    |    .    |
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |                  ERC-721                   |                  ERC-721                   |
+| Address  | 0x0ed55aee0399064cfe51dd3cc10d99734bb796c7 | 0x9A161D13af5EF286e6D6Aa77671Fb0870465DF20 |
+| CodeLink |                     .                      |                     .                      |
 
 ---
 
 ### [**Aien**](#aien)
 
-|          |  Main   |  Test   |
-| :------: | :-----: | :-----: |
-|   Type   | ERC-721 | ERC-721 |
-| Address  |    .    |    .    |
-| CodeLink |    .    |    .    |
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |               ERC-721(UUPS)                |               ERC-721(UUPS)                |
+| Address  | 0xf9415efcd4e41856fa1a7af4d0d6082d62e93211 | 0x9A4c82a0F2e1dF8236015166673F497470882E3d |
+| CodeLink |                     .                      |                     .                      |
 
 ---
 
 ### [**Items**](#items)
 
-|          |   Main   |   Test   |
-| :------: | :------: | :------: |
-|   Type   | ERC-1155 | ERC-1155 |
-| Address  |    .     |    .     |
-| CodeLink |    .     |    .     |
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |               ERC-1155(UUPS)               |               ERC-1155(UUPS)               |
+| Address  | 0xd67b2bdd91ef23c4855b39f5ec9b3f6ad366eec7 | 0x13F0faE1e13F89bb6FCdEaF38275f4cAd20f397F |
+| CodeLink |                     .                      |                     .                      |
+
+---
+
+### [**Items**](#items)
 
 <!-- # 1. 컨트랙트 리스트
 
