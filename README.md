@@ -11,42 +11,82 @@
 모두 Diamond pattern의 컨트랙트로 병합되어 관리 됩니다.
 
 - [Diamond Contract](#diamond-contract)
+- [Old Legacy Contract](#old-legacy-contract)
 
 #
 
-### Legacy (old)
+## Old(legacy)
+
+기존 동작방식은 각 컨텐츠별 Logic을 구성하는 컨트랙트와, DB Contract를 따로 나누어 설계 되었습니다.
+
+유저는 각 컨텐츠별 각각 Logic Contract로 함수를 호출하여야 하고
+
+로직 컨트랙트는 DB Contract를 통하여 필요한 storage값을 체크하고 실행 됩니다.
+
+---
+
+### 문제점
+
+    1. 컨텐츠가 추가됨에 따라 불필요한 Approve를 계속 수행하여야 합니다.
+
+    2. backend , front에서 협업시 수많은 어드레스를 전부 신경써야 합니다.
+      -- Backend의 경우 event 로그수집시 번거로운 필터링 추가 발생
+      -- Frontend의 경우 수많은 address와 abi를 각각 관리하여야 하는 문제
+
+    3. 코드사이즈 문제로 확장성에 문제가 발생할 수 있습니다.
+
+추후 컨텐츠가 계속해서 추가될 경우 복잡도는 더욱 늘어날걸로 보이며,
+
+완벽하진 않으나 Diamond Pattern을 이용한 확장성 높은 프록시 패턴 도입을 결정 하였습니다.
+
+아래는 적용전 유저의 action > internal tx 차트예시 입니다.
+
+<image src="./legacyCotnract.png" width="450px" height="300px"> </image>
+
+## diamond(latest)
+
+기존 동작방식에서 약 70%는 Diamond Pattern으로 병합을 완료 했습니다.
+
+P1,P2(stake service)의 경우 중단하여 다시 시작하기에 어려움이 있기때문에
+
+P1,P2를 제외한 컨트랙트는 병합이 완료된 상태 입니다.
+
+Diamond > Facet > P1,P2로 호출됩니다.
+
+<image src="./latestContract.png" width="700px" height="300px"> </image>
+
+---
+
+### [old-legacy-contract](#old-legacy-contract)
+
+[Github Link](https://github.com/cic-develop/cic-admin/blob/feature/tez/jo/Contracts/contracts)
 
 #### [Asset Contracts](#asset-contracts)
 
 - [Per Project](#per-project) (ERC 20)
 - [Per Friends](#per-friends) (ERC 721)
 - [Aien](#aien) (ERC 721)
-- [Items](#item) (ERC 1155)
+- [Items](#items) (ERC 1155)
 
 #### [Logic Contracts](#logic-contracts)
 
 - channel-iN
-  - mint Logic
+  - [mint Logic](#mint-logic)
 - i - Tez
-  - DB
-  - mix Logic
-  - P2
-  - P1
-  - PerFriends Factory
-  - Distribute
+  - [DB](#db)
+  - [mix logic](#mix-logic)
+  - [P2 logic](#p2-logic)
+  - [P1 logic](#p1-logic)
+  - [PerFriends Factory](#pf)
+  - [Distribute](#distribute)
 - KlayMint(Market Place)
   - Market
 
-<!-- ## 1. 서비스 리스트
-
-## [**channel-iN**](#channel-in)
-
-## [**i-tez**](#i-tez)
- -->
-
 ---
 
-### [**Diamond Contract**](#diamond-contract)
+### [Diamond Contract](#diamond-contract)
+
+[Github Link](https://github.com/cic-develop/channel-iN_contracts/tree/main/contracts)
 
 #### Live
 
@@ -62,19 +102,25 @@
 
 #
 
-- Facets
+- [Facets](#facets)
 
   - channel-iN
-    - AdminFacet
-    - AienMintFacet
-    - P0Facet
-    - P1Facet
-    - P2Facet
-  - Share Facet
-    - OraklFacet
-    - ConstantFacet
+    - [AdminFacet](#adminfacet)
+    - [AienMintFacet](#aienmintfacet)
+    - [P0Facet](#p0facet)
+    - [P1Facet](#p1facet)
+    - [P2Facet](#p2facet)
+    - [FrontFacet](#frontfacet)
+  - [Share Facet](#share-facet)
+    - [OraklFacet](#oraklfacet)
+    - [ConstantFacet](#constantfacet)
+    - [DistributeFacet](#distributefacet)
 
 - Struct(Storage)
+
+# 1. [Old Legacy Contract](#old-legacy-contract)
+
+## 1-1. [Asset Contracts](#asset-contracts)
 
 ### [**Per Project**](#per-project)
 
@@ -116,12 +162,192 @@
 
 ---
 
-### [**Items**](#items)
+## 1-2. [Logic Contracts](#logic-contracts)
 
-<!-- # 1. 컨트랙트 리스트
+### [DB](#db)
 
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |                    UUPS                    |                    UUPS                    |
+| Address  | 0x0967358cB6a94aCF45A99Fb4ED199C081bbe2121 | 0x4f47CF617Cdd6eA9d1b235Af05650cd0e83B8C62 |
+| CodeLink |                     .                      |                     .                      |
+
+---
+
+### [mix logic](#mix-logic)
+
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |                    UUPS                    |                    UUPS                    |
+| Address  | 0x15300AFB6250bc41869607b7a208742a7E70572d | 0x759b4F53F8dD2Ce50440ecbAb626eCd0CCd12644 |
+| CodeLink |                     .                      |                     .                      |
+
+---
+
+### [P2 logic](#p2-logic)
+
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |                    UUPS                    |                    UUPS                    |
+| Address  | 0x3D3a841E4C9F668eEFe5218149184a4245AFA223 | 0x6576a1fD2B554a42cAE8F0CfbFF413f86449eE22 |
+| CodeLink |                     .                      |                     .                      |
+
+---
+
+### [P1 logic](#p1-logic)
+
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |                    UUPS                    |                    UUPS                    |
+| Address  | 0xE032cC82587b82b9b4B82233ad4b30cc5a402006 | 0x0753ECbcb9B967fecD1e61b3a42F9C7Cd04E18EA |
+| CodeLink |                     .                      |                     .                      |
+
+---
+
+### [mint Logic](#mint-logic)
+
+- Aien > defaultMint, aiMint, PfMint...
+
+|          |                    Live                    |                    Test                    |
+| :------: | :----------------------------------------: | :----------------------------------------: |
+|   Type   |                    UUPS                    |                    UUPS                    |
+| Address  | 0x9dA4B68Fc9791E76d0fb438366AB8Cd5048a9787 | 0x49B2f470d6C9EE779dCD40e7014a17e1E333b339 |
+| CodeLink |                     .                      |                     .                      |
+
+---
+
+# 2. [Diamond Contract](#diamond-contract)
+
+## 2-1 [Facets](#facets)
+
+### [AdminFacet](#adminfacet)
+
+| Function Name                    | Sighash  | Function Signature                                                     |
+| -------------------------------- | -------- | ---------------------------------------------------------------------- |
+| admin_p0_setStates               | ef404fa2 | admin_p0_setStates(uint24,uint256,uint16,bool)                         |
+| admin_p0_setGradeInfos           | c7809e2f | admin_p0_setGradeInfos(uint8,bool,uint256,uint24,uint16,uint24,uint24) |
+| admin_p0_setPerFriendsProb       | 1ad1d5dc | admin_p0_setPerFriendsProb(uint256,string,uint24)                      |
+| admin_p0_getStates               | 3a8e18de | admin_p0_getStates()                                                   |
+| admin_p0_getGradeInfos           | 9b0988f1 | admin_p0_getGradeInfos(uint8)                                          |
+| admin_p0_getPerFriendsProb       | 7fe5cca1 | admin_p0_getPerFriendsProb(uint256)                                    |
+| admin_p0_setMetaData             | 025aa16c | admin_p0_setMetaData(uint256,uint8,string)                             |
+| admin_p0_setMergeGradesInfo      | ced1c987 | admin_p0_setMergeGradesInfo(uint8,string,uint256,uint256,uint256,bool) |
+| admin_p0_getMetadataMargin       | 1b907b2c | admin_p0_getMetadataMargin(uint8)                                      |
+| admin_P2_layer_setting           | 9a6d9887 | admin_P2_layer_setting(uint256,uint256,uint256,uint256,uint256,bool)   |
+| admin_P2_blockUser               | f6f00563 | admin_P2_blockUser(address,bool,string)                                |
+| admin_P2_setMaxLimit             | 45d08ac6 | admin_P2_setMaxLimit(uint256)                                          |
+| admin_distribute_setStates       | a4517553 | admin_distribute_setStates(uint24,uint24,uint24,uint24,uint24)         |
+| admin_distribute_userStates      | cc6d37d6 | admin_distribute_userStates(uint256,uint256)                           |
+| admin_distribute_getStates       | 24eb911e | admin_distribute_getStates()                                           |
+| admin_distribute_setAuto         | b545c43f | admin_distribute_setAuto(bool)                                         |
+| admin_distribute_ksSwapLimit     | 5c53ddae | admin_distribute_ksSwapLimit(uint256)                                  |
+| admin_distribute_getBeforAmounts | 74e35d19 | admin_distribute_getBeforAmounts()                                     |
+| admin_distribute_estimate        | b75670e0 | admin_distribute_estimate()                                            |
+| admin_distribute_swap            | be5de2fb | admin_distribute_swap()                                                |
+| admin_setAienMintFee             | b5643cdb | admin_setAienMintFee(uint256)                                          |
+
+---
+
+### [AienMintFacet](#aienmintfacet)
+
+| Function Name   | Sighash  | Function Signature          |
+| --------------- | -------- | --------------------------- |
+| aiMint          | 6e3e74c8 | aiMint()                    |
+| pfMint          | 635e0d10 | pfMint(uint256)             |
+| defaultMint     | 43744fd7 | defaultMint()               |
+| defaultSetImage | 783e74d6 | defaultSetImage(uint256)    |
+| aiSetImage      | dde343dd | aiSetImage(uint256)         |
+| pfSetImage      | b8107ac2 | pfSetImage(uint256,uint256) |
+
+---
+
+### [P0Facet](#p0facet)
+
+| Function Name            | Sighash  | Function Signature                       |
+| ------------------------ | -------- | ---------------------------------------- |
+| mixPFInfos               | 16dba26f | mixPFInfos(uint256)                      |
+| P0_itemMerge             | ddb2bedf | P0_itemMerge(uint256,uint256)            |
+| P0_itemGradeMerge        | 6a60affb | P0_itemGradeMerge(uint256,uint256,uint8) |
+| P0_baseMixCall           | e488a83a | P0_baseMixCall(uint256,uint256)          |
+| P0_premiumMixCall        | 7174e258 | P0_premiumMixCall(uint256,uint256)       |
+| P0_addProbCall           | 6d1d105e | P0_addProbCall(uint256,uint256[])        |
+| P0_getMaxProb            | f3ebac57 | P0_getMaxProb()                          |
+| P0_getMergeState         | f6afa847 | P0_getMergeState(uint256)                |
+| P0_getAddProbFee         | d2236a54 | P0_getAddProbFee()                       |
+| P0_influencerMergeAmount | 3576742f | P0_influencerMergeAmount()               |
+| P0_basicMergeAmount      | d229a392 | P0_basicMergeAmount()                    |
+| P0_mixPFInfos            | ce47adfa | P0_mixPFInfos(uint256)                   |
+| P0_getMetadataMargin     | 0b0e517a | P0_getMetadataMargin()                   |
+| P0_getMergeStates        | 2b2dc69e | P0_getMergeStates(uint8)                 |
+| P0_getCurrentMergeStates | 55f939d9 | P0_getCurrentMergeStates()               |
+
+---
+
+### [P1Facet](#p1facet)
+
+| Function Name             | Sighash  | Function Signature                 |
+| ------------------------- | -------- | ---------------------------------- |
+| P1_staking                | b10656c2 | P1_staking(uint256)                |
+| P1_rewardStaking          | abc56431 | P1_rewardStaking()                 |
+| P1_harvest                | 4b6b29ca | P1_harvest()                       |
+| P1_pendingReward          | 5f010879 | P1_pendingReward(address,uint256)  |
+| P1_addPower               | deb37805 | P1_addPower(uint256,uint256)       |
+| P1_unstaking              | 529291d4 | P1_unstaking(uint256)              |
+| P1_unstakingConfirm       | 42f8f330 | P1_unstakingConfirm(uint256)       |
+| P1_unstakingCancel        | 7bf9f399 | P1_unstakingCancel(uint256)        |
+| P1_unstakingCancelConfirm | 48baa7f4 | P1_unstakingCancelConfirm(uint256) |
+| P1_getPoolData            | c5ec9ca2 | P1_getPoolData()                   |
+| P1_getUserData            | 26a28a2a | P1_getUserData()                   |
+| P1_getUnstakeData         | 82c2e9e0 | P1_getUnstakeData()                |
+| P1_getTimeLockInfo        | 88ee42fc | P1_getTimeLockInfo()               |
+
+---
+
+### [P2Facet](#p2facet)
+
+| Function Name      | Sighash  | Function Signature       |
+| ------------------ | -------- | ------------------------ |
+| P2_staking         | 1f6371ab | P2_staking(uint256)      |
+| P2_unStaking       | 9ba6678f | P2_unStaking(uint256)    |
+| P2_harvest         | 8c9e5564 | P2_harvest(uint256)      |
+| P2_getUserInfo     | 6efa686b | P2_getUserInfo()         |
+| P2_getLayerData    | 8de1ce6e | P2_getLayerData(uint256) |
+| P2_getAienLevel    | 53849719 | P2_getAienLevel(uint256) |
+| P2_usdtBalance     | 496758ba | P2_usdtBalance()         |
+| P2_perBalance      | ea26a267 | P2_perBalance()          |
+| P2_maxStakingLimit | ce2a9d66 | P2_maxStakingLimit()     |
+| P2_layers          | 7aca4c96 | P2_layers(uint256)       |
+
+---
+
+## 2-2 [Share Facet](#share-facet)
+
+### [OraklFacet](#oraklfacet)
+
+---
+
+### [ConstantFacet](#constantfacet)
+
+| Function Name | Sighash  | Function Signature          |
+| ------------- | -------- | --------------------------- |
+| getContract   | 35817773 | getContract(string)         |
+| setContract   | 3f0ed0df | setContract(string,address) |
+
+---
+
+### [DistributeFacet](#distributefacet)
+
+| Function Name               | Sighash  | Function Signature                                                   |
+| --------------------------- | -------- | -------------------------------------------------------------------- |
+| Distribute_Transfer_Balance | 61dd1e58 | Distribute_Transfer_Balance(address,address,uint256)                 |
+| Distribute_p0LvUpDistribute | 72dc907a | Distribute_p0LvUpDistribute(address,uint256,address,uint256,uint256) |
+| Distribute_swapToDistribute | c98c73d7 | Distribute_swapToDistribute()                                        |
+
+---
+
+<!-- <!-- # 1. 컨트랙트 리스트 -->
+<!--
 ## contract List
-
 
 [**Markdown**](https://www.markdownguide.org/getting-started/)은 텍스트 기반의 마크업언어로 2004년 존그루버에 의해 만들어졌으며 쉽게 쓰고 읽을 수 있으며 HTML로 변환이 가능하다. 특수기호와 문자를 이용한 매우 간단한 구조의 문법을 사용하여 웹에서도 보다 빠르게 컨텐츠를 작성하고 보다 직관적으로 인식할 수 있다.
 마크다운이 최근 각광받기 시작한 이유는 깃헙([https://github.com](https://github.com)) 덕분이다. 깃헙의 저장소Repository에 관한 정보를 기록하는 README.md는 깃헙을 사용하는 사람이라면 누구나 가장 먼저 접하게 되는 마크다운 문서였다. 마크다운을 통해서 설치방법, 소스코드 설명, 이슈 등을 간단하게 기록하고 가독성을 높일 수 있다는 강점이 부각되면서 점점 여러 곳으로 퍼져가게 된다.
