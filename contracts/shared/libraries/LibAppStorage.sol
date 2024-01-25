@@ -48,7 +48,6 @@ struct P0_MergePfGrade {
 struct P0_MergeState {
     uint agencyIncomePercent;
     uint influencerIncomePercent;
-    
 }
 // //- Distribute struct
 struct Distribute_State {
@@ -102,6 +101,11 @@ struct AppStorage {
     P0_MergeState p0_mergeState;
 }
 
+// struct MarketStorage {
+// }
+
+
+
 library LibAppStorage {
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {
@@ -109,10 +113,18 @@ library LibAppStorage {
         }
     }
 
+    // function marketStorage() internal pure returns (MarketStorage storage ds) {
+    //     bytes32 position = keccak256("diamond.standard.market.storage");
+    //     assembly {
+    //         ds.slot := position
+    //     }
+    // }
+
     function abs(int256 x) internal pure returns (uint256) {
         return uint256(x >= 0 ? x : -x);
     }
 }
+
 // 1,normal,  350000000000000000000,60,1000002, 1000023,true
 
 // 2,uncommon,700000000000000000000,1, 2000001, 2000023,true
