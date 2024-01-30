@@ -79,6 +79,50 @@ struct User {
     uint agencyIncome;
 }
 
+// Market Struct
+struct Market_Collection {
+    address nftAddress;
+    address creator;
+    string name;
+    string symbol;
+    uint8 nftType;
+    uint floorPrice;
+    uint8 tradeFeeRatio;
+    bool isOpen;
+    //
+    uint totalTradeBalance;
+    uint totalTradeCount;
+}
+
+struct Market_Nft {
+    address owner;
+    uint tokenId;
+    uint latestPrice;
+}
+
+struct Market_Nft_History {
+    
+}
+
+struct Market_Nft_Order {
+    address orderer;
+    uint8 orderType;
+    uint24 orderQuantity;
+    uint orderPrice;
+    uint orderTime;
+    uint orderExpireTime;
+}
+
+struct Market_Activity {
+    address from;
+    address to;
+    uint8 activityType;
+    uint activityTime;
+    uint activityAmount;
+    uint activityPrice;
+    bytes32 activityTxHash;
+}
+
 // P0 End
 struct AppStorage {
     // address constants
@@ -103,8 +147,6 @@ struct AppStorage {
 
 // struct MarketStorage {
 // }
-
-
 
 library LibAppStorage {
     function diamondStorage() internal pure returns (AppStorage storage ds) {
