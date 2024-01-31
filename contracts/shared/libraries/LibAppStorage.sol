@@ -100,11 +100,12 @@ struct Market_Nft {
     uint latestPrice;
 }
 
-struct Market_Nft_History {
-    
-}
+// struct Market_Nft_History {
+
+// }
 
 struct Market_Nft_Order {
+    uint orderId;
     address orderer;
     uint8 orderType;
     uint24 orderQuantity;
@@ -114,6 +115,7 @@ struct Market_Nft_Order {
 }
 
 struct Market_Activity {
+    uint orderId;
     address from;
     address to;
     uint8 activityType;
@@ -143,10 +145,12 @@ struct AppStorage {
     mapping(uint8 => P0_MergePfGrade) p0_mergePfGrades;
     mapping(uint => string) pfMetaURI;
     P0_MergeState p0_mergeState;
+    // MarketStructs
+    mapping(address => Market_Collection) market_collections;
+    mapping(uint => Market_Nft) market_nfts;
+    mapping(uint => Market_Nft_Order) market_nft_orders;
+    mapping(uint => Market_Nft_Order[]) market_nft_order_history;
 }
-
-// struct MarketStorage {
-// }
 
 library LibAppStorage {
     function diamondStorage() internal pure returns (AppStorage storage ds) {
@@ -167,9 +171,6 @@ library LibAppStorage {
     }
 }
 
-// 1,normal,  350000000000000000000,60,1000002, 1000023,true
-
-// 2,uncommon,700000000000000000000,1, 2000001, 2000023,true
 /**
 @dev global modifier
  */

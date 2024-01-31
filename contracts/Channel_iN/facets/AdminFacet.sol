@@ -255,4 +255,9 @@ contract AdminFacet is Modifiers {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.aienMintFee = _mintFee;
     }
+
+
+    function admin_createCollection(address _address) external onlyDev {
+        
+    }
 }
