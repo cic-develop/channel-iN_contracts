@@ -79,52 +79,99 @@ struct User {
     uint agencyIncome;
 }
 
-// Market Struct
-struct Market_Collection {
-    address nftAddress;
-    address creator;
-    string name;
-    string symbol;
-    uint8 nftType;
-    uint floorPrice;
-    uint8 tradeFeeRatio;
-    bool isOpen;
-    //
-    uint totalTradeBalance;
-    uint totalTradeCount;
+struct P3_State {
+    uint orderId;
 }
 
-struct Market_Nft {
+// 721 market structs
+struct P3_Collection_721 {
+    address nftAddress;
+    string name;
+    string symbol;
+    address creator;
+    // states
+    uint floorPrice;
+    uint totalTradeBalance;
+    uint totalTradeCount;
+    //
+    bool isOpen;
+}
+
+struct P3_Nft_721 {
     address owner;
     uint tokenId;
     uint latestPrice;
 }
 
-// struct Market_Nft_History {
-
-// }
-
-struct Market_Nft_Order {
-    uint orderId;
+struct P3_Order_721 {
+    address collectionAddress;
     address orderer;
+    uint tokenId;
+    uint orderId;
+    // 0: buy, 1: sell, 2: cancel, 3: match
     uint8 orderType;
-    uint24 orderQuantity;
     uint orderPrice;
     uint orderTime;
-    uint orderExpireTime;
 }
 
-struct Market_Activity {
+struct P3_OrderBook {
     uint orderId;
-    address from;
-    address to;
-    uint8 activityType;
-    uint activityTime;
-    uint activityAmount;
-    uint activityPrice;
-    bytes32 activityTxHash;
+    address orderer;
+    // 0: buy, 1: sell, 2: cancel, 3: match
+    uint8 orderType;
+    address collectionAddress;
+    uint tokenId;
+    uint orderPrice;
 }
 
+//
+
+struct P3_Collection_1155 {
+    address nftAddress;
+    string name;
+    address creator;
+    // states
+    uint totalTradeBalance;
+    uint totalTradeCount;
+    bool isOpen;
+}
+struct P3_Nft_1155 {
+    uint orderId;
+}
+
+struct P3_Order_1155 {
+    uint orderId;
+}
+// // 
+// 
+// 
+// 
+// 
+// 
+// 
+
+
+struct P3_AienCollection {
+    address nftAddress;
+    string name;
+    string symbol;
+    address creator;
+    // states
+    uint totalTradeBalance;
+    uint totalTradeCount;
+    bool isOpen;
+}
+struct P3_Aien {
+    uint tokenId;
+    uint aienLevel;
+
+}
+struct P3_PerFriendsCollection{
+
+}
+struct P3_ItemsCollection{
+
+}
 // P0 End
 struct AppStorage {
     // address constants
@@ -145,11 +192,20 @@ struct AppStorage {
     mapping(uint8 => P0_MergePfGrade) p0_mergePfGrades;
     mapping(uint => string) pfMetaURI;
     P0_MergeState p0_mergeState;
-    // MarketStructs
-    mapping(address => Market_Collection) market_collections;
-    mapping(uint => Market_Nft) market_nfts;
-    mapping(uint => Market_Nft_Order) market_nft_orders;
-    mapping(uint => Market_Nft_Order[]) market_nft_order_history;
+    //////////////////////////
+    // P3/////////////////////
+    //////////////////////////
+    uint p3_orderId;
+    mapping(address => uint[]) p3_user_orderLists;
+    mapping(uint => P3_OrderBook) p3_orderInfos;
+    // P3_ 721 Mappings
+    mapping(address => P3_Collection_721) p3_721_collections;
+    // contractAddr. tokenId > TokenIdInfo
+    mapping(address => mapping(uint => P3_Nft_721)) p3_721_nfts;
+    // contractAddr. tokenID => order
+    mapping(address => mapping(uint => P3_Order_721)) p3_721_nft_orders;
+
+    //////////////////////
 }
 
 library LibAppStorage {

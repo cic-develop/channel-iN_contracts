@@ -7,7 +7,9 @@ import {IP2} from "../interfaces/IP2.sol";
 import {IP2_Admin} from "../interfaces/IP2_Admin.sol";
 import {IDB} from "../interfaces/IDB.sol";
 import {LibDistribute} from "../../shared/libraries/LibDistribute.sol";
-
+import {IERC721} from "../../shared/interfaces/IERC721.sol";
+import {IERC20} from "../../shared/interfaces/IERC20.sol";
+import {LibP3} 
 contract AdminFacet is Modifiers {
     /**@dev P0 Admin functions
      */
@@ -257,7 +259,24 @@ contract AdminFacet is Modifiers {
     }
 
 
-    function admin_createCollection(address _address) external onlyDev {
+
+
+    // Market Settings
+
+    function admin_p3_createCollection_721(address _collectionAddr) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
         
+        string memory name = IERC721(_collectionAddr).name();
+        string memory symbol = IERC721(_collectionAddr).symbol();
+
+        s.p3_collections_721[_collectionAddr].nftAddress = _collectionAddr;
+        s.p3_collections_721[_collectionAddr].name = name;
+        s.p3_collections_721[_collectionAddr].symbol = symbol;
+        s.p3_collections_721[_collectionAddr].isOpen = true;
     }
+
+    function admin_p3_createCollection_1155(address _collectionAddr) external onlyDev{
+
+    }
+
 }
