@@ -79,99 +79,57 @@ struct User {
     uint agencyIncome;
 }
 
-struct P3_State {
-    uint orderId;
-}
-
-// 721 market structs
-struct P3_Collection_721 {
-    address nftAddress;
-    string name;
-    string symbol;
-    address creator;
-    // states
-    uint floorPrice;
-    uint totalTradeBalance;
-    uint totalTradeCount;
-    //
-    bool isOpen;
-}
-
-struct P3_Nft_721 {
-    address owner;
-    uint tokenId;
-    uint latestPrice;
-}
-
-struct P3_Order_721 {
-    address collectionAddress;
-    address orderer;
-    uint tokenId;
-    uint orderId;
-    // 0: buy, 1: sell, 2: cancel, 3: match
-    uint8 orderType;
-    uint orderPrice;
-    uint orderTime;
-}
-
-struct P3_OrderBook {
-    uint orderId;
-    address orderer;
-    // 0: buy, 1: sell, 2: cancel, 3: match
-    uint8 orderType;
-    address collectionAddress;
-    uint tokenId;
-    uint orderPrice;
-}
-
-//
-
-struct P3_Collection_1155 {
-    address nftAddress;
-    string name;
-    address creator;
-    // states
-    uint totalTradeBalance;
-    uint totalTradeCount;
-    bool isOpen;
-}
-struct P3_Nft_1155 {
-    uint orderId;
-}
-
-struct P3_Order_1155 {
-    uint orderId;
-}
-// // 
-// 
-// 
-// 
-// 
-// 
-// 
-
-
 struct P3_AienCollection {
     address nftAddress;
     string name;
     string symbol;
-    address creator;
-    // states
-    uint totalTradeBalance;
+    uint highestPrice;
+    uint floorPrice;
+    uint totalTradeVolume;
     uint totalTradeCount;
-    bool isOpen;
 }
+
 struct P3_Aien {
     uint tokenId;
-    uint aienLevel;
-
+    uint lastTradePrice;
+    // maybe add tx history 
 }
-struct P3_PerFriendsCollection{
 
+struct P3_AienOrder{
+    uint orderId;
+    address seller;
+    address buyer;
+    uint tokenId;
+    uint8 level;
+    uint32 baseProb;
+    uint32 addProb;
+    uint price;
+    uint tradeTime;
+    uint8 orderType;
 }
-struct P3_ItemsCollection{
 
+struct P3_PfCollection {
+    address nftAddress;
+    string name;
+    string symbol;
+    uint highestPrice;
+    uint floorPrice;
+    uint totalTradeVolume;
+    uint totalTradeCount;
 }
+
+struct P3_PfOrder{
+    uint orderId;
+    address seller;
+    address buyer;
+    uint tokenId;
+    uint8 grade;
+    uint price;
+    uint tradeTime;
+    uint8 orderType;
+}
+
+
 // P0 End
 struct AppStorage {
     // address constants
@@ -194,18 +152,21 @@ struct AppStorage {
     P0_MergeState p0_mergeState;
     //////////////////////////
     // P3/////////////////////
-    //////////////////////////
-    uint p3_orderId;
-    mapping(address => uint[]) p3_user_orderLists;
-    mapping(uint => P3_OrderBook) p3_orderInfos;
-    // P3_ 721 Mappings
-    mapping(address => P3_Collection_721) p3_721_collections;
-    // contractAddr. tokenId > TokenIdInfo
-    mapping(address => mapping(uint => P3_Nft_721)) p3_721_nfts;
-    // contractAddr. tokenID => order
-    mapping(address => mapping(uint => P3_Order_721)) p3_721_nft_orders;
+    // 
+    // userAddr => orderIds;
+    mapping(address => uint[]) p3_userOrders;
+    // 
+    // 
+    // tokenId => orderIds;
+    mapping(uint => uint[]) p3_aienTokenOrders;
+    // orderId => orderInfo
+    mapping(uint => P3_Aien_Order) p3_aienOrders;
+    // 
+    // tokenId => orderIds;  
+    mapping(uint => uint[]) p3_pfTokenOrders;
+    // orderId => orderInfo
+    mapping(uint => P3_PfOrder) p3_pfOrders;
 
-    //////////////////////
 }
 
 library LibAppStorage {
@@ -214,13 +175,6 @@ library LibAppStorage {
             ds.slot := 0
         }
     }
-
-    // function marketStorage() internal pure returns (MarketStorage storage ds) {
-    //     bytes32 position = keccak256("diamond.standard.market.storage");
-    //     assembly {
-    //         ds.slot := position
-    //     }
-    // }
 
     function abs(int256 x) internal pure returns (uint256) {
         return uint256(x >= 0 ? x : -x);
@@ -235,13 +189,4 @@ contract Modifiers {
         LibDiamond.enforceIsContractOwner();
         _;
     }
-
-    // modifier checkRole(uint16 _role) {
-    //     AppStorage storage s = LibAppStorage.diamondStorage();
-    //     require(
-    //         s.roles[_role].accounts.contains(LibMeta.msgSender()),
-    //         "AccessControl: sender does not have required role"
-    //     );
-    //     _;
-    // }
 }

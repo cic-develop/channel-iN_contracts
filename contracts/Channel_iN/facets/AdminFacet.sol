@@ -260,23 +260,4 @@ contract AdminFacet is Modifiers {
 
 
 
-
-    // Market Settings
-
-    function admin_p3_createCollection_721(address _collectionAddr) external onlyDev {
-        AppStorage storage s = LibAppStorage.diamondStorage();
-        
-        string memory name = IERC721(_collectionAddr).name();
-        string memory symbol = IERC721(_collectionAddr).symbol();
-
-        s.p3_collections_721[_collectionAddr].nftAddress = _collectionAddr;
-        s.p3_collections_721[_collectionAddr].name = name;
-        s.p3_collections_721[_collectionAddr].symbol = symbol;
-        s.p3_collections_721[_collectionAddr].isOpen = true;
-    }
-
-    function admin_p3_createCollection_1155(address _collectionAddr) external onlyDev{
-
-    }
-
 }
