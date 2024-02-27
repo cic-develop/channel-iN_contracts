@@ -2,7 +2,6 @@
 pragma solidity ^0.8.22;
 
 library LibMarketPlace {
-    
     // events
     event CreateCollection(
         address indexed nftAddress,
@@ -44,8 +43,4 @@ library LibMarketPlace {
     ) internal {}
 
     function _cancelOrder(address _nftAddress, uint _tokenId) internal {}
-
-
-
-
 }

@@ -9,7 +9,7 @@ import {IDB} from "../interfaces/IDB.sol";
 import {LibDistribute} from "../../shared/libraries/LibDistribute.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
 import {IERC20} from "../../shared/interfaces/IERC20.sol";
-import {LibP3} 
+// import {LibP3} from "../../shared/libraries/LibP3.sol";
 contract AdminFacet is Modifiers {
     /**@dev P0 Admin functions
      */
@@ -257,7 +257,4 @@ contract AdminFacet is Modifiers {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.aienMintFee = _mintFee;
     }
-
-
-
 }
