@@ -6,7 +6,7 @@ import {LibMeta} from "../../shared/libraries/LibMeta.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
 import {IP2} from "../interfaces/IP2.sol";
 import {IDB} from "../interfaces/IDB.sol";
-import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import "../../shared/libraries/LibEnumerableSet.sol";
 
 contract P2Facet {
     event P2_Staking_Event(

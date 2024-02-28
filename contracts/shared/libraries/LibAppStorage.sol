@@ -2,7 +2,7 @@
 pragma solidity ^0.8.18;
 
 import {LibDiamond} from "./LibDiamond.sol";
-import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import {EnumerableSet} from "../../shared/libraries/LibEnumerableSet.sol";
 import {LibMeta} from "./LibMeta.sol";
 
 using EnumerableSet for EnumerableSet.UintSet;
@@ -149,7 +149,7 @@ struct P2_User {
     bool isBlockUser;
     uint baseRewarded;
     uint plusRewarded;
-    EnumerableSet.uintSet tokenIds;
+    EnumerableSet.UintSet tokenIds;
 }
 
 struct P2_Aien {
@@ -224,7 +224,7 @@ struct AppStorage {
     // tokenId => orderIds;
     mapping(uint => uint[]) p3_aienTokenOrders;
     // orderId => orderInfo
-    mapping(uint => P3_Aien_Order) p3_aienOrders;
+    // mapping(uint => P3_Aien_Order) p3_aienOrders;
     //
     // tokenId => orderIds;
     mapping(uint => uint[]) p3_pfTokenOrders;
