@@ -8,7 +8,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { diamond } = deployments;
 
   const { deployer, diamondAdmin } = await getNamedAccounts();
-
+  
   await diamond.deploy("CHANNELIN", {
     from: deployer,
     owner: diamondAdmin,

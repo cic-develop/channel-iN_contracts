@@ -1,0 +1,566 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [
+    {
+      "address": "0x9ed8B44FcF4753daB21394B3730dD0edD6f6F3a4",
+      "txHash": "0x27e48b1fcbd125cf096beba31cde46fa2a4a23ba54b0ae0bf8efa1889b3a3999",
+      "kind": "uups"
+    },
+    {
+      "address": "0x242ae71f9CC0De9732e408cfC5dc24FFD2dB0593",
+      "txHash": "0x1f743f308731c69bd4847fc63422296e2d9743383a70d1a6741c01f0d0056a11",
+      "kind": "uups"
+    },
+    {
+      "address": "0xa235797a68601799BBc04d7CD9370Dd7DF46BA08",
+      "txHash": "0xf3b6fd744e8c2727cf2b068a2d7758d24034398a2ca5f6d9565809faf77bc069",
+      "kind": "uups"
+    },
+    {
+      "address": "0x02fe42876323F870b466422efee0f31E107d4695",
+      "txHash": "0x31beee592087a8fc6a5d6a60c8abc8a6c5c4d41542cc178b97e65505db670b2f",
+      "kind": "uups"
+    }
+  ],
+  "impls": {
+    "ff2b9fb01512421b21bd774119837d947a743ac6486845771a5b99dff8197487": {
+      "address": "0x6C767d23573a2375d10a941FF737D7571E04Ab90",
+      "txHash": "0x7dc7956df205e40aff386f3a95ec138791a3eadf243e31be4a5924c488e1943f",
+      "layout": {
+        "solcVersion": "0.8.22",
+        "storage": [
+          {
+            "label": "isP2Stop",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:150"
+          },
+          {
+            "label": "P2_usdtBalance",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:159"
+          },
+          {
+            "label": "P2_perBalance",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:159"
+          },
+          {
+            "label": "P2_dailyReward_Percent",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:159"
+          },
+          {
+            "label": "P2_dailyRewardUpdateBlock",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:160"
+          },
+          {
+            "label": "P2_lastRewardBlock",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:160"
+          },
+          {
+            "label": "MAX_STAKING_LIMIT",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:160"
+          },
+          {
+            "label": "ContractDB",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_address",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:161"
+          },
+          {
+            "label": "ContractPER",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_address",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:161"
+          },
+          {
+            "label": "ContractUSDT",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_address",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:161"
+          },
+          {
+            "label": "ContractAien",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_address",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:162"
+          },
+          {
+            "label": "DAYS_Count",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_uint256",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:162"
+          },
+          {
+            "label": "users",
+            "offset": 0,
+            "slot": "12",
+            "type": "t_mapping(t_address,t_struct(User)2739_storage)",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:162"
+          },
+          {
+            "label": "aiens",
+            "offset": 0,
+            "slot": "13",
+            "type": "t_mapping(t_uint256,t_struct(Aien)2756_storage)",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:164"
+          },
+          {
+            "label": "layers",
+            "offset": 0,
+            "slot": "14",
+            "type": "t_array(t_struct(Layer)2801_storage)11_storage",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:168"
+          },
+          {
+            "label": "diamondAddress",
+            "offset": 0,
+            "slot": "234",
+            "type": "t_address",
+            "contract": "P2",
+            "src": "contracts/Channel_iN/P2/P2.sol:206"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)25_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(AccessControlStorage)32_storage": {
+            "label": "struct AccessControlUpgradeable.AccessControlStorage",
+            "members": [
+              {
+                "label": "_roles",
+                "type": "t_mapping(t_bytes32,t_struct(RoleData)25_storage)",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(InitializableStorage)47_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)103_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(RoleData)25_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "hasRole",
+                "type": "t_mapping(t_address,t_bool)",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_struct(Layer)2801_storage)11_storage": {
+            "label": "struct P2.Layer[11]",
+            "numberOfBytes": "7040"
+          },
+          "t_mapping(t_address,t_struct(User)2739_storage)": {
+            "label": "mapping(address => struct P2.User)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(Aien)2756_storage)": {
+            "label": "mapping(uint256 => struct P2.Aien)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Aien)2756_storage": {
+            "label": "struct P2.Aien",
+            "members": [
+              {
+                "label": "staker",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "level",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "rewardPer",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "rewardUsdt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "rewardUsdtDebt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "rewardPerDebt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "per_received",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "usdt_received",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "7"
+              }
+            ],
+            "numberOfBytes": "256"
+          },
+          "t_struct(Balances)2777_storage": {
+            "label": "struct P2.Balances",
+            "members": [
+              {
+                "label": "perBalance",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "usdtBalance",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "savedPerBalance",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "savedUsdtBalance",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "add_dailyUSDT",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "add_dailyPER",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "total_checkWithdrawPER",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "withdrawal_checkWithdrawPER",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "7"
+              },
+              {
+                "label": "total_checkWithdrawUSDT",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "8"
+              },
+              {
+                "label": "withdrawal_checkWithdrawUSDT",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "9"
+              }
+            ],
+            "numberOfBytes": "320"
+          },
+          "t_struct(Layer)2801_storage": {
+            "label": "struct P2.Layer",
+            "members": [
+              {
+                "label": "balances",
+                "type": "t_struct(Balances)2777_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "rewardUsdtPercent",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "10"
+              },
+              {
+                "label": "rewardPerPercent",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "11"
+              },
+              {
+                "label": "dailyReward_Percent",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "12"
+              },
+              {
+                "label": "rewardPer",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "13"
+              },
+              {
+                "label": "rewardUsdt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "14"
+              },
+              {
+                "label": "add_dailyReward_Percent",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "15"
+              },
+              {
+                "label": "lastRewardBlock",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "16"
+              },
+              {
+                "label": "dailyRewardUpdateBlock",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "17"
+              },
+              {
+                "label": "totalStakedAien",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "18"
+              },
+              {
+                "label": "isOpen",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "19"
+              }
+            ],
+            "numberOfBytes": "640"
+          },
+          "t_struct(Set)1920_storage": {
+            "label": "struct EnumerableSet.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_positions",
+                "type": "t_mapping(t_bytes32,t_uint256)",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(UintSet)2392_storage": {
+            "label": "struct EnumerableSet.UintSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)1920_storage",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(User)2739_storage": {
+            "label": "struct P2.User",
+            "members": [
+              {
+                "label": "isBlockUser",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "perRewarded",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "usdtRewarded",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "tokenIds",
+                "type": "t_struct(UintSet)2392_storage",
+                "offset": 0,
+                "slot": "3"
+              }
+            ],
+            "numberOfBytes": "160"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.AccessControl": [
+            {
+              "contract": "AccessControlUpgradeable",
+              "label": "_roles",
+              "type": "t_mapping(t_bytes32,t_struct(RoleData)25_storage)",
+              "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:61",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol:40",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

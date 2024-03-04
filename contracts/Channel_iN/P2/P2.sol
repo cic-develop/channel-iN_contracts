@@ -1,3 +1,4 @@
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
@@ -49,47 +50,47 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 		address staker;
 		uint level;
 		// requires value
-		uint rewardBase;
-		uint rewardPlus;
-		uint rewardBaseDebt;
-		uint rewardPlusDebt;
+		uint rewardPer;
+		uint rewardUsdt;
+		uint rewardUsdtDebt;
+		uint rewardPerDebt;
 		////////////////////
-		uint base_received;
-		uint plus_received;
+		uint per_received;
+		uint usdt_received;
 	}
 
 	struct Balances {
 		// 로직상 계산에 필요한 밸런스 변수 (실제와 다를 수 있음)
-		uint baseBalance;
-		uint plusBalance;
+		uint perBalance;
+		uint usdtBalance;
 		// 레이어가 오픈 되지 않은 상태에서
 		// 레이어가 오픈되면 해당 레이어에 저장된 리워드를 데일리 리워드로 추가 분배하기 위한 변수
-		uint savedBaseBalance;
-		uint savedPlusBalance;
+		uint savedPerBalance;
+		uint savedUsdtBalance;
 		// 현재 savedUsdt, savedPer를 통해 나온 데일리 리워드
-		uint add_dailyBase;
-		uint add_dailyPlus;
+		uint add_dailyUSDT;
+		uint add_dailyPER;
 		// 보안상 문제가 생겨
 		// 예상보다 많은 withdraw를 요청하게 되는 경우
 		// 지금까지 쌓인 레이어별 토탈 밸런스와
 		// 지금까지 쌓인 레이어별 출금 밸런스를 비교하여
 		// 출금 가능한지 체크하는 변수
-		uint total_checkWithdrawBase;
-		uint withdrawal_checkWithdrawBase;
-		uint total_checkWithdrawPlus;
-		uint withdrawal_checkWithdrawPlus;
+		uint total_checkWithdrawPER;
+		uint withdrawal_checkWithdrawPER;
+		uint total_checkWithdrawUSDT;
+		uint withdrawal_checkWithdrawUSDT;
 	}
 
 	struct Layer {
 		Balances balances;
 		// P2에서 해당 레이어에 토큰 배정 받을때 리워드 퍼센트
-		uint rewardBasePercent;
-		uint rewardPlusPercent;
+		uint rewardUsdtPercent;
+		uint rewardPerPercent;
 		// 유저에게 하루에 분배하는 리워드 퍼센트
 		uint dailyReward_Percent;
 		// 계산에 필요
-		uint rewardBase;
-		uint rewardPlus;
+		uint rewardPer;
+		uint rewardUsdt;
 		// 미오픈시 저장한 리워드를 데일리 리워드로 추가 분배하기 위한 퍼센트변수
 		uint add_dailyReward_Percent;
 		uint lastRewardBlock;
@@ -103,26 +104,26 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 		uint _aienId;
 		uint _aienLevel;
 		// 출금 토탈
-		uint _aien_base_received;
-		uint _aien_plus_received;
+		uint _aien_per_received;
+		uint _aien_usdt_received;
 		//출금 가능
-		uint base_withdrawable;
-		uint plus_withdrawable;
+		uint usdt_withdrawable;
+		uint per_withdrawable;
 		// block당 리워드
-		uint block_reward_base;
-		uint block_reward_plus;
+		uint block_reward_per;
+		uint block_reward_usdt;
 	}
 
 	struct LayerLoadData {
 		bool isOpen;
 		uint _layerNumber;
-		uint _24h_reward_base;
-		uint _24h_reward_plus;
+		uint _24h_reward_per;
+		uint _24h_reward_usdt;
 		uint totalStakedAien;
 	}
 	struct UserLoadData {
-		uint _baseRewarded;
-		uint _plusRewarded;
+		uint _usdtRewarded;
+		uint _perRewarded;
 		bool _isBlockUser;
 	}
 
@@ -133,8 +134,8 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 	uint public constant DAY_TO_SEC = 86400;
 
 	//staking variables
-	uint public P2_baseBalance;
-	uint public P2_plusBalance;
+	uint public P2_usdtBalance;
+	uint public P2_perBalance;
 	uint public P2_dailyReward_Percent;
 	uint public P2_dailyRewardUpdateBlock;
 	uint public P2_lastRewardBlock;
@@ -143,6 +144,7 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 
 	address public ContractDB;
 	address public ContractPER;
+	address public ContractUSDT;
 	address public ContractAien;
 
 	// 테스트용
@@ -156,7 +158,7 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 
 	event Deposit(address indexed user, uint indexed aienId, uint indexed layer, uint timestamp);
 	event Withdraw(address indexed user, uint indexed aienId, uint indexed layer, uint timestamp);
-	event Harvest(address indexed user, uint indexed baseReward, uint indexed plusReward, uint aienId, uint timestamp);
+	event Harvest(address indexed user, uint indexed per, uint indexed usdt, uint aienId, uint timestamp);
 	event BlackUser(address indexed user, bool isBlockUser, uint timestamp, string desc);
 
 	modifier isOpenLayer(uint _layer) {
@@ -206,14 +208,16 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 	function _P2_Start(
 		address _dbAddr,
 		address _perAddr,
+		address _usdtAddr,
 		address _aienAddr,
-		uint _base,
-		uint _plus,
+		uint _usdt,
+		uint _per,
 		uint _p2_dailyReward_Percent,
 		uint _maxStake
 	) public onlyRole(DEFAULT_ADMIN_ROLE) {
 		ContractDB = _dbAddr;
 		ContractPER = _perAddr;
+		ContractUSDT = _usdtAddr;
 		ContractAien = _aienAddr;
 
 		MAX_STAKING_LIMIT = _maxStake;
@@ -221,8 +225,8 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 		// 기존 IERC20(address).balanceOf(address)를 사용하면 가스피가 늘어나는 문제가 있어서
 		// 실제로 P2컨트랙트로 전송하고
 		// 직접 변수에 초기셋팅 기입/ 실제 밸런스와 맞추어 기입 해야함
-		P2_baseBalance = _base;
-		P2_plusBalance = _plus;
+		P2_usdtBalance = _usdt;
+		P2_perBalance = _per;
 
 		P2_dailyReward_Percent = _p2_dailyReward_Percent;
 
@@ -234,14 +238,14 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 
 	function _layer_setting(
 		uint _layerNumber,
-		uint _fromP2BasePercent,
-		uint _fromP2PlusPercent,
+		uint _fromP2PerPercent,
+		uint _fromP2UsdtPercent,
 		uint _dailyReward_percent,
 		uint _add_dailyReward_Percent,
 		bool _isOpen
 	) public onlyRole(DEFAULT_ADMIN_ROLE) {
-		layers[_layerNumber].rewardBasePercent = _fromP2BasePercent;
-		layers[_layerNumber].rewardPlusPercent = _fromP2PlusPercent;
+		layers[_layerNumber].rewardUsdtPercent = _fromP2UsdtPercent;
+		layers[_layerNumber].rewardPerPercent = _fromP2PerPercent;
 		layers[_layerNumber].dailyReward_Percent = _dailyReward_percent;
 		// 추가됨 Layer struct 참고
 		layers[_layerNumber].add_dailyReward_Percent = _add_dailyReward_Percent;
@@ -252,47 +256,47 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 		layers[_layerNumber].dailyRewardUpdateBlock = block.number;
 		layers[_layerNumber].lastRewardBlock = block.number;
 
-		layers[_layerNumber].balances.savedBaseBalance += layers[_layerNumber].balances.baseBalance;
-		layers[_layerNumber].balances.savedPlusBalance += layers[_layerNumber].balances.plusBalance;
-		
+		layers[_layerNumber].balances.savedUsdtBalance += layers[_layerNumber].balances.usdtBalance;
+		layers[_layerNumber].balances.savedPerBalance += layers[_layerNumber].balances.perBalance;
+		// console.log(layers[_layerNumber].balances.savedPerBalance);
 
-		(uint dailyBASE, uint dailyPLUS) = _daily_calc(P2_baseBalance, P2_plusBalance, P2_dailyReward_Percent);
-		(uint add_dailyBASE, uint add_dailyPLUS) = _daily_calc(
-			layers[_layerNumber].balances.savedBaseBalance,
-			layers[_layerNumber].balances.savedPlusBalance,
+		(uint dailyUSDT, uint dailyPER) = _daily_calc(P2_usdtBalance, P2_perBalance, P2_dailyReward_Percent);
+		(uint add_dailyUSDT, uint add_dailyPER) = _daily_calc(
+			layers[_layerNumber].balances.savedUsdtBalance,
+			layers[_layerNumber].balances.savedPerBalance,
 			layers[_layerNumber].add_dailyReward_Percent
 		);
 
-		layers[_layerNumber].balances.savedBaseBalance -= add_dailyBASE;
-		layers[_layerNumber].balances.savedPlusBalance -= add_dailyPLUS;
+		layers[_layerNumber].balances.savedPerBalance -= add_dailyPER;
+		layers[_layerNumber].balances.savedUsdtBalance -= add_dailyUSDT;
 
 		// 문제점  =  (dailyPER / REWARD_PERCENT_DECIMAL * layers[_layerNumber].rewardPerPercent) + add_dailyPER; 으로 수정해야될듯
-		layers[_layerNumber].balances.baseBalance =
-			((dailyBASE / REWARD_PERCENT_DECIMAL) * layers[_layerNumber].rewardBasePercent) +
-			add_dailyBASE;
-		layers[_layerNumber].balances.plusBalance =
-			((dailyPLUS / REWARD_PERCENT_DECIMAL) * layers[_layerNumber].rewardPlusPercent) +
-			add_dailyPLUS;
+		layers[_layerNumber].balances.perBalance =
+			((dailyPER / REWARD_PERCENT_DECIMAL) * layers[_layerNumber].rewardPerPercent) +
+			add_dailyPER;
+		layers[_layerNumber].balances.usdtBalance =
+			((dailyUSDT / REWARD_PERCENT_DECIMAL) * layers[_layerNumber].rewardUsdtPercent) +
+			add_dailyUSDT;
 		//
-		layers[_layerNumber].balances.total_checkWithdrawBase = layers[_layerNumber].balances.baseBalance;
-		layers[_layerNumber].balances.total_checkWithdrawPlus = layers[_layerNumber].balances.plusBalance;
+		layers[_layerNumber].balances.total_checkWithdrawPER = layers[_layerNumber].balances.perBalance;
+		layers[_layerNumber].balances.total_checkWithdrawUSDT = layers[_layerNumber].balances.usdtBalance;
 
 		// console.log('internal layer start!!!!!!!!!!');
 		_layer_update(_layerNumber);
 	}
 
 	// 전체 풀에 USDT, PER 추가
-	function addPerUsdtDistribution(uint _base, uint _plus) public onlyRole(ADDER_ROLE) {
-		P2_baseBalance += _base;
-		P2_plusBalance += _plus;
+	function addPerUsdtDistribution(uint _usdt, uint _per) public onlyRole(ADDER_ROLE) {
+		P2_usdtBalance += _usdt;
+		P2_perBalance += _per;
 
 		_p2_update(0);
 	}
 
 	// high pool(6~10)에 PER 추가
-	function addHighPoolPerDistribution(uint _plus) public onlyRole(ADDER_ROLE) {
+	function addHighPoolPerDistribution(uint _per) public onlyRole(ADDER_ROLE) {
 		// layer6~10까지 per 추가
-		P2_plusBalance += _plus;
+		P2_perBalance += _per;
 
 		_p2_update(0);
 	}
@@ -305,58 +309,58 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 			// 하루 단위로 레이어로 재원 분배 실행
 
 			// from: P2, to: layers로 실제 분배한 리워드들
-			uint distri_base = 0;
-			uint distri_plus = 0;
+			uint distri_per = 0;
+			uint distri_usdt = 0;
 
 			while (_block > P2_dailyRewardUpdateBlock + DAY_TO_SEC) {
 				DAYS_Count++;
 				P2_dailyRewardUpdateBlock += DAY_TO_SEC;
 				// _daily_calc는 데일리 리워드를 뽑는 퓨어함수 (P2, 하위 레이어들이 공통 실행 함수)
-				(uint dailyBASE, uint dailyPLUS) = _daily_calc(P2_baseBalance, P2_plusBalance, P2_dailyReward_Percent);
+				(uint dailyUSDT, uint dailyPER) = _daily_calc(P2_usdtBalance, P2_perBalance, P2_dailyReward_Percent);
 
 				for (uint8 i = 1; i < 11; i++) {
-					(uint add_dailyBASE, uint add_dailyPLUS) = _daily_calc(
-						layers[i].balances.savedBaseBalance,
-						layers[i].balances.savedPlusBalance,
+					(uint add_dailyUSDT, uint add_dailyPER) = _daily_calc(
+						layers[i].balances.savedUsdtBalance,
+						layers[i].balances.savedPerBalance,
 						layers[i].add_dailyReward_Percent
 					);
 
-					distri_base += (dailyBASE / REWARD_PERCENT_DECIMAL) * layers[i].rewardBasePercent;
-					distri_plus += (dailyPLUS / REWARD_PERCENT_DECIMAL) * layers[i].rewardPlusPercent;
+					distri_per += (dailyPER / REWARD_PERCENT_DECIMAL) * layers[i].rewardPerPercent;
+					distri_usdt += (dailyUSDT / REWARD_PERCENT_DECIMAL) * layers[i].rewardUsdtPercent;
 
 					if (!layers[i].isOpen) {
-						layers[i].balances.baseBalance = 0;
-						layers[i].balances.plusBalance = 0;
-						layers[i].balances.savedPlusBalance += ((dailyPLUS / REWARD_PERCENT_DECIMAL) *
-							layers[i].rewardPlusPercent);
-						layers[i].balances.baseBalance += ((dailyBASE / REWARD_PERCENT_DECIMAL) *
-							layers[i].rewardBasePercent);
+						layers[i].balances.perBalance = 0;
+						layers[i].balances.usdtBalance = 0;
+						layers[i].balances.savedPerBalance += ((dailyPER / REWARD_PERCENT_DECIMAL) *
+							layers[i].rewardPerPercent);
+						layers[i].balances.usdtBalance += ((dailyUSDT / REWARD_PERCENT_DECIMAL) *
+							layers[i].rewardUsdtPercent);
 
 						continue;
 					}
 
-					layers[i].balances.total_checkWithdrawBase +=
-						(dailyBASE / REWARD_PERCENT_DECIMAL) *
-						layers[i].rewardBasePercent;
-					layers[i].balances.total_checkWithdrawPlus +=
-						(dailyPLUS / REWARD_PERCENT_DECIMAL) *
-						layers[i].rewardPlusPercent;
+					layers[i].balances.total_checkWithdrawUSDT +=
+						(dailyUSDT / REWARD_PERCENT_DECIMAL) *
+						layers[i].rewardUsdtPercent;
+					layers[i].balances.total_checkWithdrawPER +=
+						(dailyPER / REWARD_PERCENT_DECIMAL) *
+						layers[i].rewardPerPercent;
 
-					layers[i].balances.savedBaseBalance -= add_dailyBASE;
-					layers[i].balances.savedPlusBalance -= add_dailyPLUS;
+					layers[i].balances.savedUsdtBalance -= add_dailyUSDT;
+					layers[i].balances.savedPerBalance -= add_dailyPER;
 
 					// 문제점
-					layers[i].balances.baseBalance =
-						((dailyBASE / REWARD_PERCENT_DECIMAL) * layers[i].rewardBasePercent) +
-						add_dailyBASE;
-					layers[i].balances.plusBalance =
-						((dailyPLUS / REWARD_PERCENT_DECIMAL) * layers[i].rewardPlusPercent) +
-						add_dailyPLUS;
+					layers[i].balances.perBalance =
+						((dailyPER / REWARD_PERCENT_DECIMAL) * layers[i].rewardPerPercent) +
+						add_dailyPER;
+					layers[i].balances.usdtBalance =
+						((dailyUSDT / REWARD_PERCENT_DECIMAL) * layers[i].rewardUsdtPercent) +
+						add_dailyUSDT;
 				}
 
 				//분배 되어야할 dailyReward 차감
-				P2_baseBalance -= distri_base;
-				P2_plusBalance -= distri_plus;
+				P2_perBalance -= distri_per;
+				P2_usdtBalance -= distri_usdt;
 			}
 		}
 		return block.number;
@@ -365,8 +369,8 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 	// 오픈 레이어의 가정
 	function _layer_update(uint _layer) public isOpenLayer(_layer) returns (uint) {
 		Layer storage layer = layers[_layer];
-		uint accRewardBase = 0;
-		uint accRewardPlus = 0;
+		uint accRewardUsdt = 0;
+		uint accRewardPer = 0;
 		// console.log(layer.balances.usdtBalance);
 		// console.log('layerDailyReward UpdateBlock', layer.dailyRewardUpdateBlock);
 		if (layer.lastRewardBlock == block.number) return block.number;
@@ -376,36 +380,31 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 			while (block.number > layer.dailyRewardUpdateBlock + DAY_TO_SEC) {
 				layer.dailyRewardUpdateBlock += DAY_TO_SEC;
 
-				accRewardBase = ((layer.dailyRewardUpdateBlock - layer.lastRewardBlock) *
-					(layer.balances.baseBalance / DAY_TO_SEC) *
+				accRewardUsdt = ((layer.dailyRewardUpdateBlock - layer.lastRewardBlock) *
+					(layer.balances.usdtBalance / DAY_TO_SEC) *
 					((layer.dailyReward_Percent * PRECISION_FACTOR) / REWARD_PERCENT_DECIMAL));
 				// accRewardUsdt = ((block)*(BlockPerReward)*(데일리리워드 퍼센트));
 
 				// /
 				// 100
 				// acc = 남은블록의 리워드 * 데일리 리워드 퍼센트
-				layer.rewardBase += accRewardBase / layer.totalStakedAien;
+				layer.rewardUsdt += accRewardUsdt / layer.totalStakedAien;
 				// layer.balances.usdtBalance -= accRewardUsdt / PRECISION_FACTOR;
-				layer.balances.withdrawal_checkWithdrawBase += accRewardBase / PRECISION_FACTOR;
+				layer.balances.withdrawal_checkWithdrawUSDT += accRewardUsdt / PRECISION_FACTOR;
 
-				accRewardPlus = ((layer.dailyRewardUpdateBlock - layer.lastRewardBlock) *
-					(layer.balances.plusBalance / DAY_TO_SEC) *
+				accRewardPer = ((layer.dailyRewardUpdateBlock - layer.lastRewardBlock) *
+					(layer.balances.perBalance / DAY_TO_SEC) *
 					((layer.dailyReward_Percent * PRECISION_FACTOR) / REWARD_PERCENT_DECIMAL));
 				// /
 				// 100
 
-				layer.rewardPlus += accRewardPlus / layer.totalStakedAien;
+				layer.rewardPer += accRewardPer / layer.totalStakedAien;
 				// layer.balances.perBalance -= accRewardPer / PRECISION_FACTOR;
-				layer.balances.withdrawal_checkWithdrawPlus += accRewardPlus / PRECISION_FACTOR;
+				layer.balances.withdrawal_checkWithdrawPER += accRewardPer / PRECISION_FACTOR;
 
 				layer.lastRewardBlock = layer.dailyRewardUpdateBlock;
 			}
 		}
-// 
-// 
-// 
-// 
-// 
 
 		accRewardUsdt = ((block.number - layer.lastRewardBlock) *
 			(layer.balances.usdtBalance / DAY_TO_SEC) *
@@ -431,6 +430,8 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 
 		return block.number;
 	}
+
+	
 
 	function pendingReward(uint _aienId, uint _layerNumber, uint _withdrawBlock) public view returns (uint, uint) {
 		Layer memory layer = layers[_layerNumber];
@@ -541,6 +542,7 @@ contract P2 is Initializable, UUPSUpgradeable, ReentrancyGuardUpgradeable, Acces
 		return (dailyUSDT, dailyPER);
 	}
 
+	
 
 	// 레이어 넘버를 넣으면 1초당(1블록) 분배 수량과 (24시간 예상 리워드 == returnValue * 86400)
 	// 레이어에 스테이킹중인 aien 리턴 .

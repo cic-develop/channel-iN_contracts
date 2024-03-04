@@ -80,119 +80,119 @@ struct User {
     uint agencyIncome;
 }
 
-struct P3_AienCollection {
-    address nftAddress;
-    string name;
-    string symbol;
-    uint highestPrice;
-    uint floorPrice;
-    uint totalTradeVolume;
-    uint totalTradeCount;
-}
+// struct P3_AienCollection {
+//     address nftAddress;
+//     string name;
+//     string symbol;
+//     uint highestPrice;
+//     uint floorPrice;
+//     uint totalTradeVolume;
+//     uint totalTradeCount;
+// }
 
-struct P3_Aien {
-    uint tokenId;
-    uint lastTradePrice;
-    // maybe add tx history
-}
+// struct P3_Aien {
+//     uint tokenId;
+//     uint lastTradePrice;
+//     // maybe add tx history
+// }
 
-struct P3_AienOrder {
-    uint orderId;
-    address seller;
-    address buyer;
-    uint tokenId;
-    uint8 level;
-    uint32 baseProb;
-    uint32 addProb;
-    uint price;
-    uint tradeTime;
-    uint8 orderType;
-}
+// struct P3_AienOrder {
+//     uint orderId;
+//     address seller;
+//     address buyer;
+//     uint tokenId;
+//     uint8 level;
+//     uint32 baseProb;
+//     uint32 addProb;
+//     uint price;
+//     uint tradeTime;
+//     uint8 orderType;
+// }
 
-struct P3_PfCollection {
-    address nftAddress;
-    string name;
-    string symbol;
-    uint highestPrice;
-    uint floorPrice;
-    uint totalTradeVolume;
-    uint totalTradeCount;
-}
+// struct P3_PfCollection {
+//     address nftAddress;
+//     string name;
+//     string symbol;
+//     uint highestPrice;
+//     uint floorPrice;
+//     uint totalTradeVolume;
+//     uint totalTradeCount;
+// }
 
-struct P3_PfOrder {
-    uint orderId;
-    address seller;
-    address buyer;
-    uint tokenId;
-    uint8 grade;
-    uint price;
-    uint tradeTime;
-    uint8 orderType;
-}
+// struct P3_PfOrder {
+//     uint orderId;
+//     address seller;
+//     address buyer;
+//     uint tokenId;
+//     uint8 grade;
+//     uint price;
+//     uint tradeTime;
+//     uint8 orderType;
+// }
 
 //
 //
 //
 //
-// P2 start
-struct P2_State {
-    bool isP2Stop;
-    uint P2_baseBalance;
-    uint P2_plusBalance;
-    uint P2_dailyReward_Percent;
-    uint P2_dailyRewardUpdateBlock;
-    uint P2_lastRewardBlock;
-    uint MAX_STAKING_LIMIT;
-    uint DAYS_Count;
-}
-struct P2_User {
-    bool isBlockUser;
-    uint baseRewarded;
-    uint plusRewarded;
-    EnumerableSet.UintSet tokenIds;
-}
+// // P2 start
+// struct P2_State {
+//     bool isP2Stop;
+//     uint P2_baseBalance;
+//     uint P2_plusBalance;
+//     uint P2_dailyReward_Percent;
+//     uint P2_dailyRewardUpdateBlock;
+//     uint P2_lastRewardBlock;
+//     uint MAX_STAKING_LIMIT;
+//     uint DAYS_Count;
+// }
+// struct P2_User {
+//     bool isBlockUser;
+//     uint baseRewarded;
+//     uint plusRewarded;
+//     EnumerableSet.UintSet tokenIds;
+// }
 
-struct P2_Aien {
-    address staker;
-    uint level;
-    uint rewardBase;
-    uint rewardPlus;
-    uint rewardBaseDebt;
-    uint rewardPlusDebt;
-    //
-    uint base_received;
-    uint plus_received;
-}
+// struct P2_Aien {
+//     address staker;
+//     uint level;
+//     uint rewardBase;
+//     uint rewardPlus;
+//     uint rewardBaseDebt;
+//     uint rewardPlusDebt;
+//     //
+//     uint base_received;
+//     uint plus_received;
+// }
 
-struct P2_Balances {
-    uint baseBalance;
-    uint plusBalance;
-    uint savedBaseBalance;
-    uint savedPlusBalance;
-    uint add_dailyBase;
-    uint add_dailyPlus;
-}
+// struct P2_Balances {
+//     uint baseBalance;
+//     uint plusBalance;
+//     uint savedBaseBalance;
+//     uint savedPlusBalance;
+//     uint add_dailyBase;
+//     uint add_dailyPlus;
+// }
 
-struct P2_AienLoadData {
-    uint _aienId;
-    uint _aienLevel;
-    uint _aien_base_received;
-    uint _aien_plus_received;
-    uint base_withdrawable;
-    uint plus_withdrawable;
-    uint block_reward_base;
-    uint block_reward_plus;
-}
+// struct P2_AienLoadData {
+//     uint _aienId;
+//     uint _aienLevel;
+//     uint _aien_base_received;
+//     uint _aien_plus_received;
+//     uint base_withdrawable;
+//     uint plus_withdrawable;
+//     uint block_reward_base;
+//     uint block_reward_plus;
+// }
 
-struct P2_LayerLoadData {
-    bool isOpen;
-    uint _layerNumber;
-    uint _24h_reawrd_base;
-    uint _24h_reawrd_plus;
-    uint totalStakedAien;
-}
+// struct P2_LayerLoadData {
+//     bool isOpen;
+//     uint _layerNumber;
+//     uint _24h_reawrd_base;
+//     uint _24h_reawrd_plus;
+//     uint totalStakedAien;
+// }
 
-// P2 end
+// // P2 end
 
 // P0 End
 struct AppStorage {
@@ -217,30 +217,30 @@ struct AppStorage {
     //////////////////////////
     // P3/////////////////////
     //
-    // userAddr => orderIds;
-    mapping(address => uint[]) p3_userOrders;
+    // // userAddr => orderIds;
+    // mapping(address => uint[]) p3_userOrders;
+    // //
+    // //
+    // // tokenId => orderIds;
+    // mapping(uint => uint[]) p3_aienTokenOrders;
+    // // orderId => orderInfo
+    // // mapping(uint => P3_Aien_Order) p3_aienOrders;
+    // //
+    // // tokenId => orderIds;
+    // mapping(uint => uint[]) p3_pfTokenOrders;
+    // // orderId => orderInfo
+    // mapping(uint => P3_PfOrder) p3_pfOrders;
     //
     //
-    // tokenId => orderIds;
-    mapping(uint => uint[]) p3_aienTokenOrders;
-    // orderId => orderInfo
-    // mapping(uint => P3_Aien_Order) p3_aienOrders;
-    //
-    // tokenId => orderIds;
-    mapping(uint => uint[]) p3_pfTokenOrders;
-    // orderId => orderInfo
-    mapping(uint => P3_PfOrder) p3_pfOrders;
     //
     //
-    //
-    //
-    // P2
-    mapping(string => P2_State) p2_states;
-    mapping(string => P2_Balances) p2_balances;
-    mapping(address => P2_User) p2_users;
-    mapping(uint => P2_Aien) p2_aiens;
-    mapping(uint => P2_AienLoadData) p2_aienLoadDatas;
-    mapping(uint => P2_LayerLoadData) p2_layerLoadDatas;
+    // // P2
+    // mapping(string => P2_State) p2_states;
+    // mapping(string => P2_Balances) p2_balances;
+    // mapping(address => P2_User) p2_users;
+    // mapping(uint => P2_Aien) p2_aiens;
+    // mapping(uint => P2_AienLoadData) p2_aienLoadDatas;
+    // mapping(uint => P2_LayerLoadData) p2_layerLoadDatas;
 }
 
 library LibAppStorage {
