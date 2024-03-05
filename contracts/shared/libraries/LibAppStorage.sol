@@ -134,63 +134,109 @@ struct User {
 //
 //
 //
-// // P2 start
-// struct P2_State {
-//     bool isP2Stop;
-//     uint P2_baseBalance;
-//     uint P2_plusBalance;
-//     uint P2_dailyReward_Percent;
-//     uint P2_dailyRewardUpdateBlock;
-//     uint P2_lastRewardBlock;
-//     uint MAX_STAKING_LIMIT;
-//     uint DAYS_Count;
-// }
-// struct P2_User {
-//     bool isBlockUser;
-//     uint baseRewarded;
-//     uint plusRewarded;
-//     EnumerableSet.UintSet tokenIds;
-// }
+// P2 start
+struct P2_State {
+    bool isP2Stop;
+    uint constant REWARD_PERCENT_DECIMAL = 1e5;
+    uint constant PRECISION_FACTOR = 1e12;
+    uint constant DAY_TO_SEC = 86400;
+    uint P2_baseBalance;
+    uint P2_plusBalance;
+    uint P2_dailyReward_Percent;
+    uint P2_dailyRewardUpdateBlock;
+    uint P2_lastRewardBlock;
+    uint MAX_STAKING_LIMIT;
+    uint DAYS_Count;
+}
 
-// struct P2_Aien {
-//     address staker;
-//     uint level;
-//     uint rewardBase;
-//     uint rewardPlus;
-//     uint rewardBaseDebt;
-//     uint rewardPlusDebt;
-//     //
-//     uint base_received;
-//     uint plus_received;
-// }
+struct P2_User {
+    bool isBlockUser;
+	uint plusRewarded;
+	uint baseRewarded;
+	EnumerableSet.UintSet tokenIds;
+}
 
-// struct P2_Balances {
-//     uint baseBalance;
-//     uint plusBalance;
-//     uint savedBaseBalance;
-//     uint savedPlusBalance;
-//     uint add_dailyBase;
-//     uint add_dailyPlus;
-// }
+struct P2_Aien {
+    address staker;
+	uint level;
+	// requires value
+	uint rewardPlus;
+	uint rewardBase;
+	uint rewardBaseDebt;
+	uint rewardPlusDebt;
+	////////////////////
+	uint plus_received;
+	uint base_received;
+}
 
-// struct P2_AienLoadData {
-//     uint _aienId;
-//     uint _aienLevel;
-//     uint _aien_base_received;
-//     uint _aien_plus_received;
-//     uint base_withdrawable;
-//     uint plus_withdrawable;
-//     uint block_reward_base;
-//     uint block_reward_plus;
-// }
+struct P2_Balances {
+// 로직상 계산에 필요한 밸런스 변수 (실제와 다를 수 있음)
+	uint plusBalance;
+	uint baseBalance;
+	// 레이어가 오픈 되지 않은 상태에서
+	// 레이어가 오픈되면 해당 레이어에 저장된 리워드를 데일리 리워드로 추가 분배하기 위한 변수
+	uint savedPlusBalance;
+	uint savedBaseBalance;
+	// 현재 savedUsdt, savedPer를 통해 나온 데일리 리워드
+	uint add_dailyBASE;
+	uint add_dailyPLUS;
+	// 보안상 문제가 생겨
+	// 예상보다 많은 withdraw를 요청하게 되는 경우
+	// 지금까지 쌓인 레이어별 토탈 밸런스와
+	// 지금까지 쌓인 레이어별 출금 밸런스를 비교하여
+	// 출금 가능한지 체크하는 변수
+	uint total_checkWithdrawPLUS;
+	uint withdrawal_checkWithdrawPLUS;
+	uint total_checkWithdrawBASE;
+	uint withdrawal_checkWithdrawBASE;
+}
 
-// struct P2_LayerLoadData {
-//     bool isOpen;
-//     uint _layerNumber;
-//     uint _24h_reawrd_base;
-//     uint _24h_reawrd_plus;
-//     uint totalStakedAien;
-// }
+struct P2_Layer {
+    P2_Balances balances;
+	// P2에서 해당 레이어에 토큰 배정 받을때 리워드 퍼센트
+	uint rewardBasePercent;
+	uint rewardPlusPercent;
+	// 유저에게 하루에 분배하는 리워드 퍼센트
+	uint dailyReward_Percent;
+	// 계산에 필요
+	uint rewardPlus;
+	uint rewardBase;
+	// 미오픈시 저장한 리워드를 데일리 리워드로 추가 분배하기 위한 퍼센트변수
+	uint add_dailyReward_Percent;
+	uint lastRewardBlock;
+	uint dailyRewardUpdateBlock;
+	uint totalStakedAien;
+	bool isOpen;
+}
+
+struct P2_AienLoadData {
+    //aien정보
+	uint _aienId;
+	uint _aienLevel;
+	// 출금 토탈
+	uint _aien_plus_received;
+	uint _aien_base_received;
+	//출금 가능
+	uint base_withdrawable;
+	uint plus_withdrawable;
+	// block당 리워드
+	uint block_reward_plus;
+	uint block_reward_base;
+}
+
+struct P2_LayerLoadData {
+    bool isOpen;
+	uint _layerNumber;
+	uint _24h_reward_plus;
+	uint _24h_reward_base;
+	uint totalStakedAien;
+}
+
+struct P2_UserLoadData {
+    uint _baseRewarded;
+	uint _plusRewarded;
+	bool _isBlockUser;
+}
 
 // // P2 end
 
@@ -234,13 +280,16 @@ struct AppStorage {
     //
     //
     //
-    // // P2
-    // mapping(string => P2_State) p2_states;
-    // mapping(string => P2_Balances) p2_balances;
-    // mapping(address => P2_User) p2_users;
-    // mapping(uint => P2_Aien) p2_aiens;
-    // mapping(uint => P2_AienLoadData) p2_aienLoadDatas;
-    // mapping(uint => P2_LayerLoadData) p2_layerLoadDatas;
+    // P2   
+    P2_State p2_states;
+    uint[5] __gap;
+    mapping(address => P2_User) p2_users;
+    mapping(uint => P2_Aien) p2_aiens;
+    mapping(string => P2_Balances) p2_balances;
+    mapping(uint => P2_Layer) p2_layers;
+    mapping(uint => P2_AienLoadData) p2_aienLoadDatas;
+    mapping(uint => P2_LayerLoadData) p2_layerLoadDatas;
+    mapping(address => P2_UserLoadData) p2_userLoadDatas;
 }
 
 library LibAppStorage {
