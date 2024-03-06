@@ -137,12 +137,15 @@ struct User {
 // P2 start
 struct P2_State {
     bool isP2Stop;
-    uint constant REWARD_PERCENT_DECIMAL = 1e5;
-    uint constant PRECISION_FACTOR = 1e12;
-    uint constant DAY_TO_SEC = 86400;
+    uint REWARD_PERCENT_DECIMAL ;
+    // = 1e5;
+    uint PRECISION_FACTOR ;
+    // = 1e12;
+    uint DAY_TO_SEC ;
+    // = 86400;
     uint P2_baseBalance;
     uint P2_plusBalance;
-    uint P2_dailyReward_Percent;
+    uint P2_dailyRewardPercent;
     uint P2_dailyRewardUpdateBlock;
     uint P2_lastRewardBlock;
     uint MAX_STAKING_LIMIT;
@@ -290,6 +293,7 @@ struct AppStorage {
     mapping(uint => P2_AienLoadData) p2_aienLoadDatas;
     mapping(uint => P2_LayerLoadData) p2_layerLoadDatas;
     mapping(address => P2_UserLoadData) p2_userLoadDatas;
+    
 }
 
 library LibAppStorage {
