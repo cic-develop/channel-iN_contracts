@@ -136,23 +136,22 @@ struct User {
 //
 // P2 start
 struct P2_State {
+    // P2 global state
     bool isP2Stop;
-    uint REWARD_PERCENT_DECIMAL ;
-    // = 1e5;
-    uint PRECISION_FACTOR ;
-    // = 1e12;
-    uint DAY_TO_SEC ;
-    // = 86400;
+    // 
     uint P2_baseBalance;
     uint P2_plusBalance;
+    // 
     uint P2_dailyRewardPercent;
+    // 
     uint P2_dailyRewardUpdateBlock;
     uint P2_lastRewardBlock;
+    // 
     uint MAX_STAKING_LIMIT;
-    uint DAYS_Count;
 }
 
 struct P2_User {
+    // 블랙유저 찾아야함
     bool isBlockUser;
 	uint plusRewarded;
 	uint baseRewarded;
@@ -188,10 +187,10 @@ struct P2_Balances {
 	// 지금까지 쌓인 레이어별 토탈 밸런스와
 	// 지금까지 쌓인 레이어별 출금 밸런스를 비교하여
 	// 출금 가능한지 체크하는 변수
-	uint total_checkWithdrawPLUS;
-	uint withdrawal_checkWithdrawPLUS;
-	uint total_checkWithdrawBASE;
-	uint withdrawal_checkWithdrawBASE;
+	uint a;
+	uint b;
+	uint c;
+	uint d;
 }
 
 struct P2_Layer {
@@ -212,34 +211,58 @@ struct P2_Layer {
 	bool isOpen;
 }
 
-struct P2_AienLoadData {
-    //aien정보
-	uint _aienId;
-	uint _aienLevel;
-	// 출금 토탈
-	uint _aien_plus_received;
-	uint _aien_base_received;
-	//출금 가능
-	uint base_withdrawable;
-	uint plus_withdrawable;
-	// block당 리워드
-	uint block_reward_plus;
-	uint block_reward_base;
-}
+//   struct P2_Layer {
+//       P2_Balances balances;
+//   	// P2에서 해당 레이어에 토큰 배정 받을때 리워드 퍼센트
+//   	uint rewardBasePercent;
+//   	uint rewardPlusPercent;
+//   	// 계산에 필요
+//   	uint rewardBase;
+//   	uint rewardPlus;
+//       // 
+//       // 
+//       //////////////////////////////////////////////////////////
+//   	// 유저에게 하루에 분배하는 리워드 퍼센트///////////////////////////               
+//   	uint dailyReward_Percent;/////////////////////////////////
+//   	// 미오픈시 저장한 리워드를 데일리 리워드로 추가 분배하기 위한 퍼센트변수//
+//   	uint add_dailyReward_Percent;/////////////////////////////
+//       //////////////////////////////////////////////////////////
+//   	// 
+//       // 
+//       uint lastRewardBlock;
+//   	uint dailyRewardUpdateBlock;
+//   	uint totalStakedAien;
+//   	bool isOpen;
+//   }
 
-struct P2_LayerLoadData {
-    bool isOpen;
-	uint _layerNumber;
-	uint _24h_reward_plus;
-	uint _24h_reward_base;
-	uint totalStakedAien;
-}
+// struct P2_AienLoadData {
+//     //aien정보
+// 	uint _aienId;
+// 	uint _aienLevel;
+// 	// 출금 토탈
+// 	uint _aien_plus_received;
+// 	uint _aien_base_received;
+// 	//출금 가능
+// 	uint base_withdrawable;
+// 	uint plus_withdrawable;
+// 	// block당 리워드
+// 	uint block_reward_plus;
+// 	uint block_reward_base;
+// }
 
-struct P2_UserLoadData {
-    uint _baseRewarded;
-	uint _plusRewarded;
-	bool _isBlockUser;
-}
+// struct P2_LayerLoadData {
+//     bool isOpen;
+// 	uint _layerNumber;
+// 	uint _24h_reward_plus;
+// 	uint _24h_reward_base;
+// 	uint totalStakedAien;
+// }
+
+// struct P2_UserLoadData {
+//     uint _baseRewarded;
+// 	uint _plusRewarded;
+// 	bool _isBlockUser;
+// }
 
 // // P2 end
 
@@ -283,16 +306,27 @@ struct AppStorage {
     //
     //
     //
-    // P2   
-    P2_State p2_states;
+    // //////////////////////////
+    // P2////////////////////////   
+    bool isP2Stop;
+    uint P2_baseBalance;
+    uint P2_plusBalance;
+    uint P2_dailyRewardPercent;
+    uint P2_dailyRewardUpdateBlock;
+    uint P2_lastRewardBlock;
+    uint P2_MAX_STAKING_LIMIT;
+    uint DAY_TO_SEC;
+    uint REWARD_PERCENT_DECIMAL;
+    uint PRECISION_FACTOR;
+    // 
     uint[5] __gap;
     mapping(address => P2_User) p2_users;
     mapping(uint => P2_Aien) p2_aiens;
     mapping(string => P2_Balances) p2_balances;
     mapping(uint => P2_Layer) p2_layers;
-    mapping(uint => P2_AienLoadData) p2_aienLoadDatas;
-    mapping(uint => P2_LayerLoadData) p2_layerLoadDatas;
-    mapping(address => P2_UserLoadData) p2_userLoadDatas;
+    // mapping(uint => P2_AienLoadData) p2_aienLoadDatas;
+    // mapping(uint => P2_LayerLoadData) p2_layerLoadDatas;
+    // mapping(address => P2_UserLoadData) p2_userLoadDatas;
     
 }
 

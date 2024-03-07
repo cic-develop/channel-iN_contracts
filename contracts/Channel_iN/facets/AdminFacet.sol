@@ -135,42 +135,93 @@ contract AdminFacet is Modifiers {
 
     /**@dev P2 Admin functions
      */
-    function admin_P2_layer_setting(
-        uint _layerNumber,
-        uint _fromP2PerPercent,
-        uint _fromP2UsdtPercent,
-        uint _dailyReward_percent,
-        uint _add_dailyReward_Percent,
-        bool _isOpen
-    ) external onlyDev {
+    function admin_P2_start(uint _baseBalance, uint _plusBalance, uint _dailyRewardPercent,uint _maxStakingLimit) external onlyDev returns(bool){
         AppStorage storage s = LibAppStorage.diamondStorage();
-        IP2_Admin(s.contracts["p2"])._layer_setting(
-            _layerNumber,
-            _fromP2PerPercent,
-            _fromP2UsdtPercent,
-            _dailyReward_percent,
-            _add_dailyReward_Percent,
-            _isOpen
-        );
+        s.isP2Stop = true;
+        s.REWARD_PERCENT_DECIMAL = 1e5;
+        s.PRECISION_FACTOR = 1e12;
+        s.DAY_TO_SEC = 86400;
+        s.P2_baseBalance = _baseBalance;
+        s.P2_plusBalance = _plusBalance;
+        s.P2_dailyRewardPercent = _dailyRewardPercent;
+        s.P2_dailyRewardUpdateBlock = block.number - 86400;
+        s.P2_MAX_STAKING_LIMIT = _maxStakingLimit;
+
+        return true;
     }
 
-    function admin_P2_blockUser(
-        address _user,
-        bool _isBlock,
-        string memory _why
+    function admin_P2_layer_setting(
+        uint _layerNumber,
+		uint _fromP2PlusPercent,
+		uint _fromP2BasePercent,
+		uint _add_dailyReward_Percent,
+		bool _isOpen) external onlyDev {
+        // 1Layer :  81144000   / 0             || -                        || 7000     ||   -      || 100000 ||
+        // 2Layer :  104328000  / 0             || -                        || 9000     ||   -      || 100000 || add_dailyReward_Percent
+        // 3Layer :  128491285  / 96949286      || -                        || 11000    ||   -      || 100000 || 1000
+        // 4Layer :  157051365  / 629181181     || -                        || 13000    ||   -      || 100000 || 1000
+        // 5Layer :  11592000   / 1528310000    || -                        || 1000     ||   -      || 100000 || 1000
+        // 6Layer :  11592000   / 1528310000    || 73966502951109738390000  || 1000     || 10000    || 100000 ||
+        // 7Layer :  11592000   / 1528310000    || 73966502951109738390000  || 1000     || 10000    || 100000 ||
+        // 8Layer :  11592000   / 1528310000    || 73966502951109738390000  || 1000     || 10000    || 100000 ||
+        // 9Layer :  11592000   / 1528310000    || 73966502951109738390000  || 1000     || 10000    || 100000 ||
+        // 10Layer :  11592000  / 1528310000    || 73966502951109738390000  || 1000     || 10000    || 100000 ||
+
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.p2_layers[_layerNumber].rewardBasePercent = _fromP2BasePercent;
+        s.p2_layers[_layerNumber].rewardPlusPercent = _fromP2PlusPercent;
+        s.p2_layers[_layerNumber].dailyReward_Percent = 100000;
+        // 1-5 layer는 0, 6-10 layer는 10000
+        s.p2_layers[_layerNumber].add_dailyReward_Percent = _add_dailyReward_Percent;
+        s.p2_layers[_layerNumber].isOpen = _isOpen;
+    }
+
+    function admin_P2_layer_setRewardPercent(
+        uint _layerNumber,
+        uint _rewardBasePercent,
+        uint _rewardPlusPercent
     ) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        IP2_Admin(s.contracts["p2"]).diamond_P2_BlockUser(
-            _user,
-            _isBlock,
-            _why
-        );
+        s.p2_layers[_layerNumber].dailyReward_Percent = _dailyReward_Percent;
+        s.p2_layers[_layerNumber].add_dailyReward_Percent = _add_dailyReward_Percent;
+    }
+
+    function admin_P2_setDailyRewardPercent(uint _dailyRewardPercent) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.P2_dailyRewardPercent = _dailyRewardPercent;
+    }
+    function admin_P2_blockUser(
+        address _user,
+        bool _isBlock
+    ) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.p2_users[_user].isBlock = _isBlock;
     }
 
     function admin_P2_setMaxLimit(uint _maxLimit) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        IP2_Admin(s.contracts["p2"]).diamond_P2_setMaxLimit(_maxLimit);
+        s.P2_MAX_STAKING_LIMIT = _maxLimit;
+    }    
+    
+    function admin_P2_layer_balances_setting(uint _layerNumber, uint _baseBalance,uint _plusBalance, uint _savedBaseBalance,uint _savedPlusBalance) external onlyDev returns(bool){
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.p2_layers[_layerNumber].balances.baseBalance = _baseBalance;
+        s.p2_layers[_layerNumber].balances.plusBalance = _plusBalance;
+        s.p2_layers[_layerNumber].balances.savedBaseBalance = _savedBaseBalance;
+        s.p2_layers[_layerNumber].balances.savedPlusBalance = _savedPlusBalance;
+
+        return true;
     }
+
+    // function admin_P2_returnAien(uint _id) external onlyDev {
+    //     AppStorage storage s = LibAppStorage.diamondStorage(); 
+    // }
+
+    // function admin_P2_returnWithdraw(uint _id) external onlyDev {
+    //     AppStorage storage s = LibAppStorage.diamondStorage();
+    // }
+
+
 
     /**@dev DistriBute Admin functions
      */

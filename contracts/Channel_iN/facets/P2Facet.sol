@@ -4,7 +4,7 @@ pragma solidity ^0.8.22;
 import {AppStorage, LibAppStorage} from "../../shared/libraries/LibAppStorage.sol";
 import {LibMeta} from "../../shared/libraries/LibMeta.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
-import {IP2} from "../interfaces/IP2.sol";
+import {LibP2} from "../libraries/LibP2.sol";
 import {IDB} from "../interfaces/IDB.sol";
 import "../../shared/libraries/LibEnumerableSet.sol";
 
@@ -75,9 +75,9 @@ contract P2Facet {
         external
         view
         returns (
-            IP2.UserLoadData memory,
-            IP2.AienLoadData[] memory,
-            IP2.LayerLoadData[] memory
+            LibP2.UserLoadData memory,
+            LibP2.AienLoadData[] memory,
+            LibP2.LayerLoadData[] memory
         )
     {
         AppStorage storage s = LibAppStorage.diamondStorage();
