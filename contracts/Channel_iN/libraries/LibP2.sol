@@ -57,15 +57,31 @@ library LibP2 {
             // uint withdrawal_checkWithdrawBASE;
     }
 
-    function _P2_Layer_Reset(uint _layerNumber) internal returns(bool){
+    function _P2_Layer_Reset(uint _layerNumber) internal {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.p2_layers[_layerNumber].dailyRewardUpdateBlock = block.number;
         s.p2_layers[_layerNumber].lastRewardBlock = block.number;
 
+        s.p2_layers[_layerNumber].balances.savedBaseBalance = s.p2_layers[_layerNumber].balances.baseBalance;
+        s.p2_layers[_layerNumber].balances.savedPlusBalance = s.p2_layers[_layerNumber].balances.plusBalance;
+
+        (uint dailyBASE, uint dailyPLUS) = __P2_Daily_Calculate(s.p2_states.P2_baseBalance,s.p2_states.P2_plusBalance, s.p2_states.P2_dailyRewardPercent);
+        (uint add_dailyBASE, uint add_dailyPLUS) = __P2_Daily_Calculate(s.p2_layers[_layerNumber].balances.savedBaseBalance, s.p2_layers[_layerNumber].balances.savedPlusBalance, s.p2_layers[_layerNumber].balances.add_dailyReward_Percent);
         
+        s.p2_layers[_layerNumber].balances.savedBaseBalance -= add_dailyBASE;
+        s.p2_layers[_layerNumber].balances.savedPlusBalance -= add_dailyPLUS;
 
-        return true;
+        s.p2_layers[_layerNumber].balances.baseBalance = 
+        ((dailyBASE / s.p2_states.REWARD_PERCENT_DECIMAL) * 
+        s.p2_layers[_layerNumber].rewardBasePercent)
+        + add_dailyBASE;
 
+        s.p2_layers[_layerNumber].balances.plusBalance = 
+        ((dailyPLUS / s.p2_states.REWARD_PERCENT_DECIMAL) *
+        s.p2_layers[_layerNumber].rewardPlusPercent)
+        + add_dailyPLUS;
+
+        __P2_Update(_layerNumber);
     }
 
 
@@ -81,18 +97,57 @@ library LibP2 {
 
     }
 
+    function __P2_Layer_Update(uint _layerNumber) internal returns (uint){
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        require(s.p2_layers[_layerNumber].isOpen, "P2: Layer is not open")
+        Layer storage layer = s.p2_layers[_layerNumber];
+        uint accrewardBase = 0;
+        uint accrewardPlus = 0;
+
+        if(layer.lastRewardBlock == block.number) return block.number;
+        if(layer.totalStakedAien == 0) return block.number;
+
+        if(block.number > layer.dailyRewardUpdateBlock + s.p2_states.DAY_TO_SEC){
+            while(block.number > layer.dailyRewardUpdateBlock + s.p2_states.DAY_TO_SEC){
+                layer.dailyRewardUpdateBlock += s.p2_states.DAY_TO_SEC;
+                
+                accrewardBase = ((layer.dailyRewardUpdateBlock - layer.lastRewardBlock) *
+                (layer.balances.baseBalance / s.p2_states.DAY_TO_SEC) *
+                ((layer.dailyReward_Percent * s.p2_states.PRECISION_FACTOR)/s.p2_states.REWARD_PERCENT_DECIMAL));
+                
+                layer.rewardBase += accrewardBase / layer.totalStakedAien;
+                
+                // fix : withdrawal _check balance
+
+                accrewardPlus = ((layer.dailyRewardUpdateBlock - layer.lastRewardBlock) *
+                (layer.balances.plusBalance / s.p2_states.DAY_TO_SEC) *
+                ((layer.dailyReward_Percent * s.p2_states.PRECISION_FACTOR)/s.p2_states.REWARD_PERCENT_DECIMAL));
+
+                layer.rewardPlus += accrewardPlus / layer.totalStakedAien;
+
+
+                // fix : withdrawal _check balance
+
+                layer.lastRewardBlock = layer.dailyRewardUpdateBlock;
+                
+            }
+        }
+            
+
+
+        
+    }
+
     function __P2_Pending_Reward() internal returns (uint){
 
     }
 
-    function onERC721Received(
-		address operator,
-		address from,
-		uint256 tokenId,
-		bytes memory data
-	) internal pure returns (bytes4) {
-		return bytes4(keccak256('onERC721Received(address,address,uint256,bytes)'));
-	}
+    function __P2_Daily_Calculate(uint _baseBalance, uint _plusBalance, uint _dailyRewardPercent) internal pure returns(uint,uint) {
+        uint dailyBASE = (_baseBalance * _dailyRewardPercent) / 1e5;
+        uint dailyPLUS = (_plusBalance * _dailyRewardPercent) / 1e5;
+
+        return (dailyBASE, dailyPLUS);
+    }
 
 
     function __P2_Reward_Transfer() internal {
@@ -103,9 +158,6 @@ library LibP2 {
 
     }
 
-    function __P2_Daily_Calculate() internal {
-
-    }
 
     function __P2_Get_LayerData() internal {
 
@@ -114,6 +166,14 @@ library LibP2 {
     function __P2_Layer_Start() internal {
 
     }
+    function onERC721Received(
+		address operator,
+		address from,
+		uint256 tokenId,
+		bytes memory data
+	) internal pure returns (bytes4) {
+		return bytes4(keccak256('onERC721Received(address,address,uint256,bytes)'));
+	}
 
 
 
