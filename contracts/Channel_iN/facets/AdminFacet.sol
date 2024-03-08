@@ -182,8 +182,8 @@ contract AdminFacet is Modifiers {
         uint _rewardPlusPercent
     ) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        s.p2_layers[_layerNumber].dailyReward_Percent = _dailyReward_Percent;
-        s.p2_layers[_layerNumber].add_dailyReward_Percent = _add_dailyReward_Percent;
+        s.p2_layers[_layerNumber].dailyReward_Percent = _rewardBasePercent;
+        s.p2_layers[_layerNumber].add_dailyReward_Percent = _rewardPlusPercent;
     }
 
     function admin_P2_setDailyRewardPercent(uint _dailyRewardPercent) external onlyDev {
@@ -195,7 +195,7 @@ contract AdminFacet is Modifiers {
         bool _isBlock
     ) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        s.p2_users[_user].isBlock = _isBlock;
+        s.p2_users[_user].isBlockUser = _isBlock;
     }
 
     function admin_P2_setMaxLimit(uint _maxLimit) external onlyDev {

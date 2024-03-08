@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.22;
 
-import {AppStorage, LibAppStorage} from "../../shared/libraries/LibAppStorage.sol";
+import {AppStorage, LibAppStorage, P2_Layer} from "../../shared/libraries/LibAppStorage.sol";
 import {LibMeta} from "../../shared/libraries/LibMeta.sol";
 import {IERC721} from "../../shared/interfaces/IERC721.sol";
 import {LibP2} from "../libraries/LibP2.sol";
@@ -23,15 +23,15 @@ contract P2Facet {
         address indexed to,
         uint indexed aienId,
         uint indexed layer,
-        uint ousdt,
-        uint per
+        uint baseReward,
+        uint plusReward
     );
 
     function P2_staking(uint _aienId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
         uint _aienLevel = P2_getAienLevel(_aienId);
-        IP2(s.contracts["p2"]).diamond_P2_deposit(msgsender, _aienId);
+        LibP2.diamond_P2_deposit(msgsender, _aienId);
         IERC721(s.contracts["aien"]).safeTransferFrom(
             msgsender,
             s.contracts["p2"],
@@ -42,33 +42,29 @@ contract P2Facet {
     }
 
     function P2_unStaking(uint _aienId) external {
-        AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
         uint _aienLevel = P2_getAienLevel(_aienId);
-        (uint per, uint ousdt) = IP2(s.contracts["p2"]).pendingReward(
+        (uint base, uint plus) = LibP2.__P2_Pending_Reward(
             _aienId,
-            _aienLevel,
-            0
+            _aienLevel
         );
 
         emit P2_UnStaking_Event(msgsender, _aienId, _aienLevel);
-        emit P2_Harvest_Event(msgsender, _aienId, _aienLevel, per, ousdt);
+        emit P2_Harvest_Event(msgsender, _aienId, _aienLevel, base, plus);
 
-        IP2(s.contracts["p2"]).diamond_P2_withdraw(msgsender, _aienId);
+        LibP2.diamond_P2_withdraw(msgsender, _aienId);
     }
 
     function P2_harvest(uint _aienId) external {
-        AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
         uint _aienLevel = P2_getAienLevel(_aienId);
-        (uint per, uint ousdt) = IP2(s.contracts["p2"]).pendingReward(
+        (uint base, uint plus) = LibP2.__P2_Pending_Reward(
             _aienId,
-            _aienLevel,
-            0
+            _aienLevel
         );
-        emit P2_Harvest_Event(msgsender, _aienId, _aienLevel, per, ousdt);
-        IP2(s.contracts["p2"]).diamond_P2_harvest(msgsender, _aienId);
+        emit P2_Harvest_Event(msgsender, _aienId, _aienLevel, base, plus);
+        LibP2.diamond_P2_harvest(msgsender, _aienId);
     }
 
     function P2_getUserInfo()
@@ -80,22 +76,21 @@ contract P2Facet {
             LibP2.LayerLoadData[] memory
         )
     {
-        AppStorage storage s = LibAppStorage.diamondStorage();
         address msgsender = LibMeta.msgSender();
 
         (
-            IP2.UserLoadData memory userData,
-            IP2.AienLoadData[] memory aienData,
-            IP2.LayerLoadData[] memory layerData
-        ) = IP2(s.contracts["p2"]).diamond_P2_getUserInfo(msgsender);
+            LibP2.UserLoadData memory userData,
+            LibP2.AienLoadData[] memory aienData,
+            LibP2.LayerLoadData[] memory layerData
+        ) = LibP2.diamond_P2_getUserInfo(msgsender);
         return (userData, aienData, layerData);
     }
 
     function P2_getLayerData(
         uint _number
     ) public view returns (uint, uint, uint) {
-        AppStorage storage s = LibAppStorage.diamondStorage();
-        return IP2(s.contracts["p2"]).diamond_P2_getLayerData(_number);
+        
+        return LibP2.diamond_p2_getLayerData(_number);
     }
 
     function P2_getAienLevel(uint _aienId) public view returns (uint) {
@@ -103,23 +98,24 @@ contract P2Facet {
         return IDB(s.contracts["db"]).getAienLevel(_aienId);
     }
 
-    function P2_usdtBalance() public view returns (uint) {
+    function P2_baseBalance() public view returns (uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        return IP2(s.contracts["p2"]).P2_usdtBalance();
+        return s.P2_baseBalance;
     }
 
-    function P2_perBalance() public view returns (uint) {
+    function P2_plusBalance() public view returns (uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        return IP2(s.contracts["p2"]).P2_perBalance();
+        return s.P2_plusBalance;
     }
 
     function P2_maxStakingLimit() public view returns (uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        return IP2(s.contracts["p2"]).MAX_STAKING_LIMIT();
+        return s.P2_MAX_STAKING_LIMIT;
     }
 
-    function P2_layers(uint _number) public view returns (IP2.Layer memory) {
+    function P2_layers(uint _number) public view returns (P2_Layer memory) {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        return IP2(s.contracts["p2"]).layers(_number);
+        return s.p2_layers[_number];
+    //     return IP2(s.contracts["p2"]).layers(_number);
     }
 }
