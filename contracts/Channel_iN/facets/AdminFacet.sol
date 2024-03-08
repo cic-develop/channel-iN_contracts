@@ -148,12 +148,13 @@ contract AdminFacet is Modifiers {
         s.P2_MAX_STAKING_LIMIT = _maxStakingLimit;
 
         return true;
-    }
+    } 
+    
 
     function admin_P2_layer_setting(
         uint _layerNumber,
-		uint _fromP2PlusPercent,
 		uint _fromP2BasePercent,
+		uint _fromP2PlusPercent,
 		uint _add_dailyReward_Percent,
 		bool _isOpen) external onlyDev {
         // 1Layer :  81144000   / 0             || -                        || 7000     ||   -      || 100000 ||

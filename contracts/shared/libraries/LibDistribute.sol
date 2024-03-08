@@ -33,9 +33,9 @@ library LibDistribute {
         IERC20(per).transfer(_agency, _agencyAmount);
         IERC20(per).transfer(_influencer, _influencerAmount);
         IERC20(per).transfer(s.contracts["burn"], burnAmount);
-        IERC20(per).transfer(s.contracts["p2"], p2Amount);
+        IERC20(per).transfer(s.contracts["p2balance"], p2Amount);
         IERC20(per).transfer(s.contracts["p1"], p1Amount);
-        IP2(s.contracts["p2"]).addPerUsdtDistribution(0, p2Amount);
+        IP2(s.contracts["p2balance"]).addPerUsdtDistribution(0, p2Amount);
         IP1(s.contracts["p1"]).diamond_P1_addDistributionAmountAll(p1Amount);
 
         // IERC20(PER).transfer(P1, )
@@ -103,14 +103,14 @@ library LibDistribute {
         uint _teamUsdtAmount = (usdtBalance *
             s.distribute_states.teamUsdtRatio) / calculatePercent;
 
-        IERC20(s.contracts["usdt"]).transfer(s.contracts["p2"], _p2UsdtAmount);
+        IERC20(s.contracts["per"]).transfer(s.contracts["p2balance"], _p2UsdtAmount);
 
-        IERC20(s.contracts["usdt"]).transfer(
+        IERC20(s.contracts["per"]).transfer(
             s.contracts["team"],
             _teamUsdtAmount
         );
 
-        IP2(s.contracts["p2"]).addPerUsdtDistribution(_p2UsdtAmount, 0);
+        IP2(s.contracts["p2balance"]).addPerUsdtDistribution(_p2UsdtAmount, 0);
 
         s.distribute_states.beforeP2Per = 0;
         s.distribute_states.beforeP2Usdt = 0;
@@ -133,7 +133,7 @@ library LibDistribute {
 
         uint estimateUsdt = IKlaySwap(s.contracts["klayswaputil"]).estimateSwap(
             s.contracts["per"],
-            s.contracts["usdt"],
+            s.contracts["per"],
             _balance,
             path
         );

@@ -29,20 +29,20 @@ contract P2Facet {
 
     function P2_staking(uint _aienId) external {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        address msgsender = LibMeta.msgSender();
+        // address msgsender = LibMeta.msgSender();
         uint _aienLevel = P2_getAienLevel(_aienId);
-        LibP2.diamond_P2_deposit(msgsender, _aienId);
+        LibP2.diamond_P2_deposit(msg.sender, _aienId);
         IERC721(s.contracts["aien"]).safeTransferFrom(
-            msgsender,
-            s.contracts["p2"],
+            msg.sender,
+            s.contracts["p2balance"],
             _aienId
         );
 
-        emit P2_Staking_Event(msgsender, _aienId, _aienLevel);
+        emit P2_Staking_Event(msg.sender, _aienId, _aienLevel);
     }
 
     function P2_unStaking(uint _aienId) external {
-        address msgsender = LibMeta.msgSender();
+        // address msgsender = LibMeta.msgSender();
 
         uint _aienLevel = P2_getAienLevel(_aienId);
         (uint base, uint plus) = LibP2.__P2_Pending_Reward(
@@ -50,21 +50,21 @@ contract P2Facet {
             _aienLevel
         );
 
-        emit P2_UnStaking_Event(msgsender, _aienId, _aienLevel);
-        emit P2_Harvest_Event(msgsender, _aienId, _aienLevel, base, plus);
+        emit P2_UnStaking_Event(msg.sender, _aienId, _aienLevel);
+        emit P2_Harvest_Event(msg.sender, _aienId, _aienLevel, base, plus);
 
-        LibP2.diamond_P2_withdraw(msgsender, _aienId);
+        LibP2.diamond_P2_withdraw(msg.sender, _aienId);
     }
 
     function P2_harvest(uint _aienId) external {
-        address msgsender = LibMeta.msgSender();
+        // address msgsender = LibMeta.msgSender();
         uint _aienLevel = P2_getAienLevel(_aienId);
         (uint base, uint plus) = LibP2.__P2_Pending_Reward(
             _aienId,
             _aienLevel
         );
-        emit P2_Harvest_Event(msgsender, _aienId, _aienLevel, base, plus);
-        LibP2.diamond_P2_harvest(msgsender, _aienId);
+        emit P2_Harvest_Event(msg.sender, _aienId, _aienLevel, base, plus);
+        LibP2.diamond_P2_harvest(msg.sender, _aienId);
     }
 
     function P2_getUserInfo()
@@ -76,13 +76,13 @@ contract P2Facet {
             LibP2.LayerLoadData[] memory
         )
     {
-        address msgsender = LibMeta.msgSender();
+        // address msgsender = LibMeta.msgSender();
 
         (
             LibP2.UserLoadData memory userData,
             LibP2.AienLoadData[] memory aienData,
             LibP2.LayerLoadData[] memory layerData
-        ) = LibP2.diamond_P2_getUserInfo(msgsender);
+        ) = LibP2.diamond_P2_getUserInfo(msg.sender);
         return (userData, aienData, layerData);
     }
 
@@ -117,5 +117,13 @@ contract P2Facet {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return s.p2_layers[_number];
     //     return IP2(s.contracts["p2"]).layers(_number);
+    }
+
+    function P2_beforeOpenLayer(uint _layer) public view returns (uint) {
+        // AppStorage storage s = LibAppStorage.diamondStorage();
+        // LibP2.diamond_p2_beforeLayer(_layer);
+
+        return LibP2.diamond_p2_beforeLayer(_layer);
+
     }
 }

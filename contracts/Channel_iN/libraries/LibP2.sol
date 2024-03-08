@@ -46,21 +46,21 @@ library LibP2 {
         _;
     }
 
-    modifier isBlackUser() {
+    modifier isBlackUser(address _sender) {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        require(!s.p2_users[msg.sender].isBlockUser, "P2: BlackList User");
+        require(!s.p2_users[_sender].isBlockUser, "P2: BlackList User");
         _;
     }
 
     modifier isP2StopCheck() {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        require(!s.isP2Stop, "P2: P2 is stopped");
+        require(s.isP2Stop, "P2: P2 is stopped");
         _;
     }
 
-    modifier isMaxStakingLimit() {
+    modifier isMaxStakingLimit(address _sender) {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        require(s.p2_users[msg.sender].tokenIds.length() < s.P2_MAX_STAKING_LIMIT, "P2: Max Staking Limit");
+        require(s.p2_users[_sender].tokenIds.length() < s.P2_MAX_STAKING_LIMIT, "P2: Max Staking Limit");
         _;
     }
 
@@ -335,13 +335,13 @@ library LibP2 {
 
     function __P2_Reward_Transfer(address _to, uint _base, uint _plus) internal {
         AppStorage storage s = LibAppStorage.diamondStorage();
-		IERC20(s.contracts["per"]).transfer(_to, _base);
-        IERC20(s.contracts["per"]).transfer(_to, _plus);
+		IERC20(s.contracts["per"]).transferFrom(s.contracts["p2balance"], _to, _base);
+        IERC20(s.contracts["per"]).transferFrom(s.contracts["p2balance"], _to, _plus);
     }
 
     function __P2_Aien_Transfer(address _staker, uint _aienId) internal {
         AppStorage storage s = LibAppStorage.diamondStorage();
-        IERC721(s.contracts["aien"]).safeTransferFrom(address(this), _staker, _aienId);
+        IERC721(s.contracts["aien"]).safeTransferFrom(s.contracts["p2balance"], _staker, _aienId);
     }
 
 
@@ -357,12 +357,14 @@ library LibP2 {
     function diamond_P2_deposit(
 		address _sender,
 		uint _aienId
-	) internal isMaxStakingLimit() isBlackUser() isP2StopCheck() returns(uint){
+	) internal isMaxStakingLimit(_sender) isBlackUser(_sender) isP2StopCheck {
         AppStorage storage s = LibAppStorage.diamondStorage();
 
         uint _layer = IDB(s.contracts["db"]).getAienLevel(_aienId);
         P2_Layer storage layer = s.p2_layers[_layer];
 
+
+        
         if(layer.totalStakedAien == 0){
             __P2_Layer_Start(_layer);
         }
@@ -383,13 +385,13 @@ library LibP2 {
         aien.rewardBaseDebt = layer.rewardBase;
         aien.rewardPlusDebt = layer.rewardPlus;
 
-        return block.number;
+        
     }
 
         
     function diamond_P2_withdraw(
         address _sender,
-		uint _aienId) internal isBlackUser() isP2StopCheck() returns(uint) {
+		uint _aienId) internal isBlackUser(_sender) isP2StopCheck returns(uint) {
         AppStorage storage s = LibAppStorage.diamondStorage();
         P2_User storage user = s.p2_users[_sender];
         P2_Aien storage aien = s.p2_aiens[_aienId];
@@ -438,7 +440,7 @@ library LibP2 {
         return block.number;
     }
 
-    function diamond_P2_harvest(address _sender, uint _aienId) isP2StopCheck() internal returns (uint){
+    function diamond_P2_harvest(address _sender, uint _aienId) isP2StopCheck internal returns (uint){
         AppStorage storage s = LibAppStorage.diamondStorage();
         P2_User storage user = s.p2_users[_sender];
         P2_Aien storage aien = s.p2_aiens[_aienId];
@@ -541,6 +543,30 @@ library LibP2 {
 
 		return (_UserLoadData, _AienLoadData, _LayerLoadData);
     }
+    
+    function diamond_p2_beforeLayer(uint _layerNumber) internal view returns(uint){
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        P2_Layer memory layer = s.p2_layers[_layerNumber];
+
+        (uint add_dailyBASE, uint add_dailyPLUS) = __P2_Daily_Calculate(
+				layer.balances.savedBaseBalance,
+				layer.balances.savedPlusBalance,
+				layer.add_dailyReward_Percent
+		);
+
+        uint _base =  (((((s.P2_baseBalance * s.P2_dailyRewardPercent) / s.REWARD_PERCENT_DECIMAL) * layer.rewardBasePercent) /
+					s.REWARD_PERCENT_DECIMAL) + add_dailyBASE) /
+				1;
+        uint _plus = (((((s.P2_plusBalance * s.P2_dailyRewardPercent) / s.REWARD_PERCENT_DECIMAL) * layer.rewardPlusPercent) /
+					s.REWARD_PERCENT_DECIMAL) + add_dailyPLUS) /
+				1;
+
+        
+
+        return (_base+_plus);
+        
+
+    }
 
     function diamond_p2_getLayerData(uint _layerNumber) internal view returns(uint,uint,uint){
         AppStorage storage s = LibAppStorage.diamondStorage();
@@ -556,7 +582,6 @@ library LibP2 {
 
         return (base / s.DAY_TO_SEC, plus / s.DAY_TO_SEC, layer.totalStakedAien);
     }
-    
 
 
     function onERC721Received(

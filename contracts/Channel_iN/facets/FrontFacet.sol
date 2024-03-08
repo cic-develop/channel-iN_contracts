@@ -50,4 +50,6 @@ contract FrontFacet {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return IDB(s.contracts["db"]).getAienGradeInfo();
     }
+
+    
 }
