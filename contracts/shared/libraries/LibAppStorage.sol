@@ -57,10 +57,13 @@ struct Distribute_State {
     uint beforeTeamUsdt;
     // distribute ratios
     uint24 p1Ratio;
-    uint24 p2PerRatio;
-    uint24 p2UsdtRatio;
+    uint24 p2BaseRatio;
+    // uint24 p2PerRatio;
+    uint24 p2PlusRatio;
+    // uint24 p2UsdtRatio;
     uint24 burnRatio;
-    uint24 teamUsdtRatio;
+    uint24 teamFeeRatio;
+    // uint24 teamUsdtRatio;
 }
 // DB > Filtered User Struct
 struct User {

@@ -554,7 +554,8 @@ library LibP2 {
 				layer.add_dailyReward_Percent
 		);
 
-        uint _base =  (((((s.P2_baseBalance * s.P2_dailyRewardPercent) / s.REWARD_PERCENT_DECIMAL) * layer.rewardBasePercent) /
+        uint _base =  (((((s.P2_baseBalance * s.P2_dailyRewardPercent) / s.REWARD_PERCENT_DECIMAL) * 13000) /
+        // uint _base =  (((((s.P2_baseBalance * s.P2_dailyRewardPercent) / s.REWARD_PERCENT_DECIMAL) * layer.rewardBasePercent) /
 					s.REWARD_PERCENT_DECIMAL) + add_dailyBASE) /
 				1;
         uint _plus = (((((s.P2_plusBalance * s.P2_dailyRewardPercent) / s.REWARD_PERCENT_DECIMAL) * layer.rewardPlusPercent) /

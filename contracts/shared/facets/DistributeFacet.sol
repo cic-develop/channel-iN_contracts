@@ -35,7 +35,7 @@ contract DistributeFacet is Modifiers {
         );
     }
 
-    function Distribute_swapToDistribute() external {
-        LibDistribute.swapToDistribute();
-    }
+    // function Distribute_swapToDistribute() external {
+    //     LibDistribute.swapToDistribute();
+    // }
 }

@@ -149,7 +149,7 @@ contract AdminFacet is Modifiers {
 
         return true;
     } 
-    
+
 
     function admin_P2_layer_setting(
         uint _layerNumber,
@@ -228,17 +228,17 @@ contract AdminFacet is Modifiers {
      */
     function admin_distribute_setStates(
         uint24 _p1Ratio,
-        uint24 _p2PerRatio,
-        uint24 _p2UsdtRatio,
+        uint24 _p2BaseRatio,
+        uint24 _p2PlusRatio,
         uint24 _burnRatio,
-        uint24 _teamUsdtRatio
+        uint24 _teamFeeRatio
     ) external onlyDev {
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.distribute_states.p1Ratio = _p1Ratio;
-        s.distribute_states.p2PerRatio = _p2PerRatio;
-        s.distribute_states.p2UsdtRatio = _p2UsdtRatio;
+        s.distribute_states.p2BaseRatio = _p2BaseRatio;
+        s.distribute_states.p2PlusRatio = _p2PlusRatio;
         s.distribute_states.burnRatio = _burnRatio;
-        s.distribute_states.teamUsdtRatio = _teamUsdtRatio;
+        s.distribute_states.teamFeeRatio = _teamFeeRatio;
     }
 
     function admin_distribute_userStates(
@@ -258,10 +258,10 @@ contract AdminFacet is Modifiers {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return (
             s.distribute_states.p1Ratio,
-            s.distribute_states.p2PerRatio,
-            s.distribute_states.p2UsdtRatio,
+            s.distribute_states.p2BaseRatio,
+            s.distribute_states.p2PlusRatio,
             s.distribute_states.burnRatio,
-            s.distribute_states.teamUsdtRatio,
+            s.distribute_states.teamFeeRatio,
             s.p0_mergeState.agencyIncomePercent,
             s.p0_mergeState.influencerIncomePercent
         );
@@ -298,9 +298,9 @@ contract AdminFacet is Modifiers {
         return LibDistribute.isSwap();
     }
 
-    function admin_distribute_swap() external onlyDev {
-        LibDistribute.swapToDistribute();
-    }
+    // function admin_distribute_swap() external onlyDev {
+    //     LibDistribute.swapToDistribute();
+    // }
 
     /**@dev aien mint variables
      */
