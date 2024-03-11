@@ -119,11 +119,54 @@ contract P2Facet {
     //     return IP2(s.contracts["p2"]).layers(_number);
     }
 
+    function P2_pendingReward(uint _aienId) public view returns(uint, uint){
+        uint _aienLevel = P2_getAienLevel(_aienId);
+        return LibP2.__P2_Pending_Reward(_aienId, _aienLevel);
+    }
+
+    function P2_blockPerLayers(uint _number) public view returns (uint,uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        
+        
+        uint basePer =
+                ((s.p2_layers[_number].balances.baseBalance *
+					s.p2_layers[_number].dailyReward_Percent) /
+					s.REWARD_PERCENT_DECIMAL /
+					s.p2_layers[_number].totalStakedAien) /
+				s.DAY_TO_SEC;
+                
+        uint plusPer = ((s.p2_layers[_number].balances.plusBalance *
+					s.p2_layers[_number].dailyReward_Percent) /
+					s.REWARD_PERCENT_DECIMAL /
+					s.p2_layers[_number].totalStakedAien) /
+				s.DAY_TO_SEC;
+        
+
+    return( basePer, plusPer);
+    }
+
+
+    // 0,0,0,2510772063979743000000,
+    // 0,0,0,0,0,0,1000,0,100000,0,0,0,0,0,0,false
+
+
     function P2_beforeOpenLayer(uint _layer) public view returns (uint) {
         // AppStorage storage s = LibAppStorage.diamondStorage();
         // LibP2.diamond_p2_beforeLayer(_layer);
 
         return LibP2.diamond_p2_beforeLayer(_layer);
 
+    }
+
+    function P2_layer_update(uint _layNumber) public {
+        LibP2.__P2_Layer_Update(_layNumber);
+    }
+    function P2_layer_updateAll(uint _layerNumber) public {
+        for (uint i = 1; i < _layerNumber; i++) {
+            LibP2.__P2_Layer_Update(i);
+        }
+    }
+    function P2_update() public {
+        LibP2.__P2_Update();
     }
 }

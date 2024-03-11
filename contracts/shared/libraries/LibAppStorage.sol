@@ -176,12 +176,12 @@ struct P2_Aien {
 
 struct P2_Balances {
 // 로직상 계산에 필요한 밸런스 변수 (실제와 다를 수 있음)
-	uint plusBalance;
 	uint baseBalance;
+	uint plusBalance;
 	// 레이어가 오픈 되지 않은 상태에서
 	// 레이어가 오픈되면 해당 레이어에 저장된 리워드를 데일리 리워드로 추가 분배하기 위한 변수
-	uint savedPlusBalance;
 	uint savedBaseBalance;
+	uint savedPlusBalance;
 	// 현재 savedUsdt, savedPer를 통해 나온 데일리 리워드
 	uint add_dailyBASE;
 	uint add_dailyPLUS;
@@ -199,75 +199,26 @@ struct P2_Balances {
 struct P2_Layer {
     P2_Balances balances;
 	// P2에서 해당 레이어에 토큰 배정 받을때 리워드 퍼센트
+    // 1~5 // 구 oUSDT
 	uint rewardBasePercent;
+    // 6~10 // 구 PER
 	uint rewardPlusPercent;
+    // 
 	// 유저에게 하루에 분배하는 리워드 퍼센트
 	uint dailyReward_Percent;
+    // 미오픈시 저장한 리워드를 데일리 리워드로 추가 분배하기 위한 퍼센트변수
+	uint add_dailyReward_Percent;
+    // 
 	// 계산에 필요
 	uint rewardPlus;
 	uint rewardBase;
-	// 미오픈시 저장한 리워드를 데일리 리워드로 추가 분배하기 위한 퍼센트변수
-	uint add_dailyReward_Percent;
-	uint lastRewardBlock;
+	// 
+    uint lastRewardBlock;
 	uint dailyRewardUpdateBlock;
 	uint totalStakedAien;
 	bool isOpen;
 }
 
-//   struct P2_Layer {
-//       P2_Balances balances;
-//   	// P2에서 해당 레이어에 토큰 배정 받을때 리워드 퍼센트
-//   	uint rewardBasePercent;
-//   	uint rewardPlusPercent;
-//   	// 계산에 필요
-//   	uint rewardBase;
-//   	uint rewardPlus;
-//       // 
-//       // 
-//       //////////////////////////////////////////////////////////
-//   	// 유저에게 하루에 분배하는 리워드 퍼센트///////////////////////////               
-//   	uint dailyReward_Percent;/////////////////////////////////
-//   	// 미오픈시 저장한 리워드를 데일리 리워드로 추가 분배하기 위한 퍼센트변수//
-//   	uint add_dailyReward_Percent;/////////////////////////////
-//       //////////////////////////////////////////////////////////
-//   	// 
-//       // 
-//       uint lastRewardBlock;
-//   	uint dailyRewardUpdateBlock;
-//   	uint totalStakedAien;
-//   	bool isOpen;
-//   }
-
-// struct P2_AienLoadData {
-//     //aien정보
-// 	uint _aienId;
-// 	uint _aienLevel;
-// 	// 출금 토탈
-// 	uint _aien_plus_received;
-// 	uint _aien_base_received;
-// 	//출금 가능
-// 	uint base_withdrawable;
-// 	uint plus_withdrawable;
-// 	// block당 리워드
-// 	uint block_reward_plus;
-// 	uint block_reward_base;
-// }
-
-// struct P2_LayerLoadData {
-//     bool isOpen;
-// 	uint _layerNumber;
-// 	uint _24h_reward_plus;
-// 	uint _24h_reward_base;
-// 	uint totalStakedAien;
-// }
-
-// struct P2_UserLoadData {
-//     uint _baseRewarded;
-// 	uint _plusRewarded;
-// 	bool _isBlockUser;
-// }
-
-// // P2 end
 
 // P0 End
 struct AppStorage {

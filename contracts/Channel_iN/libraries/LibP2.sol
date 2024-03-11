@@ -64,49 +64,6 @@ library LibP2 {
         _;
     }
 
-    
-    // function _P2_Start(uint _baseBalance, uint _plusBalance, uint _dailyRewardPercent,uint _maxStakingLimit) internal returns(bool){
-    //     AppStorage storage s = LibAppStorage.diamondStorage();
-    //     s.isP2Stop = true;
-    //     s.REWARD_PERCENT_DECIMAL = 1e5;
-    //     s.PRECISION_FACTOR = 1e12;
-    //     s.DAY_TO_SEC = 86400;
-    //     s.P2_baseBalance = _baseBalance;
-    //     s.P2_plusBalance = _plusBalance;
-    //     s.P2_dailyRewardPercent = _dailyRewardPercent;
-    //     s.P2_dailyRewardUpdateBlock = block.number - 86400;
-    //     s.P2_MAX_STAKING_LIMIT = _maxStakingLimit;
-
-    //     return true;
-    // }
-
-    // function _P2_Layer_Setting(
-    //     uint _layerNumber,
-	// 	uint _fromP2PlusPercent,
-	// 	uint _fromP2BasePercent,
-	// 	uint _dailyReward_Percent,
-	// 	uint _add_dailyReward_Percent,
-	// 	bool _isOpen
-    //     ) internal returns(bool){
-    //     AppStorage storage s = LibAppStorage.diamondStorage();
-    //     s.p2_layers[_layerNumber].rewardPlusPercent = _fromP2PlusPercent;
-    //     s.p2_layers[_layerNumber].rewardBasePercent = _fromP2BasePercent;
-    //     s.p2_layers[_layerNumber].dailyReward_Percent = _dailyReward_Percent;
-    //     s.p2_layers[_layerNumber].add_dailyReward_Percent = _add_dailyReward_Percent;
-    //     s.p2_layers[_layerNumber].isOpen = _isOpen;
-        
-    //     return true;
-    // }
-
-    // function _P2_Layer_Balances_Setting(uint _layerNumber, uint _baseBalance,uint _plusBalance, uint _savedBaseBalance,uint _savedPlusBalance) internal returns(bool){
-    //     AppStorage storage s = LibAppStorage.diamondStorage();
-    //     s.p2_layers[_layerNumber].balances.baseBalance = _baseBalance;
-    //     s.p2_layers[_layerNumber].balances.plusBalance = _plusBalance;
-    //     s.p2_layers[_layerNumber].balances.savedBaseBalance = _savedBaseBalance;
-    //     s.p2_layers[_layerNumber].balances.savedPlusBalance = _savedPlusBalance;
-
-    //     return true;
-    // }
 
     function _P2_Layer_Reset(uint _layerNumber) internal {
         AppStorage storage s = LibAppStorage.diamondStorage();
@@ -175,8 +132,8 @@ library LibP2 {
                         s.p2_layers[i].balances.savedPlusBalance,
                         s.p2_layers[i].add_dailyReward_Percent
                     );
-                distri_base = (dailyBASE / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardBasePercent;
-                distri_plus = (dailyPLUS / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardPlusPercent;
+                distri_base += (dailyBASE / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardBasePercent;
+                distri_plus += (dailyPLUS / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardPlusPercent;
 
                 if(!s.p2_layers[i].isOpen){
                     s.p2_layers[i].balances.baseBalance = 0;
@@ -331,6 +288,7 @@ library LibP2 {
 
         return (dailyBASE, dailyPLUS);
     }
+
 
 
     function __P2_Reward_Transfer(address _to, uint _base, uint _plus) internal {
@@ -515,9 +473,6 @@ library LibP2 {
 
         for (uint i = 1; i < 11; i++) {
 			P2_Layer memory layer = s.p2_layers[i];
-
-			// if(layer.isOpen == false) break;
-			// (uint dailyBASE, uint dailyPLUS) = __P2_Daily_Calculate(s.P2_baseBalance, s.P2_plusBalance, s.P2_dailyRewardPercent);
 
 			(uint add_dailyBASE, uint add_dailyPLUS) = __P2_Daily_Calculate(
 				layer.balances.savedBaseBalance,
