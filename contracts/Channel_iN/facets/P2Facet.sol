@@ -169,4 +169,9 @@ contract P2Facet {
     function P2_update() public {
         LibP2.__P2_Update();
     }
+
+    function P2_updateBlock() public view returns(uint){
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return s.P2_dailyRewardUpdateBlock;
+    }
 }

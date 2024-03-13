@@ -217,7 +217,10 @@ contract AdminFacet is Modifiers {
     }
 
     
-
+    function admin_P2_Stop(bool _isStop) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.isP2Stop = _isStop;
+    }
 
 
     /**@dev DistriBute Admin functions

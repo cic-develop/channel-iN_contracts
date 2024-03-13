@@ -140,7 +140,7 @@ library LibP2 {
 
                         distri_base += ((dailyBASE / s.REWARD_PERCENT_DECIMAL) * 
                         s.p2_layers[i].rewardBasePercent);
-                        
+
                         distri_plus += ((dailyPLUS / s.REWARD_PERCENT_DECIMAL) *
                         s.p2_layers[i].rewardPlusPercent);
 
@@ -612,7 +612,7 @@ library LibP2 {
 		return bytes4(keccak256('onERC721Received(address,address,uint256,bytes)'));
 	}
 
-
+    
 
 
 }
