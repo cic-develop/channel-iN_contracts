@@ -124,31 +124,34 @@ library LibP2 {
 
             while(block.number > s.P2_dailyRewardUpdateBlock + s.DAY_TO_SEC){
                 s.P2_dailyRewardUpdateBlock += s.DAY_TO_SEC;
+                
                 (uint dailyBASE, uint dailyPLUS) = __P2_Daily_Calculate(s.P2_baseBalance,s.P2_plusBalance, s.P2_dailyRewardPercent);
                 
                 for(uint8 i = 1; i < 11; i++){
-                    (uint add_dailyBASE, uint add_dailyPLUS) = __P2_Daily_Calculate(
+
+                    // 미오픈 레이어라면, saved 리워드만 추가
+                    if(!s.p2_layers[i].isOpen){
+                        s.p2_layers[i].balances.baseBalance = 0;
+                        s.p2_layers[i].balances.plusBalance = 0;
+                        s.p2_layers[i].balances.savedBaseBalance += ((dailyBASE / s.REWARD_PERCENT_DECIMAL) * 
+                        s.p2_layers[i].rewardBasePercent);
+                        s.p2_layers[i].balances.savedPlusBalance += ((dailyPLUS / s.REWARD_PERCENT_DECIMAL) *
+                        s.p2_layers[i].rewardPlusPercent);
+
+                        distri_base += ((dailyBASE / s.REWARD_PERCENT_DECIMAL) * 
+                        s.p2_layers[i].rewardBasePercent);
+                        
+                        distri_plus += ((dailyPLUS / s.REWARD_PERCENT_DECIMAL) *
+                        s.p2_layers[i].rewardPlusPercent);
+
+                        continue;
+                    }
+
+                (uint add_dailyBASE, uint add_dailyPLUS) = __P2_Daily_Calculate(
                         s.p2_layers[i].balances.savedBaseBalance,
                         s.p2_layers[i].balances.savedPlusBalance,
                         s.p2_layers[i].add_dailyReward_Percent
-                    );
-                distri_base += (dailyBASE / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardBasePercent;
-                distri_plus += (dailyPLUS / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardPlusPercent;
-
-                if(!s.p2_layers[i].isOpen){
-                    s.p2_layers[i].balances.baseBalance = 0;
-                    s.p2_layers[i].balances.plusBalance = 0;
-                    s.p2_layers[i].balances.savedBaseBalance += ((dailyBASE / s.REWARD_PERCENT_DECIMAL) * 
-                    s.p2_layers[i].rewardBasePercent);
-                    s.p2_layers[i].balances.savedPlusBalance += ((dailyPLUS / s.REWARD_PERCENT_DECIMAL) *
-                    s.p2_layers[i].rewardPlusPercent);
-
-                continue;
-
-                }
-
-                s.p2_layers[i].balances.savedBaseBalance -= add_dailyBASE;
-                s.p2_layers[i].balances.savedPlusBalance -= add_dailyPLUS;
+                );                
 
                 s.p2_layers[i].balances.baseBalance = 
                 ((dailyBASE / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardBasePercent) +
@@ -158,14 +161,74 @@ library LibP2 {
                 ((dailyPLUS / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardPlusPercent) +
                 add_dailyPLUS;
 
-            }
-            //분배 되어야할 dailyReward 차감
+                s.p2_layers[i].balances.savedBaseBalance -= add_dailyBASE;
+                s.p2_layers[i].balances.savedPlusBalance -= add_dailyPLUS;
+
+                distri_base += (dailyBASE / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardBasePercent;
+                distri_plus += (dailyPLUS / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardPlusPercent;
+                    
+                }
             s.P2_baseBalance -= distri_base;
             s.P2_plusBalance -= distri_plus;
             }
         }
         return block.number;
     }
+    // function __P2_Update() internal isP2StopCheck() returns (uint){
+    //     AppStorage storage s = LibAppStorage.diamondStorage();
+
+    //     if(s.P2_dailyRewardUpdateBlock == block.number) return block.number;
+
+    //     if(block.number > s.P2_dailyRewardUpdateBlock + s.DAY_TO_SEC ) {
+
+    //         uint distri_base = 0;
+    //         uint distri_plus = 0;
+
+
+    //         while(block.number > s.P2_dailyRewardUpdateBlock + s.DAY_TO_SEC){
+    //             s.P2_dailyRewardUpdateBlock += s.DAY_TO_SEC;
+    //             (uint dailyBASE, uint dailyPLUS) = __P2_Daily_Calculate(s.P2_baseBalance,s.P2_plusBalance, s.P2_dailyRewardPercent);
+                
+    //             for(uint8 i = 1; i < 11; i++){
+    //                 (uint add_dailyBASE, uint add_dailyPLUS) = __P2_Daily_Calculate(
+    //                     s.p2_layers[i].balances.savedBaseBalance,
+    //                     s.p2_layers[i].balances.savedPlusBalance,
+    //                     s.p2_layers[i].add_dailyReward_Percent
+    //                 );
+    //             distri_base += (dailyBASE / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardBasePercent;
+    //             distri_plus += (dailyPLUS / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardPlusPercent;
+
+    //             if(!s.p2_layers[i].isOpen){
+    //                 s.p2_layers[i].balances.baseBalance = 0;
+    //                 s.p2_layers[i].balances.plusBalance = 0;
+    //                 s.p2_layers[i].balances.savedBaseBalance += ((dailyBASE / s.REWARD_PERCENT_DECIMAL) * 
+    //                 s.p2_layers[i].rewardBasePercent);
+    //                 s.p2_layers[i].balances.savedPlusBalance += ((dailyPLUS / s.REWARD_PERCENT_DECIMAL) *
+    //                 s.p2_layers[i].rewardPlusPercent);
+
+    //             continue;
+
+    //             }
+
+    //             s.p2_layers[i].balances.savedBaseBalance -= add_dailyBASE;
+    //             s.p2_layers[i].balances.savedPlusBalance -= add_dailyPLUS;
+
+    //             s.p2_layers[i].balances.baseBalance = 
+    //             ((dailyBASE / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardBasePercent) +
+    //             add_dailyBASE;
+
+    //             s.p2_layers[i].balances.plusBalance = 
+    //             ((dailyPLUS / s.REWARD_PERCENT_DECIMAL) * s.p2_layers[i].rewardPlusPercent) +
+    //             add_dailyPLUS;
+
+    //         }
+    //         //분배 되어야할 dailyReward 차감
+    //         s.P2_baseBalance -= distri_base;
+    //         s.P2_plusBalance -= distri_plus;
+    //         }
+    //     }
+    //     return block.number;
+    // }
 
     function __P2_Layer_Update(uint _layerNumber) internal isOpenLayer(_layerNumber) returns (uint){
         AppStorage storage s = LibAppStorage.diamondStorage();

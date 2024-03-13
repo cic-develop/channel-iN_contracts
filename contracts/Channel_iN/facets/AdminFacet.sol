@@ -137,16 +137,16 @@ contract AdminFacet is Modifiers {
 
     /**@dev P2 Admin functions
      */
-    function admin_P2_start(uint _baseBalance, uint _plusBalance, uint _dailyRewardPercent,uint _maxStakingLimit) external onlyDev returns(bool){
+    function admin_P2_start(uint _baseBalance, uint _plusBalance, uint _dailyRewardPercent,uint _maxStakingLimit, uint _dayToSec) external onlyDev returns(bool){
         AppStorage storage s = LibAppStorage.diamondStorage();
         s.isP2Stop = true;
         s.REWARD_PERCENT_DECIMAL = 1e5;
         s.PRECISION_FACTOR = 1e12;
-        s.DAY_TO_SEC = 86400;
+        s.DAY_TO_SEC = _dayToSec;
         s.P2_baseBalance = _baseBalance;
         s.P2_plusBalance = _plusBalance;
         s.P2_dailyRewardPercent = _dailyRewardPercent;
-        s.P2_dailyRewardUpdateBlock = block.number - 86400;
+        s.P2_dailyRewardUpdateBlock = block.number - _dayToSec;
         s.P2_MAX_STAKING_LIMIT = _maxStakingLimit;
 
         return true;
