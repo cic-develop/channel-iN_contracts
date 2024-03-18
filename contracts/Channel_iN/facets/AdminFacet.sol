@@ -222,6 +222,13 @@ contract AdminFacet is Modifiers {
         s.isP2Stop = _isStop;
     }
 
+    function admin_P2_setBalance(uint _baseBalance, uint _plusBalance) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.P2_baseBalance = _baseBalance;
+        s.P2_plusBalance = _plusBalance;
+    }
+
+
 
     /**@dev DistriBute Admin functions
      */

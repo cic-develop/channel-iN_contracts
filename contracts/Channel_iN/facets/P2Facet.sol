@@ -174,4 +174,14 @@ contract P2Facet {
         AppStorage storage s = LibAppStorage.diamondStorage();
         return s.P2_dailyRewardUpdateBlock;
     }
+
+    function P2_getDailyRewardPercent() public view returns(uint){
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return s.P2_dailyRewardPercent;
+    }
+
+    function P2_getDailyRewardUpdateBlock() public view returns(uint){
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        return s.P2_dailyRewardUpdateBlock;
+    }
 }
