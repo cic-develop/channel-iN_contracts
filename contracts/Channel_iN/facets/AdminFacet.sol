@@ -228,6 +228,11 @@ contract AdminFacet is Modifiers {
         s.P2_plusBalance = _plusBalance;
     }
 
+    function admin_P2_addBalance(uint _baseBalance, uint _plusBalance) external onlyDev {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        s.P2_baseBalance += _baseBalance;
+        s.P2_plusBalance += _plusBalance;
+    }
 
 
     /**@dev DistriBute Admin functions
