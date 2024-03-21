@@ -51,10 +51,28 @@ const config: HardhatUserConfig = {
           optimizer: { enabled: true, runs: 200 },
         },
       },
+      {
+        version: "0.6.6",
+        settings: {
+          optimizer: { enabled: true, runs: 200 },
+        },
+      },
+      {
+        version: "0.5.16",
+        settings: {
+          optimizer: { enabled: true, runs: 200 },
+        },
+      },
     ],
   },
   namedAccounts: {
     deployer: 0,
+    live: {
+      default: 0,
+    },
+    dev: {
+      default: 1,
+    },
   },
   networks: {
     live: {
@@ -67,7 +85,7 @@ const config: HardhatUserConfig = {
       url: process.env.KLAYTN_NODE_TEST_ENDPOINT,
       accounts: [process.env.TEST_PRIV_KEY || ""],
       chainId: 8217,
-      gasPrice: 25000000000,
+      gasPrice: 250000000000,
     },
   },
 };

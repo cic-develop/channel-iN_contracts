@@ -20,6 +20,7 @@
     "hardhat": "^2.16.1"
   },
   "dependencies": {
+    "@klaytn/contracts": "^1.0.4",
     "@bisonai/orakl-contracts": "1.2.0",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
@@ -28,6 +29,11 @@
     "@openzeppelin/contracts-upgradeable": "5.0.0",
     "@openzeppelin/hardhat-upgrades": "2.3.3",
     "@typechain/hardhat": "^8.0.0",
+    "@uniswap/lib": "4.0.1-alpha",
+    "@uniswap/v2-core": "1.0.1",
+    "@uniswap/v2-periphery": "1.1.0-beta.0",
+    "@uniswap/v3-core": "1.0.1",
+    "@uniswap/v3-periphery": "1.4.4",
     "caver-js": "^1.11.0",
     "chai": "^4.3.7",
     "dotenv": "16.3.1",

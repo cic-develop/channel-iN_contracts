@@ -1,0 +1,490 @@
+{
+  "target": "0x43B0dCCc7d8959885481e5baFDccC275B49cC1ab",
+  "interface": {
+    "fragments": [
+      { "type": "error", "inputs": [], "name": "AccessControlBadConfirmation" },
+      {
+        "type": "error",
+        "inputs": [
+          {
+            "name": "account",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "neededRole",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "AccessControlUnauthorizedAccount"
+      },
+      {
+        "type": "error",
+        "inputs": [
+          {
+            "name": "target",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "AddressEmptyCode"
+      },
+      {
+        "type": "error",
+        "inputs": [
+          {
+            "name": "implementation",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "ERC1967InvalidImplementation"
+      },
+      { "type": "error", "inputs": [], "name": "ERC1967NonPayable" },
+      { "type": "error", "inputs": [], "name": "FailedInnerCall" },
+      { "type": "error", "inputs": [], "name": "InvalidInitialization" },
+      { "type": "error", "inputs": [], "name": "NotInitializing" },
+      { "type": "error", "inputs": [], "name": "ReentrancyGuardReentrantCall" },
+      { "type": "error", "inputs": [], "name": "UUPSUnauthorizedCallContext" },
+      {
+        "type": "error",
+        "inputs": [
+          {
+            "name": "slot",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "UUPSUnsupportedProxiableUUID"
+      },
+      {
+        "type": "event",
+        "inputs": [
+          {
+            "name": "version",
+            "type": "uint64",
+            "baseType": "uint64",
+            "indexed": false,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "Initialized",
+        "anonymous": false
+      },
+      {
+        "type": "event",
+        "inputs": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "previousAdminRole",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "newAdminRole",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "RoleAdminChanged",
+        "anonymous": false
+      },
+      {
+        "type": "event",
+        "inputs": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "account",
+            "type": "address",
+            "baseType": "address",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "sender",
+            "type": "address",
+            "baseType": "address",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "RoleGranted",
+        "anonymous": false
+      },
+      {
+        "type": "event",
+        "inputs": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "account",
+            "type": "address",
+            "baseType": "address",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "sender",
+            "type": "address",
+            "baseType": "address",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "RoleRevoked",
+        "anonymous": false
+      },
+      {
+        "type": "event",
+        "inputs": [
+          {
+            "name": "implementation",
+            "type": "address",
+            "baseType": "address",
+            "indexed": true,
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "Upgraded",
+        "anonymous": false
+      },
+      {
+        "type": "function",
+        "inputs": [],
+        "name": "DEFAULT_ADMIN_ROLE",
+        "constant": true,
+        "outputs": [
+          {
+            "name": "",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "stateMutability": "view",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [],
+        "name": "UPGRADE_INTERFACE_VERSION",
+        "constant": true,
+        "outputs": [
+          {
+            "name": "",
+            "type": "string",
+            "baseType": "string",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "stateMutability": "view",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "getRoleAdmin",
+        "constant": true,
+        "outputs": [
+          {
+            "name": "",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "stateMutability": "view",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "account",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "grantRole",
+        "constant": false,
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "account",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "hasRole",
+        "constant": true,
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool",
+            "baseType": "bool",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "stateMutability": "view",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [],
+        "name": "initialize",
+        "constant": false,
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [],
+        "name": "proxiableUUID",
+        "constant": true,
+        "outputs": [
+          {
+            "name": "",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "stateMutability": "view",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "callerConfirmation",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "renounceRole",
+        "constant": false,
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "baseType": "bytes32",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "account",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "revokeRole",
+        "constant": false,
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [
+          {
+            "name": "interfaceId",
+            "type": "bytes4",
+            "baseType": "bytes4",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "supportsInterface",
+        "constant": true,
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool",
+            "baseType": "bool",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "stateMutability": "view",
+        "payable": false,
+        "gas": null
+      },
+      {
+        "type": "function",
+        "inputs": [
+          {
+            "name": "newImplementation",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "data",
+            "type": "bytes",
+            "baseType": "bytes",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "name": "upgradeToAndCall",
+        "constant": false,
+        "outputs": [],
+        "stateMutability": "payable",
+        "payable": true,
+        "gas": null
+      }
+    ],
+    "deploy": {
+      "type": "constructor",
+      "inputs": [],
+      "payable": false,
+      "gas": null
+    },
+    "fallback": null,
+    "receive": false
+  },
+  "runner": "<SignerWithAddress 0xe34f22cF55db5209bA6546701d408e5F58d8703f>",
+  "filters": {},
+  "fallback": null
+}

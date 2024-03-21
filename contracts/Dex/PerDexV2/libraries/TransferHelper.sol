@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.12;
+pragma solidity =0.8.12;
 
 // helper methods for interacting with ERC20/KIP7 tokens and sending KLAY that do not consistently return true/false
 library TransferHelper {
