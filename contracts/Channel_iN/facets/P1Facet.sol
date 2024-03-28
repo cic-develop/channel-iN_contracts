@@ -177,4 +177,12 @@ contract P1Facet {
             IP1(s.contracts["p1"]).unStakeCancelTimeLock()
         );
     }
+
+    function P1_getUnstakeData_user(
+        address _addr
+    ) external view returns (IP1.PendingInfo[] memory) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+        // address msgsender = LibMeta.msgSender();
+        return IP1(s.contracts["p1"]).diamond_P1_getUnstakeData(_addr);
+    }
 }

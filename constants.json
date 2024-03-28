@@ -16,7 +16,10 @@
       "per": "0xe3A5F36D08C75d43B18bDCaD19A6d8Cf0Bb8128c",
       "item": "0x13F0faE1e13F89bb6FCdEaF38275f4cAd20f397F",
       "p1": "0x0753ECbcb9B967fecD1e61b3a42F9C7Cd04E18EA",
-      "p2": "0x6576a1fD2B554a42cAE8F0CfbFF413f86449eE22"
+      "p2": "0x6576a1fD2B554a42cAE8F0CfbFF413f86449eE22",
+      "dexFactory": "0x2b346A0A7aE7b35D006359290ECE676b40515514",
+      "dexRouter": "0x89Bc9328eF6f700DaCEE11874e31b41C3fEE07f9",
+      "wklay": "0x19aac5f612f524b754ca7e7c41cbfa2e981a4432"
     }
   },
   "live": {

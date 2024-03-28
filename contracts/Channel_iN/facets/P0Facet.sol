@@ -130,4 +130,10 @@ contract P0Facet is Modifiers {
 
         return _mergePfGrades;
     }
+
+    function P0_getMixFees(uint _layer) external view returns (uint) {
+        AppStorage storage s = LibAppStorage.diamondStorage();
+
+        return (s.p0_gradeInfos[_layer].mixFee);
+    }
 }
